@@ -199,7 +199,7 @@ export default function Home() {
           )}
         </section>
 
-        <footer className="footer">Made with ❤️ by @Stidscom • Powered by Stids AI</footer>
+        <footer className="footer">Made with ❤️ by <a href="https://instagram.com/stidscom" target="_blank" rel="noopener noreferrer">@Stidscom</a> • Powered by Stids AI</footer>
       </main>
     </>
   );
