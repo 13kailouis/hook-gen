@@ -6,7 +6,7 @@ import { FiCopy, FiCheck } from "react-icons/fi";
 
 export default function Home() {
   const [niche, setNiche] = useState("");
-  const [tone, setTone] = useState("fear");
+  const [tone, setTone] = useState("affiliate");
   const [product, setProduct] = useState("");
   const [loading, setLoading] = useState(false);
   const [hooks, setHooks] = useState<string[]>([]);
