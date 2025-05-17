@@ -121,11 +121,11 @@ export default function Home() {
                 onChange={(e) => setTone(e.target.value)}
                 className="tone-select"
               >
+                <option value="affiliate">🛍️ Affiliate Produk</option>
                 <option value="fear">😱 Fear / Shock</option>
                 <option value="curiosity">🧠 Curiosity</option>
                 <option value="confession">🤐 Confession</option>
                 <option value="humor">😂 Humor</option>
-                <option value="affiliate">🛍️ Affiliate Produk</option>
               </select>
             </label>
 
