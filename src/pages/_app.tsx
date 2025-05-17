@@ -1,12 +1,14 @@
 import "@/styles/globals.css";
-import { Analytics } from "@vercel/analytics/react";
 import type { AppProps } from "next/app";
+import { Analytics } from "@vercel/analytics/react"; // Kalau kamu pakai juga
+import { SpeedInsights } from "@vercel/speed-insights/next"; // Tambahan ini!
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Component {...pageProps} />
-      <Analytics /> {/* Ini penting agar tracking jalan */}
+      <Analytics />
+      <SpeedInsights /> {/* Tambahkan komponen ini */}
     </>
   );
 }
