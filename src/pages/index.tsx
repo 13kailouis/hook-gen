@@ -82,16 +82,36 @@ export default function Home() {
 
   return (
     <>
-      <Head>
-        <title>HookFreak • Viral Hook Generator</title>
-        <meta name="description" content="Bikin hook TikTok dan IG viral dengan 1 klik. Powered by STIDS." />
-        <meta property="og:image" content="/og-cover.png" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+         <Head>
+          <title>HookFreak • AI Viral Hook Generator TikTok</title>
+          <meta name="description" content="Bikin hook video TikTok & Reels viral pakai AI. Gratis, cepat, dan didesain untuk CTR tinggi. Powered by STIDS." />
+          <meta name="keywords" content="hook generator, TikTok hook, AI TikTok content, viral hook tools, konten viral, pembuka video TikTok, kalimat viral, hook reels, CTA TikTok" />
+          <meta name="author" content="Stidscom Team" />
+          <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        
+          {/* OG untuk Facebook/Telegram/LinkedIn */}
+          <meta property="og:title" content="HookFreak - AI Viral Hook Generator" />
+          <meta property="og:description" content="Auto generate hook TikTok yang bikin orang nggak bisa skip. Cuma 1 klik. Gratis selamanya!" />
+          <meta property="og:image" content="/og-cover.png" />
+          <meta property="og:url" content="https://hook-gen.vercel.app" />
+          <meta property="og:type" content="website" />
+        
+          {/* Twitter card */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="HookFreak - AI Viral Hook Generator" />
+          <meta name="twitter:description" content="Bikin hook TikTok & Reels viral dalam 1 klik. Gratis & powerful." />
+          <meta name="twitter:image" content="/og-cover.png" />
+        
+          {/* SEO technical */}
+          <link rel="canonical" href="https://hook-gen.vercel.app" />
+          <link rel="icon" href="/favicon.ico" />
+        
+          {/* Preload font */}
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+        </Head>
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
-      </Head>
 
       <main className="main-wrapper">
         <section className="hero">
