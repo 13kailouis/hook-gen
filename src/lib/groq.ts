@@ -1,7 +1,7 @@
 export async function generateHooks(niche: string, tone: string, product?: string) {
     const basePrompt = [
       "Kamu adalah copywriter spesialis TikTok.",
-      `Tolong buatkan 10 hook 1 detik pertama yang sangat sangat bikin viral untuk niche: "${niche}".`,
+      `Tolong buatkan 10 hook 1 detik pertama yang sangat sangat fresh dan bikin viral untuk niche: "${niche}".`,
       "Jangan pakai bullet point, jangan pakai emoji.",
        "Gunakan bahasa anak muda (bahasa tongkrongan Gen Z).",
         "Setiap hook harus langsung menembak perhatian otak dalam 1 detik pertama.",
@@ -11,7 +11,6 @@ export async function generateHooks(niche: string, tone: string, product?: strin
         "- Cerita singkat yang janji ada ending mengejutkan",
         "- Larangan atau sindiran halus",
         "- Pertanyaan kontras atau gak masuk akal",
-        "- Gunakan kata 'lu', 'lo', atau 'kamu' di awal kalimat",
       "Pakai bahasa tongkrongan dan Gen Z.",
       "Pisahkan setiap hook dengan newline biasa.",
     ];
