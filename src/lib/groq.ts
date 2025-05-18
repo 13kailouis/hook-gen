@@ -3,6 +3,15 @@ export async function generateHooks(niche: string, tone: string, product?: strin
       "Kamu adalah copywriter spesialis TikTok.",
       `Tolong buatkan 10 hook 1 detik pertama yang sangat sangat bikin viral untuk niche: "${niche}".`,
       "Jangan pakai bullet point, jangan pakai emoji.",
+       "Gunakan bahasa anak muda (bahasa tongkrongan Gen Z).",
+        "Setiap hook harus langsung menembak perhatian otak dalam 1 detik pertama.",
+        "Fokus pada gaya hook tanpa visual, jadi: otak harus membayangkan sendiri lewat kata-kata.",
+         "Gunakan pola ini:",
+        "- Konflik batin atau kalimat yang malu-malu tapi jujur",
+        "- Cerita singkat yang janji ada ending mengejutkan",
+        "- Larangan atau sindiran halus",
+        "- Pertanyaan kontras atau gak masuk akal",
+        "- Gunakan kata 'lu', 'lo', atau 'kamu' di awal kalimat",
       "Pakai bahasa tongkrongan dan Gen Z.",
       "Pisahkan setiap hook dengan newline biasa.",
     ];
@@ -33,7 +42,7 @@ export async function generateHooks(niche: string, tone: string, product?: strin
     } else {
       basePrompt.push(
         `Gunakan tone: ${tone}.`,
-        "Pastikan hook-nya memicu rasa penasaran, ketakutan, atau luka psikologis kecil audiens."
+        "Pastikan hook-nya sangat memicu rasa penasaran, ketakutan, atau luka psikologis kecil audiens, atau apapun yang bikin berhenti scroll di 1 detik pertama."
       );
     }
   
