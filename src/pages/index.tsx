@@ -6,12 +6,12 @@ import { FiCopy, FiCheck } from "react-icons/fi";
 
 export default function Home() {
   const [niche, setNiche] = useState("");
-  const [tone, setTone] = useState("affiliate");
+  const [tone, setTone] = useState("fear");
   const [product, setProduct] = useState("");
   const [loading, setLoading] = useState(false);
   const [hooks, setHooks] = useState<string[]>([]);
   const [copiedAll, setCopiedAll] = useState(false);
-  const [placeholder, setPlaceholder] = useState("Contoh: jualan skincare glowing");
+  const [placeholder, setPlaceholder] = useState("Contoh: review makanan unik dari china");
   const [tipsIndex, setTipsIndex] = useState(0);
 
   const tips = [
@@ -31,12 +31,12 @@ export default function Home() {
 
   useEffect(() => {
     const options = [
-      "jualan skincare glowing",
-      "dropship baju tidur",
+      "review makanan unik dari china",
+      "Orang rela makan mie instan tiap hari, asal bisa nongkrong di tempat yang keliatan “berkelas”. Rela nyicil HP belasan juta, padahal saldo tabungan gak nyampe sejuta.",
       "jualan alat dapur unik",
-      "jualan lampu aesthetic",
+      "Trik Atur Keuangan Biar Gaji UMR Kerasa Kayak 10 Juta",
       "affiliate produk pelangsing",
-      "jualan serum pemutih",
+      "Bedah bagaimana pasar bergerak tanpa ampun terhadap emosi manusia. Tampilkan ironi: justru trader terbaik adalah yang paling dingin.",
     ];
     let i = 0;
     const interval = setInterval(() => {
@@ -124,7 +124,7 @@ export default function Home() {
         <section className="form-section">
           <form onSubmit={handleGenerate} className="hook-form">
             <label>
-              <span className="form-label">Niche Konten</span>
+              <span className="form-label">isi Konten</span>
               <input
                 type="text"
                 placeholder={placeholder}
@@ -141,9 +141,9 @@ export default function Home() {
                 onChange={(e) => setTone(e.target.value)}
                 className="tone-select"
               >
-                <option value="affiliate">🛍️ Affiliate Produk</option>
                 <option value="fear">😱 Fear / Shock</option>
                 <option value="curiosity">🧠 Curiosity</option>
+                <option value="affiliate">🛍️ Affiliate Produk</option>
                 <option value="confession">🤐 Confession</option>
                 <option value="humor">😂 Humor</option>
               </select>
