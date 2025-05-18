@@ -1,7 +1,7 @@
 export async function generateHooks(niche: string, tone: string, product?: string) {
     const basePrompt = [
    "Kamu copywriter TikTok kelas jagoan.",
-      `Saat diberi "${niche}", keluarkan *persis* 10 hook pembuka berdurasi 1 detik yang dijamin viral.`,
+      `Saat diberi "${niche}", keluarkan *persis* 10 hook pembuka berdurasi 1 detik yang dijamin viral dan fresh.`,
       "Jangan pakai bullet point, jangan pakai emoji.",
       "Tulis pakai bahasa tongkrongan Gen Z,",
       "Pisahkan setiap hook dengan newline biasa.",
