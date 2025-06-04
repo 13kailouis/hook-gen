@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 
 export default function Builder() {
   const [description, setDescription] = useState("");
@@ -8,6 +9,13 @@ export default function Builder() {
   const [style, setStyle] = useState("soft-sell");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any[] | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.query.desc) setDescription(router.query.desc as string);
+    if (router.query.audience) setAudience(router.query.audience as string);
+    if (router.query.style) setStyle(router.query.style as string);
+  }, [router.query]);
 
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault();
@@ -86,6 +94,9 @@ export default function Builder() {
                   <p><strong>Teks Hook:</strong> {r.textHook}</p>
                   <p><strong>Script:</strong> {r.script}</p>
                   <p><strong>Frame:</strong> {r.frames}</p>
+                  <p><em>HookStyle:</em> {r.hookStyle}</p>
+                  <p><em>Tone:</em> {r.tone}</p>
+                  <p><em>Niche:</em> {r.niche}</p>
                 </div>
               ))}
             </div>

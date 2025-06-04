@@ -222,10 +222,17 @@ export interface SalesHook {
   textHook: string;
   script: string;
   frames: string;
+  hookStyle: string;
+  tone: string;
+  niche: string;
 }
 
-export async function generateSalesHooks(desc: string, audience: string, style: string) {
-  const prompt = `Kamu scriptwriter TikTok spesialis jualan. Deskripsi produk: ${desc}. Target audiens: ${audience}. Gaya konten: ${style}. Buat 3 alternatif. Format setiap alternatif:\nVisualHook: <adegan pembuka 1 shot>\nTextHook: <kalimat pembuka>\nScript: <narasi Hook-Problem-Agitation-Solution-CTA maks 30 detik, pisahkan dengan ' -- '>\nFrameSuggestion: <saran visual singkat untuk tiap bagian>. Pisahkan setiap alternatif dengan ====.`;
+export async function generateSalesHooks(
+  desc: string,
+  audience: string,
+  style: string,
+) {
+  const prompt = `Kamu scriptwriter video TikTok spesialis jualan. Deskripsi produk: ${desc}. Target audiens: ${audience}. Gaya konten: ${style}. Hasilkan 3 versi. Format tiap versi:\nVisualHook: <adegan pembuka 1 shot, konkret tanpa CGI>\nTextHook: <kalimat pembuka emosional>\nScript: <narasi mengalir pola Hook-Problem-Agitation-Solution-CTA, pisahkan tiap bagian dengan ' --- ', maksimal 30 detik>\nFrameSuggestion: <saran visual singkat tiap bagian>\nHookStyle: <label pendek jenis visual hook>\nTone: ${style}\nNiche: ${desc}\n====`;
 
   const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
@@ -256,6 +263,9 @@ export async function generateSalesHooks(desc: string, audience: string, style: 
       textHook: get("TextHook"),
       script: get("Script"),
       frames: get("FrameSuggestion"),
+      hookStyle: get("HookStyle"),
+      tone: get("Tone") || style,
+      niche: get("Niche") || desc,
     } as SalesHook;
   });
 }

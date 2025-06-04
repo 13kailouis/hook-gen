@@ -84,8 +84,8 @@ export default function Home() {
   return (
     <>
          <Head>
-          <title>HookFreak • AI Viral Hook Generator TikTok</title>
-          <meta name="description" content="Bikin hook video TikTok & Reels viral pakai AI. Gratis, cepat, dan didesain untuk CTR tinggi. Powered by STIDS." />
+          <title>HookFreak • Viral Hook Generator TikTok</title>
+          <meta name="description" content="Bikin hook video TikTok & Reels viral dalam 1 klik. Gratis dan siap pakai." />
           <meta name="keywords" content="hook generator, TikTok hook, AI TikTok content, viral hook tools, konten viral, pembuka video TikTok, kalimat viral, hook reels, CTA TikTok" />
           <meta name="author" content="Stidscom Team" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -202,7 +202,7 @@ export default function Home() {
           )}
         </section>
 
-        <footer className="footer">Made with ❤️ by <a href="https://instagram.com/stidscom" target="_blank" rel="noopener noreferrer">@Stidscom</a> • Powered by Stids AI</footer>
+        <footer className="footer">Made with ❤️ by <a href="https://instagram.com/stidscom" target="_blank" rel="noopener noreferrer">@Stidscom</a></footer>
       </main>
     </>
   );
