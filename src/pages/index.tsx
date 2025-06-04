@@ -1,52 +1,52 @@
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-export default function Landing() {
-  const [product, setProduct] = useState("");
-  const [style, setStyle] = useState("storytelling");
+export default function Home() {
+  const [niche, setNiche] = useState("");
+  const [tone, setTone] = useState("fear");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any | null>(null);
+  const [hooks, setHooks] = useState<string[]>([]);
+  const generatorRef = useRef<HTMLDivElement>(null);
 
-  const examples = [
-    {
-      visual: "Tetesin serum ke punggung tangan sambil close-up",
-      text: "Kulit kusam? Nih trik biar cerah tanpa ribet!",
-      script: "Hook -- Problem -- Solution -- CTA",
-    },
-    {
-      visual: "Tangan pasang holder HP di motor, shot cepat",
-      text: "Jalan sambil jualan? Gini cara gampangnya!",
-      script: "Hook -- Problem -- Solution -- CTA",
-    },
-    {
-      visual: "Close up snack rendah kalori digigit",
-      text: "Cerita gagal diet gara-gara ngemil? Dengerin ini",
-      script: "Hook -- Problem -- Solution -- CTA",
-    },
-  ];
+  const scrollToGenerator = () => {
+    generatorRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault();
-    if (!product) return;
+    if (!niche) return;
     setLoading(true);
-    setResult(null);
+    setHooks([]);
     try {
-      const r = await fetch("/api/generate-script", {
+      const r = await fetch("/api/generate-hooks", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ description: product, style, audience: "" }),
+        body: JSON.stringify({ niche, tone, product: "" }),
       });
       const data = await r.json();
-      if (data.hooks && data.hooks.length) {
-        setResult(data.hooks[0]);
-        localStorage.setItem("hf-temp", JSON.stringify(data.hooks[0]));
-      }
+      setHooks(data.hooks || []);
     } finally {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("show");
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+    const cards = document.querySelectorAll(".hook-card");
+    cards.forEach((c) => observer.observe(c));
+    return () => observer.disconnect();
+  }, [hooks]);
 
   return (
     <>
@@ -56,76 +56,88 @@ export default function Landing() {
           name="description"
           content="Bikin video jualan nancep di detik pertama."
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
       </Head>
-      <main className="landing-wrapper">
-        <Navbar />
-        <section className="landing-hero">
-          <div className="hero-grid">
-            <div className="hero-visual">
-              <img src="/og-cover.png" alt="preview" style={{ width: "100%", borderRadius: 12 }} />
-            </div>
-            <div className="hero-content">
-              <h1 className="logo-text">Hook<span>Freak</span></h1>
-              <p className="subtitle">Bikin opening video yang langsung jualan</p>
-              <form onSubmit={handleGenerate} className="hero-form">
-                <input
-                  value={product}
-                  onChange={(e) => setProduct(e.target.value)}
-                  placeholder="Apa produk yang kamu jual?"
-                  className="niche-input"
-                />
-                <select
-                  value={style}
-                  onChange={(e) => setStyle(e.target.value)}
-                  className="tone-select"
-                >
-              <option value="storytelling">Storytelling</option>
-              <option value="edukatif">Edukatif</option>
-              <option value="hard-sell">Hard Sell</option>
-              <option value="soft-sell">Soft Sell</option>
-              <option value="lucu">Lucu</option>
-              <option value="fomo">FOMO</option>
-            </select>
-                <button type="submit" className="generate-button" disabled={loading}>
-                  {loading ? "Sebentar..." : "Bikin skrip konten pertama saya"}
-                </button>
-              </form>
-              {result && (
-                <div className="result-preview">
-                  <p><strong>Visual Hook:</strong> {result.visualHook}</p>
-                  <p><strong>Teks Hook:</strong> {result.textHook}</p>
-                  <p><strong>Script:</strong> {result.script}</p>
-                  <p><strong>Frame:</strong> {result.frames}</p>
-                </div>
-              )}
-            </div>
+      <Navbar />
+
+      <section className="hero-section">
+        <div className="hero-inner">
+          <div className="hero-visual">
+            <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8" alt="Laptop 3D" loading="lazy" />
           </div>
-        </section>
-
-        <section className="examples">
-          {examples.map((ex, idx) => (
-            <div key={idx} className="example-item">
-              <div className="example-visual">{ex.visual}</div>
-              <div className="example-text">
-                <p className="hook-text">{ex.text}</p>
-                <p className="script-text">{ex.script}</p>
-              </div>
-            </div>
-          ))}
-        </section>
-
-        <div style={{ marginTop: 40 }}>
-          <Link href="/builder" className="cta-button">
-            Coba generator lengkap
-          </Link>
+          <div className="hero-copy">
+            <h1>
+              Bikin opening video <span className="hl">TikTok & Reels</span> yang
+              viral dalam 1 klik
+            </h1>
+            <button className="cta-primary" onClick={scrollToGenerator}>
+              Mulai Gratis Sekarang
+            </button>
+          </div>
         </div>
+      </section>
 
-        <footer className="footer" style={{ marginTop: 80 }}>
-          <Link href="/builder" className="cta-button">
-            Mulai gratis sekarang
-          </Link>
-        </footer>
-      </main>
+      <section className="features-section" id="features">
+        <div className="feature">
+          <div className="icon">⚡</div>
+          <p>Pembuatan hook instan</p>
+        </div>
+        <div className="feature">
+          <div className="icon">🧠</div>
+          <p>Varian psikologi viral</p>
+        </div>
+        <div className="feature">
+          <div className="icon">🤖</div>
+          <p>Integrasi AI</p>
+        </div>
+      </section>
+
+      <section id="generator" ref={generatorRef} className="generator-section">
+        <form onSubmit={handleGenerate} className="generator-form">
+          <input
+            type="text"
+            placeholder="Contoh: jualan skincare glowing"
+            value={niche}
+            onChange={(e) => setNiche(e.target.value)}
+          />
+          <select value={tone} onChange={(e) => setTone(e.target.value)}>
+            <option value="fear">Fear / Shock</option>
+            <option value="curiosity">Curiosity</option>
+            <option value="confession">Confession</option>
+            <option value="humor">Humor</option>
+            <option value="affiliate">Affiliate Produk</option>
+          </select>
+          <button type="submit" disabled={loading}>
+            {loading ? "Menghasilkan..." : "Generate"}
+          </button>
+        </form>
+
+        {hooks.length > 0 && (
+          <div className="results-grid">
+            {hooks.map((h, i) => (
+              <div key={i} className="hook-card">
+                <h3 className="hook-title">Hook {i + 1}</h3>
+                <p className="hook-desc">{h}</p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <Link href="/builder" className="cta-secondary">
+          Coba Generator Lengkap
+        </Link>
+      </section>
+
+      <footer className="site-footer">
+        <a href="/privacy">Kebijakan Privasi</a>
+        <a href="/terms">Syarat</a>
+        <a href="mailto:hello@hookfreak.com">Kontak</a>
+      </footer>
     </>
   );
 }
