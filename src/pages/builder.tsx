@@ -2,25 +2,25 @@ import Head from "next/head";
 import { useState } from "react";
 
 export default function Builder() {
-  const [niche, setNiche] = useState("");
+  const [description, setDescription] = useState("");
+  const [audience, setAudience] = useState("");
   const [style, setStyle] = useState("soft-sell");
-  const [product, setProduct] = useState("");
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<any[] | null>(null);
 
   async function handleGenerate(e: React.FormEvent) {
     e.preventDefault();
-    if (!niche) return;
+    if (!description) return;
     setLoading(true);
     setResult(null);
     try {
       const r = await fetch("/api/generate-script", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ niche, style, product }),
+        body: JSON.stringify({ description, audience, style }),
       });
       const data = await r.json();
-      setResult(data.script);
+      setResult(data.hooks || []);
     } finally {
       setLoading(false);
     }
@@ -29,28 +29,37 @@ export default function Builder() {
   return (
     <>
       <Head>
-        <title>HookFreak • Content Builder</title>
+        <title>HookFreak • Video Sales Hook Builder</title>
       </Head>
       <main className="main-wrapper">
         <section className="hero">
           <h1 className="logo-text">
             Hook<span>Freak</span>
           </h1>
-          <p className="subtitle">Content Builder</p>
+          <p className="subtitle">Video Sales Hook Builder</p>
         </section>
         <section className="form-section">
           <form onSubmit={handleGenerate} className="hook-form">
             <label>
-              <span className="form-label">Apa yang mau dijual?</span>
+              <span className="form-label">Deskripsi Produk</span>
               <input
                 type="text"
-                value={niche}
-                onChange={(e) => setNiche(e.target.value)}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="niche-input"
               />
             </label>
             <label>
-              <span className="form-label">Gaya penyampaian</span>
+              <span className="form-label">Target Audiens</span>
+              <input
+                type="text"
+                value={audience}
+                onChange={(e) => setAudience(e.target.value)}
+                className="niche-input"
+              />
+            </label>
+            <label>
+              <span className="form-label">Gaya Konten</span>
               <select
                 value={style}
                 onChange={(e) => setStyle(e.target.value)}
@@ -63,25 +72,20 @@ export default function Builder() {
                 <option value="shock">Shock</option>
               </select>
             </label>
-            <label>
-              <span className="form-label">Produk (opsional)</span>
-              <input
-                type="text"
-                value={product}
-                onChange={(e) => setProduct(e.target.value)}
-              />
-            </label>
             <button type="submit" disabled={loading} className="generate-button">
               {loading ? "Menghasilkan..." : "Generate Script"}
             </button>
           </form>
           {result && (
             <div className="results" style={{ whiteSpace: "pre-wrap" }}>
-              <p><strong>Hook:</strong> {result.hook}</p>
-              <p><strong>Problem:</strong> {result.problem}</p>
-              <p><strong>Agitation:</strong> {result.agitation}</p>
-              <p><strong>Solution:</strong> {result.solution}</p>
-              <p><strong>CTA:</strong> {result.cta}</p>
+              {result.map((r, idx) => (
+                <div key={idx} style={{ marginBottom: 24 }}>
+                  <p><strong>Visual Hook:</strong> {r.visualHook}</p>
+                  <p><strong>Teks Hook:</strong> {r.textHook}</p>
+                  <p><strong>Script:</strong> {r.script}</p>
+                  <p><strong>Frame:</strong> {r.frames}</p>
+                </div>
+              ))}
             </div>
           )}
         </section>

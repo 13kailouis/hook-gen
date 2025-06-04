@@ -2,13 +2,40 @@ import Head from "next/head";
 import Link from "next/link";
 
 export default function Landing() {
+  const examples = [
+    {
+      visual: "Close-up wajah kaget, tiba-tiba munculkan botol serum",
+      text: "Jerawat datang lagi? Bentar, coba ini dulu!",
+      script:
+        "Hook -- Problem -- Agitation -- Solution -- CTA",
+      frame:
+        "Hook: close-up wajah, Problem: tunjuk jerawat, Agitation: ekspresi frustasi, Solution: tampilkan produk, CTA: ajak cek link bio",
+    },
+    {
+      visual: "Before-after meja berantakan lalu rapi dalam satu swipe",
+      text: "Gini caranya meja kerja keliatan premium!",
+      script:
+        "Hook -- Problem -- Agitation -- Solution -- CTA",
+      frame:
+        "Hook: sapu kamera ke meja, Problem: tunjuk kekacauan, Agitation: geleng kepala, Solution: pasang organizer, CTA: kode diskon di caption",
+    },
+    {
+      visual: "Gerakan tangan cepat pasang casing HP warna neon",
+      text: "Pengen hp keliatan mahal tanpa beli baru?",
+      script:
+        "Hook -- Problem -- Agitation -- Solution -- CTA",
+      frame:
+        "Hook: tangan masang casing, Problem: hp polos bikin bosan, Agitation: jari mengetuk kesal, Solution: tunjuk casing warna neon, CTA: swipe up untuk beli",
+    },
+  ];
+
   return (
     <>
       <Head>
-        <title>HookFreak • Viral Hook Generator</title>
+        <title>HookFreak • Video Sales Hook Builder</title>
         <meta
           name="description"
-          content="Bikin hook TikTok viral kurang dari 12 kata. Gratis dan cepat."
+          content="Bangun hook video jualan yang nancep dalam hitungan detik."
         />
       </Head>
       <main className="landing-wrapper">
@@ -16,33 +43,45 @@ export default function Landing() {
           <h1 className="logo-text">
             Hook<span>Freak</span>
           </h1>
-          <p className="subtitle">Toolkit Konten TikTok/Reels</p>
-          <div style={{display:"flex",gap:12,flexWrap:"wrap",justifyContent:"center"}}>
-            <Link href="/generator" className="cta-button">
-              Hook Generator
+          <p className="subtitle">Video Sales Hook Builder</p>
+          <form action="/builder" className="hero-form">
+            <input
+              name="description"
+              placeholder="Apa yang kamu jual?"
+              className="niche-input"
+            />
+            <select name="style" className="tone-select">
+              <option value="storytelling">Storytelling</option>
+              <option value="hard-sell">Hard Sell</option>
+              <option value="soft-sell">Soft Sell</option>
+              <option value="humor">Humor</option>
+              <option value="shock">Shock</option>
+            </select>
+            <button type="submit" className="cta-button">
+              Lihat Hasil Cepat
+            </button>
+          </form>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 16 }}>
+            <Link href="/builder?persona=ugc" className="cta-outline">
+              Saya UGC Creator
             </Link>
-            <Link href="/builder" className="cta-button">
-              Content Builder
+            <Link href="/builder?persona=brand" className="cta-outline">
+              Saya Pemilik Brand
             </Link>
-            <Link href="/batch" className="cta-button">
-              Batch Pack
+            <Link href="/builder?persona=freelancer" className="cta-outline">
+              Saya Freelancer Marketing
             </Link>
           </div>
         </section>
-        <section className="features">
-          <div className="feature">
-            <h3>⚡ Cepat &amp; Gratis</h3>
-            <p>Generate 10 hook kurang dari 12 kata cuma dengan 1 klik.</p>
-          </div>
-          <div className="feature">
-            <h3>🤖 Powered by AI</h3>
-            <p>Ditenagai model LLAMA-3-70B via Groq untuk hasil tajam.</p>
-          </div>
-          <div className="feature">
-            <h3>🎯 CTR Tinggi</h3>
-            <p>Hook didesain khusus untuk bikin penonton berhenti scroll.</p>
-          </div>
-        </section>
+        {examples.map((ex, idx) => (
+          <section key={idx} className="example">
+            <h3>Contoh #{idx + 1}</h3>
+            <p><strong>Adegan Pembuka:</strong> {ex.visual}</p>
+            <p><strong>Teks Hook:</strong> {ex.text}</p>
+            <p><strong>Script:</strong> {ex.script}</p>
+            <p><strong>Frame:</strong> {ex.frame}</p>
+          </section>
+        ))}
       </main>
     </>
   );
