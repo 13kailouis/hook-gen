@@ -1,0 +1,94 @@
+.hookList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.hookItem {
+  position: relative;
+  background-color: #1c1c1c;
+  border-left: 4px solid var(--color-accent);
+  border-radius: 12px;
+  padding: 20px 52px 20px 20px;
+  box-shadow: 0 0 0 1px var(--color-border);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.hookItem:hover {
+  background-color: #222;
+  transform: translateY(-2px);
+}
+
+.hookText {
+  font-family: var(--font-main);
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: 0.2px;
+  font-weight: 400;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.copyButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+.copyButton:hover {
+  color: var(--color-accent);
+}
+
+.hookActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 4px;
+  border-top: 1px solid var(--color-border);
+}
+
+.likeButton,
+.dislikeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.likeButton:hover,
+.dislikeButton:hover {
+  color: var(--color-accent);
+}
+
+.likeButton.active,
+.dislikeButton.active {
+  color: var(--color-accent);
+}
+
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.active { color: var(--color-accent); }
