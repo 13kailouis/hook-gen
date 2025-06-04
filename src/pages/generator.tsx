@@ -1,5 +1,6 @@
 // 📁 pages/generator.tsx
 import Head from "next/head";
+import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
 import HookList from "@/components/HookList";
 import { FiCopy, FiCheck } from "react-icons/fi";
@@ -111,6 +112,8 @@ export default function Home() {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
           <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
         </Head>
+
+      <Navbar />
 
 
       <main className="main-wrapper">
