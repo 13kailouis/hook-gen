@@ -15,8 +15,14 @@ Setiap permintaan memberi tiga versi alternatif supaya kamu bisa pilih yang pali
 1.  Salin file `.env.example` menjadi `.env.local` (`cp .env.example .env.local`).
 2.  Isi `GROQ_API_KEY` di dalam `.env.local` dengan API key Groq Anda.
 3.  Atur `NEXT_PUBLIC_DEFAULT_DURATION` jika ingin mengubah durasi script default (opsional).
+
+4.  Opsional: set `NEXT_PUBLIC_SITE_NAME` untuk mengganti nama brand pada tampilan.
+5.  Install dependencies: `npm i`
+6.  Jalankan server development: `npm run dev`
 4.  Install dependencies: `npm i`
 5.  Jalankan server development: `npm run dev`
 
+
 Aplikasi akan berjalan di `http://localhost:3000`.
-Anda bisa langsung buka halaman utama untuk mencoba generator singkat, atau ke `/builder` untuk fitur input yang lebih lengkap.
+Landing page kini hanya menampilkan informasi dan contoh hasil.
+Buka `/builder` untuk langsung menggunakan generator skrip lengkap.

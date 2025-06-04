@@ -14,9 +14,16 @@ const formatScriptForLandingDisplay = (script: string) => {
     else if (index === 2) label = "Agitation";
     else if (index === 3) label = "Solution";
     else if (index === 4) label = "CTA";
-    
+
     const contentPart = part.trim();
     return (
+      <div key={index} style={{ marginBottom: "0.5em" }}>
+        {label && (
+          <strong style={{ color: "var(--highlight-color)" }}>{label}: </strong>
+        )}
+        <span>
+          {contentPart.length > 100 ? contentPart.substring(0, 97) + "..." : contentPart}
+        </span>
       <div key={index} style={{ marginBottom: '0.5em' }}>
         {label && <strong style={{ color: 'var(--highlight-color)' }}>{label}: </strong>}
         <span>{contentPart.length > 100 ? contentPart.substring(0, 97) + "..." : contentPart}</span>
@@ -25,7 +32,11 @@ const formatScriptForLandingDisplay = (script: string) => {
   });
 };
 
+const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "HookFreak";
+const [MAIN_NAME, SECOND_NAME] = SITE_NAME.split(" ");
 
+
+export default function HomePage() {
 export default function HomePage() {
   const [productInput, setProductInput] = useState("");
   const [styleInput, setStyleInput] = useState("storytelling");
@@ -108,6 +119,7 @@ export default function HomePage() {
   return (
     <>
       <Head>
+        <title>{SITE_NAME} – Video Sales Hook Builder (TikTok, Reels, Shorts)</title>
         <title>HookFreak – Video Sales Hook Builder (TikTok, Reels, Shorts)</title>
         <meta name="description" content="Bikin skrip video jualan TikTok, Reels, dan Shorts yang nancep di detik pertama. Hasilkan visual hook, teks pembuka, skrip sesuai durasi, dan saran frame dalam 1 klik!" />
         <meta name="keywords" content="video sales hook, tiktok script generator, reels script, shorts script, content creator tool, marketing video, hook generator" />
@@ -118,7 +130,10 @@ export default function HomePage() {
 
       {/* Navbar Minimal untuk Landing Page */}
       <nav className="landing-nav">
-        <div className="nav-logo">Hook<span>Freak</span></div>
+        <div className="nav-logo">
+          {MAIN_NAME}
+          {SECOND_NAME && <span>{SECOND_NAME}</span>}
+        </div>
         <div className="nav-actions">
           <Link href="/builder" className="nav-link">Builder Lengkap</Link>
           {/* <a href="#pricing" className="nav-link login-link">Harga & Login</a> */}
@@ -129,7 +144,14 @@ export default function HomePage() {
         <section className="hero-new">
           <div className="hero-content-new">
             <h1>Stop Bikin Konten Jualan <span className="highlight">Ngebosenin</span>.</h1>
-            <p className="subheadline">HookFreak bantu kamu bikin <strong className="highlight">visual hook, teks pembuka, skrip sesuai durasi, dan ide frame</strong> video TikTok & Reels yang nancep di detik pertama. Sekali klik, tiga alternatif langsung jadi!</p>
+            <p className="subheadline">{SITE_NAME} bantu kamu bikin <strong className="highlight">visual hook, teks pembuka, skrip sesuai durasi, dan ide frame</strong> video TikTok & Reels yang nancep di detik pertama. Sekali klik, tiga alternatif langsung jadi!</p>
+            <Link href="/builder" className="cta-button-primary">
+              🚀 Mulai Buat Skrip Sekarang
+            </Link>
+          </div>
+        </section>
+
+          <p className="subheadline">HookFreak bantu kamu bikin <strong className="highlight">visual hook, teks pembuka, skrip sesuai durasi, dan ide frame</strong> video TikTok & Reels yang nancep di detik pertama. Sekali klik, tiga alternatif langsung jadi!</p>
             <form onSubmit={handleQuickGenerate} className="hero-form">
               <input
                 type="text"
@@ -197,8 +219,7 @@ export default function HomePage() {
             </div>
           </section>
         )}
-
-        <section className="persona-cta-section">
+    <section className="persona-cta-section">
           <h2>Kamu Siapa di Dunia Konten?</h2>
           <div className="persona-grid">
             <Link href="/builder?persona=ugc" className="persona-card">
@@ -220,7 +241,7 @@ export default function HomePage() {
         </section>
 
         <section className="examples-section">
-          <h2>Contoh Hasil Nyata dari HookFreak:</h2>
+          <h2>Contoh Hasil Nyata dari {SITE_NAME}:</h2>
           {exampleOutputs.map((ex, idx) => ( 
             <div key={idx} className="example-output-card">
                <h4>Contoh untuk: "{ex._internalProductDesc}" (Gaya: {ex._internalStyle})</h4>
@@ -236,7 +257,7 @@ export default function HomePage() {
         </section>
 
         <footer className="landing-footer">
-          <p>&copy; {new Date().getFullYear()} HookFreak. Bikin konten jualan nancep itu gampang!</p>
+          <p>&copy; {new Date().getFullYear()} {SITE_NAME}. Bikin konten jualan nancep itu gampang!</p>
           {/* <a href="/privacy">Kebijakan Privasi</a> | <a href="/terms">Syarat Ketentuan</a> */}
         </footer>
       </main>
@@ -255,6 +276,8 @@ export default function HomePage() {
         .hero-new { text-align: center; padding: 4rem 2rem 3rem; background: linear-gradient(180deg, #080808 0%, #000000 100%); }
         .hero-content-new h1 { font-size: 2.8rem; font-weight: 900; margin-bottom: 1rem; line-height: 1.2; }
         .hero-content-new .subheadline { font-size: 1.1rem; color: #b0b0b0; max-width: 700px; margin: 0 auto 2rem; line-height: 1.7; }
+        .cta-button-primary { display: inline-block; background: var(--highlight-color); color: #000; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 700; margin-right: 1rem; transition: transform 0.2s, background-color 0.2s; margin-bottom: 0.5rem; }
+        .cta-button-primary:hover { transform: translateY(-2px); background-color: #2ecc71; }
         .hero-form { display: flex; flex-direction: column; gap: 1rem; max-width: 600px; margin: 0 auto; background: #0a0a0a; padding: 2rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 255, 106, 0.1); }
         .hero-form input, .hero-form select { padding: 0.9rem; border-radius: 8px; border: 1px solid #333; background: #111; color: #f0f0f0; font-size: 1rem; }
         .hero-form input:focus, .hero-form select:focus { border-color: var(--highlight-color); outline: none; box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.3); }
@@ -310,11 +333,10 @@ export default function HomePage() {
         @media (max-width: 768px) {
           .hero-content-new h1 { font-size: 2.2rem; }
           .hero-content-new .subheadline { font-size: 1rem; }
-          .hero-form { padding: 1.5rem; }
           .persona-grid { grid-template-columns: 1fr; }
           .nav-actions .nav-link { margin-left: 1rem; font-size: 0.9rem;}
           .nav-logo {font-size: 1.5rem;}
-          .cta-button-primary, .cta-button-secondary { width:100%; margin-right:0; margin-left:0; box-sizing:border-box;}
+          .cta-button-primary { width:100%; margin-right:0; margin-left:0; box-sizing:border-box;}
         }
       `}</style>
     </>
