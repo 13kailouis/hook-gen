@@ -28,6 +28,7 @@ const formatScriptForLandingDisplay = (script: string) => {
 export default function HomePage() {
   const [productInput, setProductInput] = useState("");
   const [styleInput, setStyleInput] = useState("storytelling");
+  const [durationInput, setDurationInput] = useState(30);
   const [loading, setLoading] = useState(false); //
   const [firstResult, setFirstResult] = useState<SalesAlternative | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -43,9 +44,10 @@ export default function HomePage() {
         method: "POST", //
         headers: { "Content-Type": "application/json" }, //
         body: JSON.stringify({ //
-          description: productInput, 
-          audience: "", 
-          style: styleInput, 
+          description: productInput,
+          audience: "",
+          style: styleInput,
+          duration: durationInput,
         }),
       });
       if (!r.ok) {
@@ -98,7 +100,7 @@ export default function HomePage() {
     <>
       <Head>
         <title>HookFreak – Video Sales Hook Builder (TikTok, Reels, Shorts)</title>
-        <meta name="description" content="Bikin skrip video jualan TikTok, Reels, dan Shorts yang nancep di detik pertama. Hasilkan visual hook, teks pembuka, skrip 30 detik, dan saran frame dalam 1 klik!" />
+        <meta name="description" content="Bikin skrip video jualan TikTok, Reels, dan Shorts yang nancep di detik pertama. Hasilkan visual hook, teks pembuka, skrip sesuai durasi, dan saran frame dalam 1 klik!" />
         <meta name="keywords" content="video sales hook, tiktok script generator, reels script, shorts script, content creator tool, marketing video, hook generator" />
         <link rel="preconnect" href="https://fonts.googleapis.com" /> {/* */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /> {/* */}
@@ -118,7 +120,7 @@ export default function HomePage() {
         <section className="hero-new">
           <div className="hero-content-new">
             <h1>Stop Bikin Konten Jualan <span className="highlight">Ngebosenin</span>.</h1>
-            <p className="subheadline">HookFreak bantu kamu bikin <strong className="highlight">visual hook, teks pembuka, skrip 30 detik, dan ide frame</strong> video TikTok & Reels yang nancep di detik pertama. Sekali klik, tiga alternatif langsung jadi!</p>
+            <p className="subheadline">HookFreak bantu kamu bikin <strong className="highlight">visual hook, teks pembuka, skrip sesuai durasi, dan ide frame</strong> video TikTok & Reels yang nancep di detik pertama. Sekali klik, tiga alternatif langsung jadi!</p>
             <form onSubmit={handleQuickGenerate} className="hero-form">
               <input
                 type="text"
@@ -134,6 +136,11 @@ export default function HomePage() {
                 <option value="shock">Gaya: Shock</option>
                 <option value="fomo">Gaya: FOMO</option>
                 <option value="edukatif">Gaya: Edukatif</option>
+              </select>
+              <select value={durationInput} onChange={(e) => setDurationInput(parseInt(e.target.value))}>
+                <option value={15}>Durasi: 15 detik</option>
+                <option value={30}>Durasi: 30 detik</option>
+                <option value={60}>Durasi: 60 detik</option>
               </select>
               <button type="submit" disabled={loading}>
                 {loading ? "Lagi Diracik..." : "🧪 Lihat Hasil Nyata (Gratis!)"}

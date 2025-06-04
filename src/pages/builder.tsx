@@ -33,6 +33,7 @@ export default function Builder() {
   const [productDesc, setProductDesc] = useState(""); //
   const [targetAudience, setTargetAudience] = useState(""); //
   const [contentStyle, setContentStyle] = useState("storytelling"); // Default style
+  const [duration, setDuration] = useState(30);
   const [loading, setLoading] = useState(false); //
   const [results, setResults] = useState<SalesAlternative[] | null>(null); //
   const [error, setError] = useState<string | null>(null);
@@ -48,15 +49,15 @@ export default function Builder() {
       if (persona === "ugc") {
         setProductDesc(productDesc || "Produk review dari brand XYZ (kosmetik/fashion/gadget)");
         setTargetAudience(targetAudience || "Anak muda Gen Z yang suka konten otentik dan review jujur");
-        setContentStyle(style || "storytelling");
+        setContentStyle((style as string) || "storytelling");
       } else if (persona === "brand") {
         setProductDesc(productDesc || "Produk unggulan brand kami [Nama Brand]");
         setTargetAudience(targetAudience || "Target market spesifik brand kami [Misal: Ibu muda pekerja]");
-        setContentStyle(style || "soft-sell");
+        setContentStyle((style as string) || "soft-sell");
       } else if (persona === "freelancer") {
         setProductDesc(productDesc || "Produk klien [Nama Klien/Jenis Industri]");
         setTargetAudience(targetAudience || "Target audiens klien");
-        setContentStyle(style || "hard-sell");
+        setContentStyle((style as string) || "hard-sell");
       }
     }
   }, [router.isReady, router.query, productDesc, targetAudience, contentStyle]); // Added dependencies
@@ -79,6 +80,7 @@ export default function Builder() {
           description: productDesc,
           audience: targetAudience,
           style: contentStyle,
+          duration,
         }),
       });
       if (!r.ok) {
@@ -151,6 +153,14 @@ export default function Builder() {
                  <option value="problem-solution">Problem/Solution (Masalah & Solusi)</option>
                 <option value="testimonial">Testimonial (Review Jujur)</option>
                 <option value="unboxing">Unboxing Keren</option>
+              </select>
+            </label>
+            <label>
+              <span className="form-label">Durasi Maksimal Skrip</span>
+              <select value={duration} onChange={(e) => setDuration(parseInt(e.target.value))} className="tone-select">
+                <option value={15}>15 detik</option>
+                <option value={30}>30 detik</option>
+                <option value={60}>60 detik</option>
               </select>
             </label>
             <button type="submit" disabled={loading} className="generate-button"> {/* */}

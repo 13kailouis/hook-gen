@@ -14,13 +14,14 @@ export default async function handler(
     description = "", // Deskripsi produk
     audience = "",    // Target audiens
     style = "",       // Gaya konten, e.g., "storytelling", "hard-sell"
+    duration = null    // Durasi maksimum script
   } = req.body;
 
   // Tidak perlu validasi input kosong di sini jika kita ingin mengandalkan default
   // di generateCompleteSalesHooks untuk fitur "lihat hasil nyata dalam 5 detik".
 
   try {
-    const alternatives: SalesAlternative[] = await generateCompleteSalesHooks(description, audience, style); //
+    const alternatives: SalesAlternative[] = await generateCompleteSalesHooks(description, audience, style, duration ? Number(duration) : undefined); //
     // Kirim semua alternatif ke client
     res.status(200).json({ alternatives });
   } catch (err: any) {
