@@ -1,6 +1,5 @@
 // src/pages/index.tsx
 import Head from "next/head";
-import { useState, useRef } from "react";
 import Link from "next/link";
 import { SalesAlternative } from "@/lib/groq"; // Import SalesAlternative
 
@@ -13,61 +12,26 @@ const formatScriptForLandingDisplay = (script: string) => {
     else if (index === 2) label = "Agitation";
     else if (index === 3) label = "Solution";
     else if (index === 4) label = "CTA";
-    
+
     const contentPart = part.trim();
     return (
-      <div key={index} style={{ marginBottom: '0.5em' }}>
-        {label && <strong style={{ color: '#39ff14' }}>{label}: </strong>}
-        <span>{contentPart.length > 100 ? contentPart.substring(0, 97) + "..." : contentPart}</span>
+      <div key={index} style={{ marginBottom: "0.5em" }}>
+        {label && (
+          <strong style={{ color: "var(--highlight-color)" }}>{label}: </strong>
+        )}
+        <span>
+          {contentPart.length > 100 ? contentPart.substring(0, 97) + "..." : contentPart}
+        </span>
       </div>
     );
   });
 };
 
+const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "HookFreak";
+const [MAIN_NAME, SECOND_NAME] = SITE_NAME.split(" ");
+
 
 export default function HomePage() {
-  const [productInput, setProductInput] = useState("");
-  const [styleInput, setStyleInput] = useState("storytelling");
-  const [loading, setLoading] = useState(false); //
-  const [firstResult, setFirstResult] = useState<SalesAlternative | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const resultsRef = useRef<HTMLDivElement>(null); //
-
-  async function handleQuickGenerate(e?: React.FormEvent) {
-    if (e) e.preventDefault();
-    setLoading(true); //
-    setFirstResult(null);
-    setError(null);
-    try {
-      const r = await fetch("/api/generate-script", { //
-        method: "POST", //
-        headers: { "Content-Type": "application/json" }, //
-        body: JSON.stringify({ //
-          description: productInput, 
-          audience: "", 
-          style: styleInput, 
-        }),
-      });
-      if (!r.ok) {
-        const errData = await r.json();
-        throw new Error(errData.error || `Error ${r.status}`);
-      }
-      const data = await r.json(); //
-      if (data.alternatives && data.alternatives.length > 0) { //
-        setFirstResult(data.alternatives[0]); //
-        setTimeout(() => {
-          resultsRef.current?.scrollIntoView({ behavior: "smooth" }); //
-        }, 100);
-      } else {
-        setError("Gagal mendapatkan hasil. Coba lagi yuk!");
-      }
-    } catch (err: any) {
-      console.error(err);
-      setError(err.message);
-    } finally {
-      setLoading(false); //
-    }
-  }
 
   const exampleOutputs: SalesAlternative[] = [
     {
@@ -97,8 +61,8 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>HookFreak – Video Sales Hook Builder (TikTok, Reels, Shorts)</title>
-        <meta name="description" content="Bikin skrip video jualan TikTok, Reels, dan Shorts yang nancep di detik pertama. Hasilkan visual hook, teks pembuka, skrip 30 detik, dan saran frame dalam 1 klik!" />
+        <title>{SITE_NAME} – Video Sales Hook Builder (TikTok, Reels, Shorts)</title>
+        <meta name="description" content="Bikin skrip video jualan TikTok, Reels, dan Shorts yang nancep di detik pertama. Hasilkan visual hook, teks pembuka, skrip sesuai durasi, dan saran frame dalam 1 klik!" />
         <meta name="keywords" content="video sales hook, tiktok script generator, reels script, shorts script, content creator tool, marketing video, hook generator" />
         <link rel="preconnect" href="https://fonts.googleapis.com" /> {/* */}
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" /> {/* */}
@@ -107,7 +71,10 @@ export default function HomePage() {
 
       {/* Navbar Minimal untuk Landing Page */}
       <nav className="landing-nav">
-        <div className="nav-logo">Hook<span>Freak</span></div>
+        <div className="nav-logo">
+          {MAIN_NAME}
+          {SECOND_NAME && <span>{SECOND_NAME}</span>}
+        </div>
         <div className="nav-actions">
           <Link href="/builder" className="nav-link">Builder Lengkap</Link>
           {/* <a href="#pricing" className="nav-link login-link">Harga & Login</a> */}
@@ -118,66 +85,14 @@ export default function HomePage() {
         <section className="hero-new">
           <div className="hero-content-new">
             <h1>Stop Bikin Konten Jualan <span className="highlight">Ngebosenin</span>.</h1>
-            <p className="subheadline">HookFreak bantu kamu bikin <strong className="highlight">visual hook, teks pembuka, skrip 30 detik, dan ide frame</strong> video TikTok & Reels yang nancep di detik pertama. Sekali klik, tiga alternatif langsung jadi!</p>
-            <form onSubmit={handleQuickGenerate} className="hero-form">
-              <input
-                type="text"
-                value={productInput}
-                onChange={(e) => setProductInput(e.target.value)}
-                placeholder="Apa yang kamu jual? (Mis: Kopi Susu Gula Aren)"
-              />
-              <select value={styleInput} onChange={(e) => setStyleInput(e.target.value)}>
-                <option value="storytelling">Gaya: Storytelling</option>
-                <option value="soft-sell">Gaya: Soft Sell</option>
-                <option value="hard-sell">Gaya: Hard Sell</option>
-                <option value="humor">Gaya: Humor</option>
-                <option value="shock">Gaya: Shock</option>
-                <option value="fomo">Gaya: FOMO</option>
-                <option value="edukatif">Gaya: Edukatif</option>
-              </select>
-              <button type="submit" disabled={loading}>
-                {loading ? "Lagi Diracik..." : "🧪 Lihat Hasil Nyata (Gratis!)"}
-              </button>
-            </form>
-            {error && <p className="error-message-hero">{error}</p>}
+            <p className="subheadline">{SITE_NAME} bantu kamu bikin <strong className="highlight">visual hook, teks pembuka, skrip sesuai durasi, dan ide frame</strong> video TikTok & Reels yang nancep di detik pertama. Sekali klik, tiga alternatif langsung jadi!</p>
+            <Link href="/builder" className="cta-button-primary">
+              🚀 Mulai Buat Skrip Sekarang
+            </Link>
           </div>
         </section>
 
-        {firstResult && ( //
-          <section ref={resultsRef} className="quick-results-display">  {/* */}
-            <h2>✨ Ini Satu Ide Segar Buatmu:</h2>
-            <div className="alternative-card-landing">
-              <div className="result-section-landing">
-                <strong>🎨 Visual Hook Ciamik:</strong>
-                <p>{firstResult.visualHook}</p>
-              </div>
-              <div className="result-section-landing">
-                <strong>💬 Teks Hook Nendang:</strong>
-                <p>{firstResult.textHook}</p>
-              </div>
-              <div className="result-section-landing">
-                <strong>📝 Skrip Singkat & Padat:</strong>
-                <div className="script-display-landing">{formatScriptForLandingDisplay(firstResult.script)}</div>
-              </div>
-              <div className="result-section-landing">
-                <strong>🎬 Ide Frame Anti Ribet:</strong>
-                <p style={{whiteSpace: 'pre-line'}}>{firstResult.frames.substring(0,250)}...</p>
-              </div>
-            </div>
-            <div className="more-options">
-              <p>Suka? Ada 2 alternatif lain & fitur canggih menantimu di Builder!</p>
-              <Link href={`/builder?product=${encodeURIComponent(productInput)}&style=${styleInput}`} className="cta-button-primary">
-                🚀 Buka Builder Lengkap (Lihat Semua Hasil & Kustomisasi)
-              </Link>
-              <button onClick={() => handleQuickGenerate()} disabled={loading} className="cta-button-secondary">
-                {loading ? "Tunggu ya..." : "Coba Generate Lagi (Input Beda)"}
-              </button>
-              {/* <p style={{marginTop: '1rem', fontSize: '0.9em'}}>
-                <Link href="/pricing" className="link-subtle">Unlock export & batch builder untuk jadi pro!</Link>
-              </p> */}
-            </div>
-          </section>
-        )}
+
 
         <section className="persona-cta-section">
           <h2>Kamu Siapa di Dunia Konten?</h2>
@@ -201,7 +116,7 @@ export default function HomePage() {
         </section>
 
         <section className="examples-section">
-          <h2>Contoh Hasil Nyata dari HookFreak:</h2>
+          <h2>Contoh Hasil Nyata dari {SITE_NAME}:</h2>
           {exampleOutputs.map((ex, idx) => ( 
             <div key={idx} className="example-output-card">
                <h4>Contoh untuk: "{ex._internalProductDesc}" (Gaya: {ex._internalStyle})</h4>
@@ -217,7 +132,7 @@ export default function HomePage() {
         </section>
 
         <footer className="landing-footer">
-          <p>&copy; {new Date().getFullYear()} HookFreak. Bikin konten jualan nancep itu gampang!</p>
+          <p>&copy; {new Date().getFullYear()} {SITE_NAME}. Bikin konten jualan nancep itu gampang!</p>
           {/* <a href="/privacy">Kebijakan Privasi</a> | <a href="/terms">Syarat Ketentuan</a> */}
         </footer>
       </main>
@@ -225,40 +140,19 @@ export default function HomePage() {
       <style jsx>{`
         // General Landing Styles
         .landing-nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #080808; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 100;}
-        .nav-logo { font-size: 1.8rem; font-weight: 900; color: #39ff14; }
+        .nav-logo { font-size: 1.8rem; font-weight: 900; color: var(--highlight-color); }
         .nav-logo span { color: #f0f0f0; }
         .nav-actions .nav-link { color: #f0f0f0; text-decoration: none; margin-left: 1.5rem; font-weight: 500; }
-        .nav-actions .nav-link:hover { color: #39ff14; }
+        .nav-actions .nav-link:hover { color: var(--highlight-color); }
         .landing-main { font-family: 'Inter', sans-serif; background-color: #000; color: #f0f0f0; padding-top: 0;}
-        .highlight { color: #39ff14; }
+        .highlight { color: var(--highlight-color); }
 
         // Hero Section
         .hero-new { text-align: center; padding: 4rem 2rem 3rem; background: linear-gradient(180deg, #080808 0%, #000000 100%); }
         .hero-content-new h1 { font-size: 2.8rem; font-weight: 900; margin-bottom: 1rem; line-height: 1.2; }
         .hero-content-new .subheadline { font-size: 1.1rem; color: #b0b0b0; max-width: 700px; margin: 0 auto 2rem; line-height: 1.7; }
-        .hero-form { display: flex; flex-direction: column; gap: 1rem; max-width: 600px; margin: 0 auto; background: #0a0a0a; padding: 2rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 255, 106, 0.1); }
-        .hero-form input, .hero-form select { padding: 0.9rem; border-radius: 8px; border: 1px solid #333; background: #111; color: #f0f0f0; font-size: 1rem; }
-        .hero-form input:focus, .hero-form select:focus { border-color: #39ff14; outline: none; box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.3); }
-        .hero-form button { padding: 1rem; background: #39ff14; color: #000; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease; }
-        .hero-form button:hover { background-color: #2ecc71; }
-        .hero-form button:disabled { background-color: #555; opacity:0.7; cursor: not-allowed; }
-        .error-message-hero { color: #ff4d4d; margin-top: 1rem; }
-
-        // Quick Results Display
-        .quick-results-display { padding: 3rem 2rem; text-align: center; background: #050505; }
-        .quick-results-display h2 { font-size: 2rem; margin-bottom: 2rem; }
-        .alternative-card-landing { background: #111; border: 1px solid #222; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .result-section-landing { margin-bottom: 1.5rem; }
-        .result-section-landing strong { display: block; margin-bottom: 0.5rem; color: #39ff14; font-size: 1.1rem; }
-        .result-section-landing p, .result-section-landing div { color: #ccc; line-height: 1.6; }
-        .script-display-landing span { display: block; margin-bottom: 0.3em;}
-        .more-options { margin-top: 1.5rem; }
-        .more-options p { margin-bottom: 1rem; color: #aaa; }
-        .cta-button-primary { display: inline-block; background: #39ff14; color: #000; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 700; margin-right: 1rem; transition: transform 0.2s, background-color 0.2s; margin-bottom: 0.5rem; }
+        .cta-button-primary { display: inline-block; background: var(--highlight-color); color: #000; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 700; margin-right: 1rem; transition: transform 0.2s, background-color 0.2s; margin-bottom: 0.5rem; }
         .cta-button-primary:hover { transform: translateY(-2px); background-color: #2ecc71; }
-        .cta-button-secondary { display: inline-block; background: transparent; border: 2px solid #39ff14; color: #39ff14; padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background-color 0.2s, color 0.2s; margin-bottom: 0.5rem;}
-        .cta-button-secondary:hover { background-color: #39ff14; color: #000; }
-        .cta-button-secondary:disabled { opacity:0.6; cursor:not-allowed; border-color: #555; color: #555;}
         .link-subtle { color: #777; text-decoration: none; }
         .link-subtle:hover { color: #aaa; text-decoration: underline; }
 
@@ -269,9 +163,9 @@ export default function HomePage() {
         .persona-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
         .persona-card { background: #0f0f0f; border: 1px solid #222; padding: 2rem 1.5rem; border-radius: 12px; text-decoration: none; color: #f0f0f0; transition: transform 0.2s ease, box-shadow 0.2s ease; text-align: left;}
         .persona-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(57, 255, 20, 0.15); }
-        .persona-card h3 { font-size: 1.5rem; color: #39ff14; margin-top: 0; margin-bottom: 0.5rem; }
+        .persona-card h3 { font-size: 1.5rem; color: var(--highlight-color); margin-top: 0; margin-bottom: 0.5rem; }
         .persona-card p { font-size: 1rem; color: #aaa; margin-bottom: 1rem; line-height:1.6; }
-        .persona-card span { font-weight: 700; color: #39ff14; }
+        .persona-card span { font-weight: 700; color: var(--highlight-color); }
 
         // Examples Section
         .examples-section { padding: 4rem 2rem; background: #080808; }
@@ -279,23 +173,22 @@ export default function HomePage() {
         .example-output-card { background: #111; border: 1px solid #222; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto; text-align:left; }
         .example-output-card h4 { margin-top: 0; color: #eee; font-size: 1.2rem; margin-bottom: 1.5rem;}
         .example-part { margin-bottom: 1rem; }
-        .example-part strong { color: #39ff14; font-size: 1.05rem; display:block; margin-bottom:0.3rem;}
+        .example-part strong { color: var(--highlight-color); font-size: 1.05rem; display:block; margin-bottom:0.3rem;}
         .example-part p, .example-part div { color: #ccc; line-height: 1.6; margin-top: 0.1rem; }
 
         // Footer
         .landing-footer { text-align: center; padding: 3rem 2rem; background: #000; border-top: 1px solid #1a1a1a; }
         .landing-footer p { color: #777; margin: 0; }
         .landing-footer a { color: #888; text-decoration: none; margin: 0 0.5rem; }
-        .landing-footer a:hover { color: #39ff14; }
+        .landing-footer a:hover { color: var(--highlight-color); }
 
         @media (max-width: 768px) {
           .hero-content-new h1 { font-size: 2.2rem; }
           .hero-content-new .subheadline { font-size: 1rem; }
-          .hero-form { padding: 1.5rem; }
           .persona-grid { grid-template-columns: 1fr; }
           .nav-actions .nav-link { margin-left: 1rem; font-size: 0.9rem;}
           .nav-logo {font-size: 1.5rem;}
-          .cta-button-primary, .cta-button-secondary { width:100%; margin-right:0; margin-left:0; box-sizing:border-box;}
+          .cta-button-primary { width:100%; margin-right:0; margin-left:0; box-sizing:border-box;}
         }
       `}</style>
     </>
