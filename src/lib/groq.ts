@@ -15,12 +15,14 @@ export interface SalesAlternative {
 export async function generateCompleteSalesHooks(
   productDesc: string,
   audience: string,
-  style: string
+  style: string,
+  duration?: number
 ): Promise<SalesAlternative[]> {
   // Default values jika input tidak lengkap
   const finalProductDesc = productDesc || "skincare pencerah wajah";
   const finalAudience = audience || "wanita usia 20-35 tahun yang aktif di sosial media dan tertarik dengan perawatan kulit praktis";
   const finalStyle = style || "storytelling edukatif";
+  const finalDuration = duration || Number(process.env.NEXT_PUBLIC_DEFAULT_DURATION) || 30;
 
   const prompt = `
 Kamu adalah seorang scriptwriter video TikTok profesional dengan spesialisasi membuat konten jualan yang viral dan sangat efektif. Klienmu adalah kreator konten dan marketer yang butuh skrip siap pakai, bukan ide abstrak atau deskripsi umum. Outputmu harus langsung usable.
@@ -35,7 +37,7 @@ VisualHook: [Deskripsi adegan pembuka 1-2 detik yang kuat secara visual, konkret
 
 TextHook: [Satu kalimat pembuka yang emosional, provokatif, atau sangat membuat penasaran. Cocok untuk subtitle atau voiceover. Gaya bahasa harus menyesuaikan gaya konten yang diminta dan punya efek interrupt kuat. Contoh: "STOP scroll kalau lo masih jerawatan di usia 25!"; "Gue kira ini gimmick, ternyata..."; "Rahasia glow up modal 50 ribu?"]
 
-Script: [Narasi video lengkap (maksimal 30 detik) dengan struktur Hook - Problem - Agitation - Solution - CTA. Tulis sebagai PARAGRAF yang mengalir alami dan enak didengar/dibaca, BUKAN outline poin-poin. Pisahkan setiap bagian (Hook, Problem, Agitation, Solution, CTA) secara eksplisit dengan ' -- ' (spasi, dua strip, spasi). Gaya bahasa percakapan sehari-hari, sesuaikan dengan gaya konten dan target audiens.
+Script: [Narasi video lengkap (maksimal ${finalDuration} detik) dengan struktur Hook - Problem - Agitation - Solution - CTA. Tulis sebagai PARAGRAF yang mengalir alami dan enak didengar/dibaca, BUKAN outline poin-poin. Pisahkan setiap bagian (Hook, Problem, Agitation, Solution, CTA) secara eksplisit dengan ' -- ' (spasi, dua strip, spasi). Gaya bahasa percakapan sehari-hari, sesuaikan dengan gaya konten dan target audiens.
 Contoh struktur internal (jangan tampilkan ini di output, hanya sebagai panduanmu):
 Hook: (Lanjutkan atau elaborasi dari TextHook, tarik perhatian lebih dalam)
 --
@@ -170,3 +172,25 @@ export async function generateSalesHooks(desc: string, audience: string, style: 
     // ... implementasi lama ...
 }
 */
+
+// Placeholder to satisfy build for legacy API routes
+export async function generateBatchPack(
+  brand: string,
+  product: string,
+  audience: string,
+  count = 10
+) {
+  throw new Error("generateBatchPack is not implemented");
+}
+
+export async function generateHooks(
+  niche: string,
+  tone: string,
+  product?: string
+) {
+  throw new Error("generateHooks is not implemented");
+}
+
+export async function generateHookScenes(niche: string, tone: string) {
+  throw new Error("generateHookScenes is not implemented");
+}
