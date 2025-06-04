@@ -1,6 +1,7 @@
 // src/pages/index.tsx
 import Head from "next/head";
 import { useState, useRef } from "react";
+import { FiCopy, FiCheck } from "react-icons/fi";
 import Link from "next/link";
 import { SalesAlternative } from "@/lib/groq"; // Import SalesAlternative
 
@@ -17,7 +18,7 @@ const formatScriptForLandingDisplay = (script: string) => {
     const contentPart = part.trim();
     return (
       <div key={index} style={{ marginBottom: '0.5em' }}>
-        {label && <strong style={{ color: '#39ff14' }}>{label}: </strong>}
+        {label && <strong style={{ color: 'var(--highlight-color)' }}>{label}: </strong>}
         <span>{contentPart.length > 100 ? contentPart.substring(0, 97) + "..." : contentPart}</span>
       </div>
     );
@@ -32,6 +33,7 @@ export default function HomePage() {
   const [loading, setLoading] = useState(false); //
   const [firstResult, setFirstResult] = useState<SalesAlternative | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const resultsRef = useRef<HTMLDivElement>(null); //
 
   async function handleQuickGenerate(e?: React.FormEvent) {
@@ -70,6 +72,13 @@ export default function HomePage() {
       setLoading(false); //
     }
   }
+
+  const copyQuick = () => {
+    if (!firstResult) return;
+    navigator.clipboard.writeText(firstResult.script);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1200);
+  };
 
   const exampleOutputs: SalesAlternative[] = [
     {
@@ -153,7 +162,10 @@ export default function HomePage() {
         {firstResult && ( //
           <section ref={resultsRef} className="quick-results-display">  {/* */}
             <h2>✨ Ini Satu Ide Segar Buatmu:</h2>
-            <div className="alternative-card-landing">
+            <div className="alternative-card-landing" style={{position:'relative'}}>
+              <button className="copy-button" aria-label="Copy script" onClick={copyQuick} style={{position:'absolute',top:'16px',right:'16px'}}>
+                {copied ? <FiCheck size={18}/> : <FiCopy size={18}/>}
+              </button>
               <div className="result-section-landing">
                 <strong>🎨 Visual Hook Ciamik:</strong>
                 <p>{firstResult.visualHook}</p>
@@ -232,12 +244,12 @@ export default function HomePage() {
       <style jsx>{`
         // General Landing Styles
         .landing-nav { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background: #080808; border-bottom: 1px solid #1a1a1a; position: sticky; top: 0; z-index: 100;}
-        .nav-logo { font-size: 1.8rem; font-weight: 900; color: #39ff14; }
+        .nav-logo { font-size: 1.8rem; font-weight: 900; color: var(--highlight-color); }
         .nav-logo span { color: #f0f0f0; }
         .nav-actions .nav-link { color: #f0f0f0; text-decoration: none; margin-left: 1.5rem; font-weight: 500; }
-        .nav-actions .nav-link:hover { color: #39ff14; }
+        .nav-actions .nav-link:hover { color: var(--highlight-color); }
         .landing-main { font-family: 'Inter', sans-serif; background-color: #000; color: #f0f0f0; padding-top: 0;}
-        .highlight { color: #39ff14; }
+        .highlight { color: var(--highlight-color); }
 
         // Hero Section
         .hero-new { text-align: center; padding: 4rem 2rem 3rem; background: linear-gradient(180deg, #080808 0%, #000000 100%); }
@@ -245,8 +257,8 @@ export default function HomePage() {
         .hero-content-new .subheadline { font-size: 1.1rem; color: #b0b0b0; max-width: 700px; margin: 0 auto 2rem; line-height: 1.7; }
         .hero-form { display: flex; flex-direction: column; gap: 1rem; max-width: 600px; margin: 0 auto; background: #0a0a0a; padding: 2rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 255, 106, 0.1); }
         .hero-form input, .hero-form select { padding: 0.9rem; border-radius: 8px; border: 1px solid #333; background: #111; color: #f0f0f0; font-size: 1rem; }
-        .hero-form input:focus, .hero-form select:focus { border-color: #39ff14; outline: none; box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.3); }
-        .hero-form button { padding: 1rem; background: #39ff14; color: #000; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease; }
+        .hero-form input:focus, .hero-form select:focus { border-color: var(--highlight-color); outline: none; box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.3); }
+        .hero-form button { padding: 1rem; background: var(--highlight-color); color: #000; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease; }
         .hero-form button:hover { background-color: #2ecc71; }
         .hero-form button:disabled { background-color: #555; opacity:0.7; cursor: not-allowed; }
         .error-message-hero { color: #ff4d4d; margin-top: 1rem; }
@@ -256,15 +268,15 @@ export default function HomePage() {
         .quick-results-display h2 { font-size: 2rem; margin-bottom: 2rem; }
         .alternative-card-landing { background: #111; border: 1px solid #222; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .result-section-landing { margin-bottom: 1.5rem; }
-        .result-section-landing strong { display: block; margin-bottom: 0.5rem; color: #39ff14; font-size: 1.1rem; }
+        .result-section-landing strong { display: block; margin-bottom: 0.5rem; color: var(--highlight-color); font-size: 1.1rem; }
         .result-section-landing p, .result-section-landing div { color: #ccc; line-height: 1.6; }
         .script-display-landing span { display: block; margin-bottom: 0.3em;}
         .more-options { margin-top: 1.5rem; }
         .more-options p { margin-bottom: 1rem; color: #aaa; }
-        .cta-button-primary { display: inline-block; background: #39ff14; color: #000; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 700; margin-right: 1rem; transition: transform 0.2s, background-color 0.2s; margin-bottom: 0.5rem; }
+        .cta-button-primary { display: inline-block; background: var(--highlight-color); color: #000; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 700; margin-right: 1rem; transition: transform 0.2s, background-color 0.2s; margin-bottom: 0.5rem; }
         .cta-button-primary:hover { transform: translateY(-2px); background-color: #2ecc71; }
-        .cta-button-secondary { display: inline-block; background: transparent; border: 2px solid #39ff14; color: #39ff14; padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background-color 0.2s, color 0.2s; margin-bottom: 0.5rem;}
-        .cta-button-secondary:hover { background-color: #39ff14; color: #000; }
+        .cta-button-secondary { display: inline-block; background: transparent; border: 2px solid var(--highlight-color); color: var(--highlight-color); padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background-color 0.2s, color 0.2s; margin-bottom: 0.5rem;}
+        .cta-button-secondary:hover { background-color: var(--highlight-color); color: #000; }
         .cta-button-secondary:disabled { opacity:0.6; cursor:not-allowed; border-color: #555; color: #555;}
         .link-subtle { color: #777; text-decoration: none; }
         .link-subtle:hover { color: #aaa; text-decoration: underline; }
@@ -276,9 +288,9 @@ export default function HomePage() {
         .persona-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; max-width: 900px; margin: 0 auto; }
         .persona-card { background: #0f0f0f; border: 1px solid #222; padding: 2rem 1.5rem; border-radius: 12px; text-decoration: none; color: #f0f0f0; transition: transform 0.2s ease, box-shadow 0.2s ease; text-align: left;}
         .persona-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(57, 255, 20, 0.15); }
-        .persona-card h3 { font-size: 1.5rem; color: #39ff14; margin-top: 0; margin-bottom: 0.5rem; }
+        .persona-card h3 { font-size: 1.5rem; color: var(--highlight-color); margin-top: 0; margin-bottom: 0.5rem; }
         .persona-card p { font-size: 1rem; color: #aaa; margin-bottom: 1rem; line-height:1.6; }
-        .persona-card span { font-weight: 700; color: #39ff14; }
+        .persona-card span { font-weight: 700; color: var(--highlight-color); }
 
         // Examples Section
         .examples-section { padding: 4rem 2rem; background: #080808; }
@@ -286,14 +298,14 @@ export default function HomePage() {
         .example-output-card { background: #111; border: 1px solid #222; padding: 2rem; border-radius: 12px; margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto; text-align:left; }
         .example-output-card h4 { margin-top: 0; color: #eee; font-size: 1.2rem; margin-bottom: 1.5rem;}
         .example-part { margin-bottom: 1rem; }
-        .example-part strong { color: #39ff14; font-size: 1.05rem; display:block; margin-bottom:0.3rem;}
+        .example-part strong { color: var(--highlight-color); font-size: 1.05rem; display:block; margin-bottom:0.3rem;}
         .example-part p, .example-part div { color: #ccc; line-height: 1.6; margin-top: 0.1rem; }
 
         // Footer
         .landing-footer { text-align: center; padding: 3rem 2rem; background: #000; border-top: 1px solid #1a1a1a; }
         .landing-footer p { color: #777; margin: 0; }
         .landing-footer a { color: #888; text-decoration: none; margin: 0 0.5rem; }
-        .landing-footer a:hover { color: #39ff14; }
+        .landing-footer a:hover { color: var(--highlight-color); }
 
         @media (max-width: 768px) {
           .hero-content-new h1 { font-size: 2.2rem; }
