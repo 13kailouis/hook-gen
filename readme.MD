@@ -1,12 +1,12 @@
-# HookFreak – Viral Hook Generator
+# HookFreak – Video Sales Hook Builder
 
-Generate 10 hook viral < 12 kata untuk TikTok/IG berdasarkan niche & tone.
-Powered by Groq LLAMA‑3‑70B.
+Bangun skrip video jualan TikTok, Reels, dan Shorts dalam sekali klik. Hasilkan visual hook, teks pembuka, skrip 30 detik, dan saran frame secara langsung.
 
-Sekarang setiap hook punya tombol Like/Dislike supaya kamu bisa kasih feedback instan.
-Tampilan juga diperhalus dengan animasi sederhana.
+Setiap permintaan memberi tiga versi alternatif supaya kamu bisa pilih yang paling pas.
 
 ## Cara jalan
 1.  `cp .env.example .env.local` lalu isi `GROQ_API_KEY`
 2.  `npm i`
 3.  `npm run dev`
+
+Kamu bisa langsung buka `/builder` untuk mencoba generator utama.

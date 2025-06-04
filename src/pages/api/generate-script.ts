@@ -1,15 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { generateContentScript } from "@/lib/groq";
+import { generateSalesHooks } from "@/lib/groq";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method !== "POST") return res.status(405).end("Method Not Allowed");
 
-  const { niche = "", style = "soft-sell", product = "" } = req.body;
-  if (!niche) return res.status(400).json({ error: "Niche required" });
+  const {
+    description = "",
+    audience = "",
+    style = "soft-sell",
+  } = req.body;
+  if (!description)
+    return res.status(400).json({ error: "Description required" });
 
   try {
-    const script = await generateContentScript(niche, style, product);
-    res.json({ script });
+    const hooks = await generateSalesHooks(description, audience, style);
+    res.json({ hooks });
   } catch (err: any) {
     console.error(err);
     res.status(500).json({ error: err.message });

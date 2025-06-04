@@ -216,3 +216,47 @@ export async function generateBatchPack(
   return items;
 }
 
+
+export interface SalesHook {
+  visualHook: string;
+  textHook: string;
+  script: string;
+  frames: string;
+}
+
+export async function generateSalesHooks(desc: string, audience: string, style: string) {
+  const prompt = `Kamu scriptwriter TikTok spesialis jualan. Deskripsi produk: ${desc}. Target audiens: ${audience}. Gaya konten: ${style}. Buat 3 alternatif. Format setiap alternatif:\nVisualHook: <adegan pembuka 1 shot>\nTextHook: <kalimat pembuka>\nScript: <narasi Hook-Problem-Agitation-Solution-CTA maks 30 detik, pisahkan dengan ' -- '>\nFrameSuggestion: <saran visual singkat untuk tiap bagian>. Pisahkan setiap alternatif dengan ====.`;
+
+  const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: "llama-3.3-70b-versatile",
+      messages: [{ role: "user", content: prompt }],
+      stream: false,
+      temperature: 0.4,
+      max_tokens: 2048,
+    }),
+  });
+
+  if (!resp.ok) throw new Error(`Groq API error ${resp.status}`);
+  const json = await resp.json();
+  const text: string = json.choices?.[0]?.message?.content || "";
+  const blocks = text.split(/====+/).map(b => b.trim()).filter(Boolean);
+  return blocks.map(block => {
+    const get = (label: string) => {
+      const m = block.match(new RegExp(`${label}:\\s*(.*)`, "i"));
+      return m ? m[1].trim() : "";
+    };
+    return {
+      visualHook: get("VisualHook"),
+      textHook: get("TextHook"),
+      script: get("Script"),
+      frames: get("FrameSuggestion"),
+    } as SalesHook;
+  });
+}
+
