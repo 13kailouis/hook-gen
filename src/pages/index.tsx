@@ -1,5 +1,7 @@
 // src/pages/index.tsx
 import Head from "next/head";
+import { useState, useRef } from "react";
+import { FiCopy, FiCheck } from "react-icons/fi";
 import Link from "next/link";
 import { SalesAlternative } from "@/lib/groq"; // Import SalesAlternative
 
@@ -22,6 +24,9 @@ const formatScriptForLandingDisplay = (script: string) => {
         <span>
           {contentPart.length > 100 ? contentPart.substring(0, 97) + "..." : contentPart}
         </span>
+      <div key={index} style={{ marginBottom: '0.5em' }}>
+        {label && <strong style={{ color: 'var(--highlight-color)' }}>{label}: </strong>}
+        <span>{contentPart.length > 100 ? contentPart.substring(0, 97) + "..." : contentPart}</span>
       </div>
     );
   });
@@ -32,6 +37,59 @@ const [MAIN_NAME, SECOND_NAME] = SITE_NAME.split(" ");
 
 
 export default function HomePage() {
+export default function HomePage() {
+  const [productInput, setProductInput] = useState("");
+  const [styleInput, setStyleInput] = useState("storytelling");
+  const [durationInput, setDurationInput] = useState(30);
+  const [loading, setLoading] = useState(false); //
+  const [firstResult, setFirstResult] = useState<SalesAlternative | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const resultsRef = useRef<HTMLDivElement>(null); //
+
+  async function handleQuickGenerate(e?: React.FormEvent) {
+    if (e) e.preventDefault();
+    setLoading(true); //
+    setFirstResult(null);
+    setError(null);
+    try {
+      const r = await fetch("/api/generate-script", { //
+        method: "POST", //
+        headers: { "Content-Type": "application/json" }, //
+        body: JSON.stringify({ //
+          description: productInput,
+          audience: "",
+          style: styleInput,
+          duration: durationInput,
+        }),
+      });
+      if (!r.ok) {
+        const errData = await r.json();
+        throw new Error(errData.error || `Error ${r.status}`);
+      }
+      const data = await r.json(); //
+      if (data.alternatives && data.alternatives.length > 0) { //
+        setFirstResult(data.alternatives[0]); //
+        setTimeout(() => {
+          resultsRef.current?.scrollIntoView({ behavior: "smooth" }); //
+        }, 100);
+      } else {
+        setError("Gagal mendapatkan hasil. Coba lagi yuk!");
+      }
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setLoading(false); //
+    }
+  }
+
+  const copyQuick = () => {
+    if (!firstResult) return;
+    navigator.clipboard.writeText(firstResult.script);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1200);
+  };
 
   const exampleOutputs: SalesAlternative[] = [
     {
@@ -62,6 +120,7 @@ export default function HomePage() {
     <>
       <Head>
         <title>{SITE_NAME} – Video Sales Hook Builder (TikTok, Reels, Shorts)</title>
+        <title>HookFreak – Video Sales Hook Builder (TikTok, Reels, Shorts)</title>
         <meta name="description" content="Bikin skrip video jualan TikTok, Reels, dan Shorts yang nancep di detik pertama. Hasilkan visual hook, teks pembuka, skrip sesuai durasi, dan saran frame dalam 1 klik!" />
         <meta name="keywords" content="video sales hook, tiktok script generator, reels script, shorts script, content creator tool, marketing video, hook generator" />
         <link rel="preconnect" href="https://fonts.googleapis.com" /> {/* */}
@@ -92,9 +151,75 @@ export default function HomePage() {
           </div>
         </section>
 
+          <p className="subheadline">HookFreak bantu kamu bikin <strong className="highlight">visual hook, teks pembuka, skrip sesuai durasi, dan ide frame</strong> video TikTok & Reels yang nancep di detik pertama. Sekali klik, tiga alternatif langsung jadi!</p>
+            <form onSubmit={handleQuickGenerate} className="hero-form">
+              <input
+                type="text"
+                value={productInput}
+                onChange={(e) => setProductInput(e.target.value)}
+                placeholder="Apa yang kamu jual? (Mis: Kopi Susu Gula Aren)"
+              />
+              <select value={styleInput} onChange={(e) => setStyleInput(e.target.value)}>
+                <option value="storytelling">Gaya: Storytelling</option>
+                <option value="soft-sell">Gaya: Soft Sell</option>
+                <option value="hard-sell">Gaya: Hard Sell</option>
+                <option value="humor">Gaya: Humor</option>
+                <option value="shock">Gaya: Shock</option>
+                <option value="fomo">Gaya: FOMO</option>
+                <option value="edukatif">Gaya: Edukatif</option>
+              </select>
+              <select value={durationInput} onChange={(e) => setDurationInput(parseInt(e.target.value))}>
+                <option value={15}>Durasi: 15 detik</option>
+                <option value={30}>Durasi: 30 detik</option>
+                <option value={60}>Durasi: 60 detik</option>
+              </select>
+              <button type="submit" disabled={loading}>
+                {loading ? "Lagi Diracik..." : "🧪 Lihat Hasil Nyata (Gratis!)"}
+              </button>
+            </form>
+            {error && <p className="error-message-hero">{error}</p>}
+          </div>
+        </section>
 
-
-        <section className="persona-cta-section">
+        {firstResult && ( //
+          <section ref={resultsRef} className="quick-results-display">  {/* */}
+            <h2>✨ Ini Satu Ide Segar Buatmu:</h2>
+            <div className="alternative-card-landing" style={{position:'relative'}}>
+              <button className="copy-button" aria-label="Copy script" onClick={copyQuick} style={{position:'absolute',top:'16px',right:'16px'}}>
+                {copied ? <FiCheck size={18}/> : <FiCopy size={18}/>}
+              </button>
+              <div className="result-section-landing">
+                <strong>🎨 Visual Hook Ciamik:</strong>
+                <p>{firstResult.visualHook}</p>
+              </div>
+              <div className="result-section-landing">
+                <strong>💬 Teks Hook Nendang:</strong>
+                <p>{firstResult.textHook}</p>
+              </div>
+              <div className="result-section-landing">
+                <strong>📝 Skrip Singkat & Padat:</strong>
+                <div className="script-display-landing">{formatScriptForLandingDisplay(firstResult.script)}</div>
+              </div>
+              <div className="result-section-landing">
+                <strong>🎬 Ide Frame Anti Ribet:</strong>
+                <p style={{whiteSpace: 'pre-line'}}>{firstResult.frames.substring(0,250)}...</p>
+              </div>
+            </div>
+            <div className="more-options">
+              <p>Suka? Ada 2 alternatif lain & fitur canggih menantimu di Builder!</p>
+              <Link href={`/builder?product=${encodeURIComponent(productInput)}&style=${styleInput}`} className="cta-button-primary">
+                🚀 Buka Builder Lengkap (Lihat Semua Hasil & Kustomisasi)
+              </Link>
+              <button onClick={() => handleQuickGenerate()} disabled={loading} className="cta-button-secondary">
+                {loading ? "Tunggu ya..." : "Coba Generate Lagi (Input Beda)"}
+              </button>
+              {/* <p style={{marginTop: '1rem', fontSize: '0.9em'}}>
+                <Link href="/pricing" className="link-subtle">Unlock export & batch builder untuk jadi pro!</Link>
+              </p> */}
+            </div>
+          </section>
+        )}
+    <section className="persona-cta-section">
           <h2>Kamu Siapa di Dunia Konten?</h2>
           <div className="persona-grid">
             <Link href="/builder?persona=ugc" className="persona-card">
@@ -153,6 +278,29 @@ export default function HomePage() {
         .hero-content-new .subheadline { font-size: 1.1rem; color: #b0b0b0; max-width: 700px; margin: 0 auto 2rem; line-height: 1.7; }
         .cta-button-primary { display: inline-block; background: var(--highlight-color); color: #000; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 700; margin-right: 1rem; transition: transform 0.2s, background-color 0.2s; margin-bottom: 0.5rem; }
         .cta-button-primary:hover { transform: translateY(-2px); background-color: #2ecc71; }
+        .hero-form { display: flex; flex-direction: column; gap: 1rem; max-width: 600px; margin: 0 auto; background: #0a0a0a; padding: 2rem; border-radius: 12px; box-shadow: 0 8px 24px rgba(0, 255, 106, 0.1); }
+        .hero-form input, .hero-form select { padding: 0.9rem; border-radius: 8px; border: 1px solid #333; background: #111; color: #f0f0f0; font-size: 1rem; }
+        .hero-form input:focus, .hero-form select:focus { border-color: var(--highlight-color); outline: none; box-shadow: 0 0 0 2px rgba(57, 255, 20, 0.3); }
+        .hero-form button { padding: 1rem; background: var(--highlight-color); color: #000; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: background-color 0.2s ease; }
+        .hero-form button:hover { background-color: #2ecc71; }
+        .hero-form button:disabled { background-color: #555; opacity:0.7; cursor: not-allowed; }
+        .error-message-hero { color: #ff4d4d; margin-top: 1rem; }
+
+        // Quick Results Display
+        .quick-results-display { padding: 3rem 2rem; text-align: center; background: #050505; }
+        .quick-results-display h2 { font-size: 2rem; margin-bottom: 2rem; }
+        .alternative-card-landing { background: #111; border: 1px solid #222; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; text-align: left; max-width: 700px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .result-section-landing { margin-bottom: 1.5rem; }
+        .result-section-landing strong { display: block; margin-bottom: 0.5rem; color: var(--highlight-color); font-size: 1.1rem; }
+        .result-section-landing p, .result-section-landing div { color: #ccc; line-height: 1.6; }
+        .script-display-landing span { display: block; margin-bottom: 0.3em;}
+        .more-options { margin-top: 1.5rem; }
+        .more-options p { margin-bottom: 1rem; color: #aaa; }
+        .cta-button-primary { display: inline-block; background: var(--highlight-color); color: #000; padding: 0.8rem 1.8rem; border-radius: 8px; text-decoration: none; font-weight: 700; margin-right: 1rem; transition: transform 0.2s, background-color 0.2s; margin-bottom: 0.5rem; }
+        .cta-button-primary:hover { transform: translateY(-2px); background-color: #2ecc71; }
+        .cta-button-secondary { display: inline-block; background: transparent; border: 2px solid var(--highlight-color); color: var(--highlight-color); padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 700; cursor: pointer; transition: background-color 0.2s, color 0.2s; margin-bottom: 0.5rem;}
+        .cta-button-secondary:hover { background-color: var(--highlight-color); color: #000; }
+        .cta-button-secondary:disabled { opacity:0.6; cursor:not-allowed; border-color: #555; color: #555;}
         .link-subtle { color: #777; text-decoration: none; }
         .link-subtle:hover { color: #aaa; text-decoration: underline; }
 
