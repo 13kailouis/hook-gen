@@ -1,12 +1,26 @@
 import Head from "next/head";
 import { useState } from "react";
 import Link from "next/link";
+import NavBar from "@/components/NavBar";
+import ExampleModal from "@/components/ExampleModal";
 
 export default function Landing() {
   const [product, setProduct] = useState("");
   const [style, setStyle] = useState("storytelling");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<any | null>(null);
+  const [modalItem, setModalItem] = useState<{
+    visual: string;
+    text: string;
+    script: string;
+  } | null>(null);
+
+  const suggestions = [
+    "Serum anti jerawat",
+    "Sepatu lari",
+    "Tas kerja kulit",
+    "Lampu tidur unik",
+  ];
 
   const examples = [
     {
@@ -56,11 +70,12 @@ export default function Landing() {
           content="Bikin video jualan nancep di detik pertama."
         />
       </Head>
+      <NavBar />
       <main className="landing-wrapper">
         <section className="landing-hero">
           <div className="hero-grid">
             <div className="hero-visual">
-              <img src="/og-cover.png" alt="preview" style={{ width: "100%", borderRadius: 12 }} />
+              <img src="/og-cover.png" alt="preview" style={{ width: "100%", borderRadius: 12 }} loading="lazy" />
             </div>
             <div className="hero-content">
               <h1 className="logo-text">Hook<span>Freak</span></h1>
@@ -69,23 +84,29 @@ export default function Landing() {
                 <input
                   value={product}
                   onChange={(e) => setProduct(e.target.value)}
-                  placeholder="Apa produk yang kamu jual?"
+                  placeholder="Masukkan nama produk"
                   className="niche-input"
+                  list="suggestions"
                 />
+                <datalist id="suggestions">
+                  {suggestions.map((s) => (
+                    <option key={s} value={s} />
+                  ))}
+                </datalist>
                 <select
                   value={style}
                   onChange={(e) => setStyle(e.target.value)}
                   className="tone-select"
                 >
-              <option value="storytelling">Storytelling</option>
-              <option value="edukatif">Edukatif</option>
-              <option value="hard-sell">Hard Sell</option>
-              <option value="soft-sell">Soft Sell</option>
-              <option value="lucu">Lucu</option>
-              <option value="fomo">FOMO</option>
+              <option value="storytelling">📖 Storytelling</option>
+              <option value="edukatif">🎓 Edukatif</option>
+              <option value="hard-sell">💰 Hard Sell</option>
+              <option value="soft-sell">✨ Soft Sell</option>
+              <option value="lucu">😂 Lucu</option>
+              <option value="fomo">🔥 FOMO</option>
             </select>
                 <button type="submit" className="cta-button" disabled={loading}>
-                  {loading ? "Sebentar..." : "Bikin skrip konten pertama saya"}
+                  {loading ? "Sebentar..." : "Dapatkan Konten Viralmu Sekarang"}
                 </button>
               </form>
               {result && (
@@ -100,9 +121,14 @@ export default function Landing() {
           </div>
         </section>
 
-        <section className="examples">
+        <section className="examples" id="examples">
           {examples.map((ex, idx) => (
-            <div key={idx} className="example-item">
+            <div
+              key={idx}
+              className="example-item"
+              onClick={() => setModalItem(ex)}
+              style={{ cursor: "pointer" }}
+            >
               <div className="example-visual">{ex.visual}</div>
               <div className="example-text">
                 <p className="hook-text">{ex.text}</p>
@@ -122,8 +148,27 @@ export default function Landing() {
           <Link href="/builder" className="cta-button">
             Mulai gratis sekarang
           </Link>
+          <div className="language-selector">
+            <select
+              defaultValue="id"
+              onChange={() => {}}
+              className="tone-select"
+            >
+              <option value="id">Bahasa Indonesia</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+          <div style={{ marginTop: 16 }}>
+            <Link href="/privacy" style={{ marginRight: 12, color: "#777" }}>
+              Kebijakan Privasi
+            </Link>
+            <Link href="/terms" style={{ color: "#777" }}>
+              Syarat dan Ketentuan
+            </Link>
+          </div>
         </footer>
       </main>
+      <ExampleModal item={modalItem} onClose={() => setModalItem(null)} />
     </>
   );
 }
