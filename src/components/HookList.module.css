@@ -1,0 +1,92 @@
+.hookList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hookItem {
+  position: relative;
+  background-color: #181818;
+  border-left: 3px solid #22c55e;
+  border-radius: 10px;
+  padding: 16px 48px 16px 16px;
+  transition: background 0.2s ease;
+}
+
+.hookItem:hover {
+  background-color: #1a1a1a;
+}
+
+.hookText {
+  font-style: inherit;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  color: #ced3da;
+  font-size: 16px;
+  line-height: 1.7;
+  letter-spacing: 0.2px;
+  font-weight: 400;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.copyButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: #888;
+  transition: color 0.2s ease;
+}
+
+.copyButton:hover {
+  color: #22c55e;
+}
+
+.hookActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 4px;
+  border-top: 1px solid #222;
+}
+
+.likeButton,
+.dislikeButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  padding: 4px;
+  transition: color 0.2s ease;
+}
+
+.likeButton:hover,
+.dislikeButton:hover {
+  color: #22c55e;
+}
+
+.likeButton.active,
+.dislikeButton.active {
+  color: #22c55e;
+}
+
+.fadeIn {
+  opacity: 0;
+  animation: fadeIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.active { color: #22c55e; }

@@ -1,5 +1,6 @@
 import { FiCopy, FiCheck } from "react-icons/fi";
 import { useState } from "react";
+import styles from "./HookList.module.css";
 
 interface Props {
   hooks: string[];
@@ -30,12 +31,12 @@ export default function HookList({ hooks }: Props) {
   };
 
   return (
-    <div className="hook-list">
+    <div className={styles.hookList}>
       {hooks.map((hook, index) => (
-        <div className="hook-item fade-in" key={index}>
-          <p className="hook-text">{hook}</p>
+        <div className={`${styles.hookItem} ${styles.fadeIn}`} key={index}>
+          <p className={styles.hookText}>{hook}</p>
           <button
-            className="copy-button"
+            className={styles.copyButton}
             onClick={() => handleCopy(hook, index)}
             aria-label="Copy hook"
           >
@@ -46,16 +47,16 @@ export default function HookList({ hooks }: Props) {
             )}
           </button>
 
-          <div className="hook-actions">
+          <div className={styles.hookActions}>
             <button
-              className={`like-button ${feedback[index] === "like" ? "active" : ""}`}
+              className={`${styles.likeButton} ${feedback[index] === "like" ? styles.active : ""}`}
               onClick={() => toggleFeedback(index, "like")}
               aria-label="Like"
             >
               👍
             </button>
             <button
-              className={`dislike-button ${feedback[index] === "dislike" ? "active" : ""}`}
+              className={`${styles.dislikeButton} ${feedback[index] === "dislike" ? styles.active : ""}`}
               onClick={() => toggleFeedback(index, "dislike")}
               aria-label="Dislike"
             >

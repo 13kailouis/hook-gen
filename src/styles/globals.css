@@ -158,52 +158,6 @@
     text-align: center;
   }
   
-  .hook-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-  
-  .hook-item {
-    position: relative;
-    background-color: #181818;
-    border-left: 3px solid #22c55e;
-    border-radius: 10px;
-    padding: 16px 48px 16px 16px;
-    transition: background 0.2s ease;
-  }
-  
-  .hook-item:hover {
-    background-color: #1a1a1a;
-  }
-  
-  .hook-text {
-    font-style: inherit;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: #ced3da;
-    font-size: 16px;
-    line-height: 1.7;
-    letter-spacing: 0.2px;
-    font-weight: 400;
-    margin: 0;
-    white-space: pre-wrap;
-  }
-  
-  .copy-button {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-    color: #888;
-    transition: color 0.2s ease;
-  }
-  
-  .copy-button:hover {
-    color: #22c55e;
-  }
   
   .tone-select {
     background: #000000;
@@ -298,7 +252,7 @@
     color: #606060;
   }
     /* Tips berganti */
-.hook-tip {
+    .hook-tip {
         margin-top: 9px;
         font-size: 0.80rem;
         color: #ffffff67;
@@ -308,49 +262,4 @@
         font-style: italic;
         font-family: sans-serif;
       }
-
-  .hook-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 12px;
-    padding-top: 4px;
-    border-top: 1px solid #222;
-  }
-
-  .like-button,
-  .dislike-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #aaa;
-    padding: 4px;
-    transition: color 0.2s ease;
-  }
-
-  .like-button:hover,
-  .dislike-button:hover {
-    color: #22c55e;
-  }
-
-  .like-button.active,
-  .dislike-button.active {
-    color: #22c55e;
-  }
-
-  .fade-in {
-    opacity: 0;
-    animation: fadeIn 0.3s ease forwards;
-  }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(4px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
        
