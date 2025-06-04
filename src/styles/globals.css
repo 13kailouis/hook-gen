@@ -410,3 +410,82 @@
   font-size: 0.95rem;
   line-height: 1.6;
 }
+
+/* Landing revamp */
+.hero-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+}
+
+.hero-content {
+  max-width: 420px;
+}
+
+@media (min-width: 768px) {
+  .hero-grid {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 48px;
+  }
+  .hero-visual,
+  .hero-content {
+    flex: 1;
+  }
+}
+
+.result-preview {
+  background: #181818;
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 24px;
+}
+
+.examples {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.example-item {
+  background: #181818;
+  padding: 16px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.example-visual {
+  background: #000;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 16px;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+.example-text .hook-text {
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.example-text .script-text {
+  margin: 0;
+  color: #a1a1a1;
+}
+
+@media (min-width: 768px) {
+  .example-item {
+    flex-direction: row;
+  }
+  .example-visual {
+    width: 45%;
+  }
+  .example-text {
+    width: 55%;
+  }
+}
