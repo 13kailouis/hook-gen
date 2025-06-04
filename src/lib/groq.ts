@@ -1,69 +1,116 @@
-export async function generateHooks(niche: string, tone: string, product?: string) {
-    const basePrompt = [
-   "Kamu copywriter TikTok kelas jagoan.",
-      `Saat diberi "${niche}", keluarkan *persis* 10 hook pembuka berdurasi 1 detik yang dijamin viral dan fresh.`,
-      "Jangan pakai bullet point, jangan pakai emoji.",
-      "Tulis pakai bahasa tongkrongan Gen Z,",
-      "Pisahkan setiap hook dengan newline biasa.",
-    ];
-  
-    if (tone === "affiliate") {
-      basePrompt.push(
-        "Tulis 10 hook viral TikTok khusus untuk creator affiliate yang menjual produk (skincare, lifestyle, alat rumah tangga, dll).",
-        "Gunakan bahasa anak muda (bahasa tongkrongan Gen Z).",
-        "Setiap hook harus langsung menembak perhatian otak dalam 1 detik pertama.",
-        "Fokus pada gaya hook tanpa visual, jadi: otak harus membayangkan sendiri lewat kata-kata.",
-        "Gunakan pola ini:",
-        "- Konflik batin atau kalimat yang malu-malu tapi jujur",
-        "- Cerita singkat yang janji ada ending mengejutkan",
-        "- Larangan atau sindiran halus",
-        "- Pertanyaan kontras atau gak masuk akal",
-        "- Gunakan kata 'lu', 'lo', atau 'kamu' di awal kalimat",
-        "Contoh hook:",
-        `"Gue malu ngakuin ini, tapi ternyata manjur banget."`,
-        `"Lu gak bakal percaya kalau belum nyobain sendiri."`,
-        `"Dulu gue pikir ini produk receh... ternyata malah bikin kecanduan."`,
-        `"Lo gak akan ngerti hype-nya sampe nyobain sendiri."`,
-        "Jangan pakai bullet, jangan pakai nomor, jangan pakai emoji. Pisahkan hook dengan newline biasa. Jangan tambahkan penjelasan atau pengantar apapun."
-      );
-  
-      if (product && product.trim() !== "") {
-        basePrompt.push(`Fokuskan hook seolah sedang menjual produk berikut: "${product}".`);
-      }
-    } else {
-      basePrompt.push(
-        `Gunakan tone: ${tone}.`,
-        "Pastikan hook-nya sangat memicu rasa penasaran, ketakutan, atau apapun yang bikin berhenti scroll di 1 detik pertama."
-      );
-    }
-  
-    const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        messages: [
-          {
-            role: "user",
-            content: basePrompt.join(" "),
-          },
-        ],
-        stream: false,
-        temperature: 0.2,
-        max_tokens: 512,
-      }),
-    });
-  
-    if (!resp.ok) throw new Error(`Groq API error ${resp.status}`);
-    const json = await resp.json();
-    const text: string =
-      json.choices?.[0]?.message?.content ?? "Gagal menghasilkan hook";
-    return text.trim().split("\n").map((h: string) => h.trim()).filter(Boolean);
+// src/lib/groq.ts
+
+export interface SalesAlternative {
+  visualHook: string;
+  textHook: string;
+  script: string; // Format: Hook -- Problem -- Agitation -- Solution -- CTA
+  frames: string; // Deskripsi per bagian skrip
+  // Internal identifiers
+  _internalStyle: string;
+  _internalAudience: string;
+  _internalProductDesc: string;
+}
+
+// Fungsi utama untuk menghasilkan 3 alternatif sales hook
+export async function generateCompleteSalesHooks(
+  productDesc: string,
+  audience: string,
+  style: string
+): Promise<SalesAlternative[]> {
+  // Default values jika input tidak lengkap
+  const finalProductDesc = productDesc || "skincare pencerah wajah";
+  const finalAudience = audience || "wanita usia 20-35 tahun yang aktif di sosial media dan tertarik dengan perawatan kulit praktis";
+  const finalStyle = style || "storytelling edukatif";
+
+  const prompt = `
+Kamu adalah seorang scriptwriter video TikTok profesional dengan spesialisasi membuat konten jualan yang viral dan sangat efektif. Klienmu adalah kreator konten dan marketer yang butuh skrip siap pakai, bukan ide abstrak atau deskripsi umum. Outputmu harus langsung usable.
+
+Deskripsi Produk: ${finalProductDesc}
+Target Audiens: ${finalAudience}
+Gaya Konten: ${finalStyle}
+
+Tugasmu adalah menghasilkan 3 (TIGA) alternatif LENGKAP untuk konten video pendek (TikTok, Reels, Shorts) berdasarkan informasi di atas. Setiap alternatif HARUS terdiri dari EMPAT bagian berikut, dengan format persis seperti ini:
+
+VisualHook: [Deskripsi adegan pembuka 1-2 detik yang kuat secara visual, konkret, bisa direkam dengan HP, tanpa CGI. Fokus pada framing, gerakan, ekspresi, atau aksi mendadak. Contoh: Close-up ekstrem mata kaget lalu zoom out cepat; Tangan membanting produk X ke meja dengan caption "STOP!"; Transisi wipe cepat dari wajah lesu ke wajah segar setelah pakai produk Y.]
+
+TextHook: [Satu kalimat pembuka yang emosional, provokatif, atau sangat membuat penasaran. Cocok untuk subtitle atau voiceover. Gaya bahasa harus menyesuaikan gaya konten yang diminta dan punya efek interrupt kuat. Contoh: "STOP scroll kalau lo masih jerawatan di usia 25!"; "Gue kira ini gimmick, ternyata..."; "Rahasia glow up modal 50 ribu?"]
+
+Script: [Narasi video lengkap (maksimal 30 detik) dengan struktur Hook - Problem - Agitation - Solution - CTA. Tulis sebagai PARAGRAF yang mengalir alami dan enak didengar/dibaca, BUKAN outline poin-poin. Pisahkan setiap bagian (Hook, Problem, Agitation, Solution, CTA) secara eksplisit dengan ' -- ' (spasi, dua strip, spasi). Gaya bahasa percakapan sehari-hari, sesuaikan dengan gaya konten dan target audiens.
+Contoh struktur internal (jangan tampilkan ini di output, hanya sebagai panduanmu):
+Hook: (Lanjutkan atau elaborasi dari TextHook, tarik perhatian lebih dalam)
+--
+Problem: (Sebutkan masalah utama yang dihadapi audiens terkait produk)
+--
+Agitation: (Perburuk masalahnya, buat audiens merasakan urgensi atau ketidaknyamanan lebih dalam)
+--
+Solution: (kenalkan produk sebagai solusi elegan dan efektif untuk masalah tersebut)
+--
+CTA: (Ajak audiens melakukan tindakan spesifik, misal klik link, beli sekarang, follow)
+]
+
+FrameSuggestion: [Saran visual praktis untuk setiap bagian skrip (Hook, Problem, Agitation, Solution, CTA). Deskripsikan angle kamera, gerakan, ekspresi wajah, objek relevan, atau B-roll yang mendukung narasi. Harus actionable untuk kreator solo.
+Contoh:
+Hook: Extreme close-up mata (angle dari bawah), lalu cepat zoom out menunjukkan seluruh wajah dengan ekspresi terkejut.
+Problem: POV shot melihat tangan sendiri memegang beberapa produk skincare lama yang tidak efektif, ekspresi wajah terlihat dari pantulan cermin (jika ada) atau bahu yang lesu.
+Agitation: Transisi cepat: scrolling konten sosial media yang menampilkan orang lain dengan kulit bagus, diselingi shot close-up area kulit sendiri yang bermasalah. Ekspresi sedikit iri atau cemas.
+Solution: Unboxing produk dengan antusias. Shot close-up tekstur produk saat diaplikasikan ke punggung tangan. Transisi ke wajah yang tersenyum puas setelah beberapa waktu penggunaan (bisa simulasi).
+CTA: Pegang produk di samping wajah, senyum percaya diri, lalu arahkan jari ke tombol CTA atau area link di bio. Tampilkan teks promo singkat jika ada.]
+
+Pastikan setiap alternatif dipisahkan dengan "====" (empat sama dengan).
+Output HARUS 100% usable dan langsung bisa dieksekusi. Jangan ada disclaimer, jangan menjelaskan prosesmu, jangan ada basa-basi atau kalimat pengantar/penutup dari kamu. Langsung ke intinya.
+  `;
+
+  const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.GROQ_API_KEY}`, // Pastikan GROQ_API_KEY ada di .env.local
+    },
+    body: JSON.stringify({
+      model: "llama-3.3-70b-versatile", // Atau model GPT-4 lain yang tersedia jika ada
+      messages: [{ role: "user", content: prompt }],
+      stream: false,
+      temperature: 0.7, // Sedikit lebih tinggi untuk variasi antar 3 alternatif
+      max_tokens: 3000, // Sesuaikan jika output sering terpotong
+    }),
+  });
+
+  if (!resp.ok) {
+    const errorBody = await resp.text();
+    console.error("Groq API Error:", resp.status, errorBody);
+    throw new Error(`Groq API error ${resp.status}: ${errorBody}`);
   }
-  
+
+  const json = await resp.json();
+  const text: string = json.choices?.[0]?.message?.content || "";
+
+  const alternativesRaw = text.split(/====+/).map(b => b.trim()).filter(Boolean);
+
+  return alternativesRaw.map(block => {
+    const visualHook = (block.match(/VisualHook:\s*([\s\S]*?)(?=\nTextHook:)/i)?.[1] || "").trim();
+    const textHook = (block.match(/TextHook:\s*([\s\S]*?)(?=\nScript:)/i)?.[1] || "").trim();
+    const script = (block.match(/Script:\s*([\s\S]*?)(?=\nFrameSuggestion:)/i)?.[1] || "").trim();
+    const frames = (block.match(/FrameSuggestion:\s*([\s\S]*)/i)?.[1] || "").trim();
+
+    return {
+      visualHook,
+      textHook,
+      script,
+      frames,
+      _internalStyle: finalStyle,
+      _internalAudience: finalAudience,
+      _internalProductDesc: finalProductDesc,
+    } as SalesAlternative;
+  });
+}
+
+// Fungsi-fungsi lama (generateHooks, generateHookScenes, generateContentScript, generateBatchPack)
+// dapat Anda hapus atau komentari jika tidak lagi digunakan.
+// Contoh:
+/*
+export async function generateHooks(niche: string, tone: string, product?: string) {
+    // ... implementasi lama ...
+}
 
 export interface HookScene {
   visual: string;
@@ -71,38 +118,7 @@ export interface HookScene {
 }
 
 export async function generateHookScenes(niche: string, tone: string) {
-  const prompt = `Kamu adalah pakar kreator konten pendek. Buat 5 ide hook video dengan format:\nVisual: <deskripsi adegan 1-2 detik>\nText: <kalimat pembuka>.\nGaya: ${tone}. Niche atau produk: ${niche}. Jangan pakai bullet atau nomor.`;
-
-  const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: prompt }],
-      stream: false,
-      temperature: 0.3,
-      max_tokens: 512,
-    }),
-  });
-
-  if (!resp.ok) throw new Error(`Groq API error ${resp.status}`);
-  const json = await resp.json();
-  const text: string = json.choices?.[0]?.message?.content || "";
-
-  return text
-    .split(/\n+/)
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .reduce<HookScene[]>((acc, line) => {
-      const match = line.match(/Visual:\s*(.*?)\s*Text:\s*(.*)/i);
-      if (match) {
-        acc.push({ visual: match[1], text: match[2] });
-      }
-      return acc;
-    }, []);
+    // ... implementasi lama ...
 }
 
 export interface ContentScript {
@@ -118,41 +134,7 @@ export async function generateContentScript(
   style: string,
   product?: string
 ) {
-  const base = `Buat skrip video 15-60 detik dengan format Hook-Problem-Agitation-Solution-CTA. Gaya penyampaian ${style}. Niche atau produk: ${niche}${
-    product ? ", fokus pada produk: " + product : ""
-  }. Jawab dengan format:\nHook: ...\nProblem: ...\nAgitation: ...\nSolution: ...\nCTA: ...`;
-
-  const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: base }],
-      stream: false,
-      temperature: 0.3,
-      max_tokens: 512,
-    }),
-  });
-
-  if (!resp.ok) throw new Error(`Groq API error ${resp.status}`);
-  const json = await resp.json();
-  const text: string = json.choices?.[0]?.message?.content || "";
-
-  const get = (label: string) => {
-    const m = text.match(new RegExp(`${label}:\\s*(.*)`, "i"));
-    return m ? m[1].trim() : "";
-  };
-
-  return {
-    hook: get("Hook"),
-    problem: get("Problem"),
-    agitation: get("Agitation"),
-    solution: get("Solution"),
-    cta: get("CTA"),
-  } as ContentScript;
+    // ... implementasi lama ...
 }
 
 export interface BatchItem {
@@ -173,51 +155,11 @@ export async function generateBatchPack(
   audience: string,
   count = 10
 ) {
-  const prompt = `Buat ${count} ide konten pendek untuk brand ${brand} yang menjual ${product}. Audiens utama: ${audience}. Format per konten:\nJudul: ...\nVisual: ...\nTextHook: ...\nHook: ...\nProblem: ...\nSolution: ...\nCTA: ...\nThumbnail: ...\nVO: ...`;
-
-  const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: prompt }],
-      stream: false,
-      temperature: 0.4,
-      max_tokens: 2048,
-    }),
-  });
-
-  if (!resp.ok) throw new Error(`Groq API error ${resp.status}`);
-  const json = await resp.json();
-  const text: string = json.choices?.[0]?.message?.content || "";
-
-  const items: BatchItem[] = [];
-  const parts = text.split(/\n(?=Judul:)/i).filter(Boolean);
-  for (const part of parts) {
-    const get = (label: string) => {
-      const m = part.match(new RegExp(`${label}:\\s*(.*)`, "i"));
-      return m ? m[1].trim() : "";
-    };
-    items.push({
-      title: get("Judul"),
-      visual: get("Visual"),
-      text: get("TextHook"),
-      hook: get("Hook"),
-      problem: get("Problem"),
-      solution: get("Solution"),
-      cta: get("CTA"),
-      thumbnail: get("Thumbnail"),
-      vo: get("VO"),
-    });
-  }
-  return items;
+    // ... implementasi lama ...
 }
 
 
-export interface SalesHook {
+export interface SalesHook { // Ini adalah interface lama, digantikan SalesAlternative
   visualHook: string;
   textHook: string;
   script: string;
@@ -225,38 +167,6 @@ export interface SalesHook {
 }
 
 export async function generateSalesHooks(desc: string, audience: string, style: string) {
-  const prompt = `Kamu scriptwriter TikTok spesialis jualan. Deskripsi produk: ${desc}. Target audiens: ${audience}. Gaya konten: ${style}. Buat 3 alternatif. Format setiap alternatif:\nVisualHook: <adegan pembuka 1 shot>\nTextHook: <kalimat pembuka>\nScript: <narasi Hook-Problem-Agitation-Solution-CTA maks 30 detik, pisahkan dengan ' -- '>\nFrameSuggestion: <saran visual singkat untuk tiap bagian>. Pisahkan setiap alternatif dengan ====.`;
-
-  const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: "llama-3.3-70b-versatile",
-      messages: [{ role: "user", content: prompt }],
-      stream: false,
-      temperature: 0.4,
-      max_tokens: 2048,
-    }),
-  });
-
-  if (!resp.ok) throw new Error(`Groq API error ${resp.status}`);
-  const json = await resp.json();
-  const text: string = json.choices?.[0]?.message?.content || "";
-  const blocks = text.split(/====+/).map(b => b.trim()).filter(Boolean);
-  return blocks.map(block => {
-    const get = (label: string) => {
-      const m = block.match(new RegExp(`${label}:\\s*(.*)`, "i"));
-      return m ? m[1].trim() : "";
-    };
-    return {
-      visualHook: get("VisualHook"),
-      textHook: get("TextHook"),
-      script: get("Script"),
-      frames: get("FrameSuggestion"),
-    } as SalesHook;
-  });
+    // ... implementasi lama ...
 }
-
+*/
