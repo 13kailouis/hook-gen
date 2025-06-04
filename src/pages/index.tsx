@@ -16,10 +16,18 @@ export default function Landing() {
           <h1 className="logo-text">
             Hook<span>Freak</span>
           </h1>
-          <p className="subtitle">Viral Hook Generator untuk TikTok &amp; Reels</p>
-          <Link href="/generator" className="cta-button">
-            Coba Sekarang →
-          </Link>
+          <p className="subtitle">Toolkit Konten TikTok/Reels</p>
+          <div style={{display:"flex",gap:12,flexWrap:"wrap",justifyContent:"center"}}>
+            <Link href="/generator" className="cta-button">
+              Hook Generator
+            </Link>
+            <Link href="/builder" className="cta-button">
+              Content Builder
+            </Link>
+            <Link href="/batch" className="cta-button">
+              Batch Pack
+            </Link>
+          </div>
         </section>
         <section className="features">
           <div className="feature">
