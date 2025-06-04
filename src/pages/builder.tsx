@@ -3,6 +3,7 @@ import Head from "next/head";
 import Navbar from "@/components/Navbar"; // Asumsi Navbar sudah ada dan sesuai
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { FiCopy, FiCheck } from "react-icons/fi";
 import { SalesAlternative } from "@/lib/groq"; // Import SalesAlternative
 
 // Helper function to format script
@@ -37,6 +38,7 @@ export default function Builder() {
   const [loading, setLoading] = useState(false); //
   const [results, setResults] = useState<SalesAlternative[] | null>(null); //
   const [error, setError] = useState<string | null>(null);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   // Pre-fill form based on query parameters from persona CTAs
   useEffect(() => {
@@ -96,6 +98,12 @@ export default function Builder() {
       setLoading(false); //
     }
   }
+
+  const copyScript = (script: string, index: number) => {
+    navigator.clipboard.writeText(script);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 1200);
+  };
 
   return (
     <>
@@ -176,8 +184,13 @@ export default function Builder() {
             <div className="results-container" style={{marginTop: '2rem'}}>
               <h2 style={{textAlign: 'center', marginBottom: '1.5rem'}}>Ini 3 Alternatif Skrip Buatmu:</h2>
               {results.map((alt, idx) => ( //
-                <div key={idx} className="alternative-card" style={{ background: '#1a1a1a', border:'1px solid #333', borderRadius: '8px', padding: '20px', marginBottom: '24px' }}>
-                  <h3>Alternatif {idx + 1}</h3>
+                <div key={idx} className="alternative-card" style={{ background: '#1a1a1a', border:'1px solid #333', borderRadius: '8px', padding: '20px', marginBottom: '24px', position: 'relative' }}>
+                  <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
+                    <h3>Alternatif {idx + 1}</h3>
+                    <button className="copy-button" aria-label="Copy script" onClick={() => copyScript(alt.script, idx)}>
+                      {copiedIndex === idx ? <FiCheck size={18}/> : <FiCopy size={18}/>}
+                    </button>
+                  </div>
                   <div className="result-section">
                     <strong>🎨 Visual Hook Prompt:</strong>
                     <p>{alt.visualHook}</p> {/* */}
@@ -205,12 +218,12 @@ export default function Builder() {
       </main>
       <style jsx>{`
         .builder-page .form-section { max-width: 700px; }
-        .alternative-card h3 { color: #39ff14; margin-top: 0; }
+        .alternative-card h3 { color: var(--highlight-color); margin-top: 0; }
         .result-section { margin-bottom: 1.5em; }
         .result-section strong { display: block; margin-bottom: 0.5em; color: #eee; }
         .result-section p { margin: 0.2em 0; line-height: 1.6; color: #ccc; }
         .script-display .script-part { margin-bottom: 1em; }
-        .script-display .script-part strong { color: #39ff14; }
+        .script-display .script-part strong { color: var(--highlight-color); }
         .script-display .script-part p { margin: 0.3em 0; color: #ccc; }
       `}</style>
     </>
