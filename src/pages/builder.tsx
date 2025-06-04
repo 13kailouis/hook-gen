@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Navbar from "@/components/Navbar";
 import { useState } from "react";
 
 export default function Builder() {
@@ -31,6 +32,7 @@ export default function Builder() {
       <Head>
         <title>HookFreak • Video Sales Hook Builder</title>
       </Head>
+      <Navbar />
       <main className="main-wrapper">
         <section className="hero">
           <h1 className="logo-text">

@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Navbar from "@/components/Navbar";
 import { useState } from "react";
 import Link from "next/link";
 
@@ -57,6 +58,7 @@ export default function Landing() {
         />
       </Head>
       <main className="landing-wrapper">
+        <Navbar />
         <section className="landing-hero">
           <div className="hero-grid">
             <div className="hero-visual">
@@ -84,7 +86,7 @@ export default function Landing() {
               <option value="lucu">Lucu</option>
               <option value="fomo">FOMO</option>
             </select>
-                <button type="submit" className="cta-button" disabled={loading}>
+                <button type="submit" className="generate-button" disabled={loading}>
                   {loading ? "Sebentar..." : "Bikin skrip konten pertama saya"}
                 </button>
               </form>
