@@ -30,6 +30,7 @@ export default function Builder() {
     <>
       <Head>
         <title>HookFreak • Video Sales Hook Builder</title>
+        <meta name="robots" content="noindex" />
       </Head>
       <main className="main-wrapper">
         <section className="hero">
