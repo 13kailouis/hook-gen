@@ -16,9 +16,10 @@ Setiap permintaan memberi tiga versi alternatif supaya kamu bisa pilih yang pali
 2.  Isi `GROQ_API_KEY` di dalam `.env.local` dengan API key Groq Anda.
 3.  Atur `NEXT_PUBLIC_DEFAULT_DURATION` jika ingin mengubah durasi script default (opsional).
 4.  Opsional: set `NEXT_PUBLIC_SITE_NAME` untuk mengganti nama brand pada tampilan.
-5.  Install dependencies: `npm i`
-6.  Jalankan server development: `npm run dev`
+5.  Untuk mengaktifkan login Google, isi variabel Firebase yang sudah disediakan pada `.env.example` (`NEXT_PUBLIC_FIREBASE_*`).
+6.  Install dependencies: `npm i`
+7.  Jalankan server development: `npm run dev`
 
 Aplikasi akan berjalan di `http://localhost:3000`.
 Landing page menampilkan ringkasan fitur dan contoh hasil.
-Buka `/builder` untuk langsung menggunakan generator skrip lengkap.
+Buka `/builder` untuk menggunakan generator skrip lengkap. Halaman ini memerlukan login Google lebih dulu.

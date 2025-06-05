@@ -1,7 +1,19 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/components/AuthProvider";
+import { useRouter } from "next/router";
 
 export default function Batch() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.replace('/login?next=/batch');
+    }
+  }, [authLoading, user, router]);
+
+  if (authLoading || !user) return null;
   const [brand, setBrand] = useState("");
   const [product, setProduct] = useState("");
   const [audience, setAudience] = useState("");
