@@ -1,395 +1,217 @@
 // src/pages/index.tsx
 import Head from "next/head";
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo } from "react";
 
-const SITE_NAME = "HookFreak";
-const [MAIN_NAME, SECOND_NAME] = SITE_NAME.split(" ");
+/* ----------  TYPE ---------- */
+type SalesAlternative = {
+  visualHook: string;
+  textHook: string;
+  script: string;
+  frames: string;
+  _internalStyle: string;
+  _internalAudience: string;
+  _internalProductDesc: string;
+};
 
-const features = [
+/* ----------  GLOBAL VAR ---------- */
+const SITE_NAME       = process.env.NEXT_PUBLIC_SITE_NAME || "HookFreak";
+const SITE_TAGLINE    = "Video Sales Hook Builder";
+const SITE_DESC       = "Generate visual hooks, opening lines, full scripts & frame ideas for TikTok/Reels in seconds.";
+const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_PRIMARY   || "#39ff14";
+const [MAIN, SECOND]  = SITE_NAME.split(" ");
+
+/* ----------  STATIC DATA ---------- */
+const FEATURES = [
+  { icon:"💡", title:"3 Alternatif Sekali Klik", desc:"Setiap generate memberi tiga skrip berbeda siap pakai." },
+  { icon:"🎬", title:"Ide Visual & Frame",        desc:"Tidak cuma teks, dapatkan saran visual hook & alur frame." },
+  { icon:"⏱️", title:"Durasi Fleksibel",          desc:"Atur panjang skrip 15-60 detik sesuai kebutuhan konten." },
+];
+
+const EXAMPLES: SalesAlternative[] = [
+  /* --- contoh singkat; isi asli Anda di sini --- */
   {
-    icon: "🚀",
-    title: "3 Alternatif Sekali Klik",
-    desc: "Generate tiga skrip berbeda langsung siap pakai",
-    color: "from-green-400 to-teal-500"
-  },
-  {
-    icon: "🎬",
-    title: "Ide Visual & Frame",
-    desc: "Saran visual hook dan alur frame lengkap",
-    color: "from-amber-400 to-orange-500"
-  },
-  {
-    icon: "⏱️",
-    title: "Durasi Fleksibel",
-    desc: "Atur panjang skrip 15-60 detik sesuai kebutuhan",
-    color: "from-blue-400 to-indigo-500"
+    visualHook:"Close-up wajah kaget…",
+    textHook:"Baru bangun udah…",
+    script:"Hook: … -- Problem: … -- Agitation: … -- Solution: … -- CTA: …",
+    frames:"Hook: …",
+    _internalStyle:"Storytelling",
+    _internalAudience:"Remaja & Dewasa Muda",
+    _internalProductDesc:"Serum Anti Jerawat",
   }
 ];
 
-const personas = [
-  {
-    icon: "🎭",
-    title: "UGC Creator",
-    desc: "Bikin portofolio nendang, dilirik banyak brand",
-    path: "/builder?persona=ugc"
-  },
-  {
-    icon: "🏢",
-    title: "Pemilik Brand",
-    desc: "Tingkatkan konversi iklan & penjualan",
-    path: "/builder?persona=brand"
-  },
-  {
-    icon: "💼",
-    title: "Freelancer/Agensi",
-    desc: "Hemat waktu riset, puaskan klien",
-    path: "/builder?persona=freelancer"
-  }
-];
-
-const ExampleOutput = ({ data }: { data: any }) => {
-  const [expanded, setExpanded] = useState(false);
-  
-  const scriptParts = data.script.split(" -- ").map((part: string, index: number) => {
-    const labels = ["Hook", "Problem", "Agitation", "Solution", "CTA"];
+/* ----------  HELPERS ---------- */
+const formatScript = (s:string) =>
+  s.split(" -- ").map((part, i) => {
+    const L=["Hook","Problem","Agitation","Solution","CTA"];
     return (
-      <div key={index} className="mb-3">
-        <span className="font-bold text-green-400">{labels[index]}:</span>
-        <span className="ml-2">{part.replace(`${labels[index]}: `, "")}</span>
+      <div key={i} className="script-row">
+        <strong>{L[i]}:</strong>
+        <span>{part.trim()}</span>
       </div>
     );
   });
 
-  return (
-    <div className="bg-gray-900 rounded-xl p-5 border border-gray-800 hover:border-green-500/30 transition-all">
-      <div className="flex flex-wrap items-center gap-3 mb-4">
-        <h4 className="text-lg font-bold">{data._internalProductDesc}</h4>
-        <span className="bg-green-900/30 text-green-400 px-3 py-1 rounded-full text-sm">
-          {data._internalStyle}
-        </span>
-      </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <p className="text-sm text-gray-400 mb-1">Visual Hook</p>
-          <p className="font-medium">{data.visualHook}</p>
-        </div>
-        
-        <div>
-          <p className="text-sm text-gray-400 mb-1">Teks Hook</p>
-          <p className="font-medium text-green-400">"{data.textHook}"</p>
-        </div>
-      </div>
-      
-      <div className="mt-5">
-        <p className="text-sm text-gray-400 mb-1">Skrip Lengkap</p>
-        <div className="bg-gray-800/50 p-4 rounded-lg max-h-[200px] overflow-y-auto">
-          {scriptParts}
-        </div>
-      </div>
-      
-      <div className="mt-5">
-        <div className="flex justify-between items-center">
-          <p className="text-sm text-gray-400">Saran Frame</p>
-          <button 
-            onClick={() => setExpanded(!expanded)}
-            className="text-green-500 text-sm"
-          >
-            {expanded ? "Sembunyikan" : "Lihat Semua"}
-          </button>
-        </div>
-        <p className={`${expanded ? "" : "line-clamp-2"} mt-1`}>
-          {data.frames}
-        </p>
-      </div>
-    </div>
-  );
-};
-
-const examples = [
-  {
-    visualHook: "Close-up wajah kaget melihat jerawat baru di cermin, lalu zoom out cepat",
-    textHook: "Baru bangun udah disambut 'kejutan' di muka? Relate banget!",
-    script: "Hook: Baru bangun udah disambut 'kejutan' di muka? Relate banget! Udah coba ini-itu tapi si merah nongol lagi, nongol lagi. -- Problem: Padahal besok ada acara penting, mau ketemu doi, atau sekadar pengen selfie cantik tanpa filter. Jerawat satu biji aja bisa bikin mood ancur seharian. -- Agitation: Makin dipikirin makin stres, makin stres jerawat makin menjadi-jadi. Lingkaran setan yang gak ada habisnya kan? Mau sampai kapan ngumpetin muka atau ngandelin filter terus? -- Solution: Stop siklusnya sekarang! Kenalin AcneWarrior Serum, jagoan hempas jerawat dalam semalam. Dengan Salicylic Acid & Centella Asiatica, langsung nenangin dan kempesin jerawat tanpa bikin kulit kering. -- CTA: Muka glowing bebas drama jerawat bukan mimpi lagi! Klik link di bio buat dapetin AcneWarrior Serum-mu sekarang juga! Ada promo spesial buat kamu yang gercep!",
-    frames: "Hook: Wajah kaget di cermin (close-up), lalu transisi ke kalender menandai acara penting. Problem: Shot tangan frustasi memegang beberapa produk skincare gagal. Agitation: Scroll konten IG/TikTok orang lain yang flawless, lalu kembali ke wajah sendiri yang insecure. Solution: Unboxing AcneWarrior Serum, tekstur serum di tangan, aplikasi lembut di wajah, senyum puas. CTA: Pegang produk, tunjuk ke arah link di bio, wajah happy.",
-    _internalStyle: "Storytelling",
-    _internalAudience: "Remaja & Dewasa Muda",
-    _internalProductDesc: "Serum Anti Jerawat"
-  },
-  {
-    visualHook: "Tumpahan kopi di baju putih bersih, ekspresi panik",
-    textHook: "NOOO! Baju favorit kena noda pas mau ngedate?!",
-    script: "Hook: NOOO! Baju favorit kena noda pas mau ngedate?! Jangan panik dulu! -- Problem: Noda bandel emang nyebelin, apalagi di momen penting. Mau cuci biasa, takutnya malah makin nyebar atau warnanya luntur. -- Agitation: Udah coba berbagai sabun tapi nodanya tetap aja nempel kayak kenangan mantan? Bikin bete dan gak pede kan jadinya. -- Solution: Kenalin Spotless Pen! Solusi praktis basmi noda dalam sekejap. Tinggal oles, gosok dikit, noda hilang tanpa bekas! Aman buat semua jenis kain. -- CTA: Jangan biarin noda ngerusak harimu! Sedia Spotless Pen sekarang juga. Klik keranjang kuning buat harga spesial!",
-    frames: "Hook: Slow motion tumpahan kopi, close up ekspresi panik. Problem: Shot baju dengan noda membandel, orangnya keliatan bingung. Agitation: Kompilasi usaha gagal membersihkan noda (misal disikat, dikucek), ekspresi makin frustasi. Solution: Demo penggunaan Spotless Pen, noda hilang dengan mudah. Baju kembali bersih. Senyum lega. CTA: Tunjukkan produk Spotless Pen, arahkan ke CTA (misal keranjang kuning), wajah ceria.",
-    _internalStyle: "Problem-Solution",
-    _internalAudience: "Siapa saja yang sering berurusan dengan noda",
-    _internalProductDesc: "Pena Penghilang Noda Instan"
-  }
-];
-
-export default function Home() {
+/* ----------  PAGE ---------- */
+export default function HomePage() {
+  const year = useMemo(()=>new Date().getFullYear(),[]);
   return (
     <>
       <Head>
-        <title>{SITE_NAME} • AI Viral Hook Generator TikTok/Reels</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Bikin script video jualan TikTok, Reels, dan Shorts yang viral dengan visual hook menancap di detik pertama" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+        <title>{SITE_NAME} – {SITE_TAGLINE}</title>
+        <meta name="description" content={SITE_DESC}/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
       </Head>
 
-      {/* Navigation */}
-      <nav className="bg-black border-b border-gray-800 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="flex items-center">
-            <div className="text-2xl font-extrabold text-green-500">{MAIN_NAME}</div>
-            {SECOND_NAME && <span className="text-white ml-1">{SECOND_NAME}</span>}
-          </div>
-          
-          <div className="hidden md:flex space-x-6">
-            <Link href="#features" className="text-gray-300 hover:text-white transition">Fitur</Link>
-            <Link href="#examples" className="text-gray-300 hover:text-white transition">Contoh</Link>
-            <Link href="#personas" className="text-gray-300 hover:text-white transition">Untuk Siapa</Link>
-          </div>
-          
-          <Link href="/builder" className="bg-green-600 hover:bg-green-700 text-black font-semibold py-2 px-4 rounded-lg transition">
-            Builder Lengkap
-          </Link>
-        </div>
+      {/* ------------ NAV ------------- */}
+      <nav className="nav">
+        <div className="logo">{MAIN}{SECOND && <span>{SECOND}</span>}</div>
+        <Link href="/builder" className="btn ghost">Builder</Link>
       </nav>
 
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-black to-gray-900 pt-20 pb-28">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-12 md:mb-0">
-              <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-                Stop Bikin Konten Jualan <span className="text-green-500">Ngebosenin</span>
-              </h1>
-              
-              <p className="text-lg text-gray-300 mb-8 max-w-lg">
-                {SITE_NAME} bikin video TikTok & Reels-mu nancep di detik pertama dengan visual hook, teks pembuka, dan skrip durasi pas
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="/builder" className="bg-green-500 hover:bg-green-600 text-black font-bold py-3 px-8 rounded-lg text-center transition text-lg">
-                  🚀 Generate Sekarang
-                </Link>
-                <Link href="#examples" className="bg-gray-800 hover:bg-gray-700 text-white font-semibold py-3 px-8 rounded-lg text-center transition">
-                  Lihat Contoh
-                </Link>
-              </div>
-              
-              <div className="mt-8 flex flex-wrap gap-4">
-                <div className="flex items-center">
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3].map((item) => (
-                      <div key={item} className="w-8 h-8 rounded-full bg-gray-700 border-2 border-black"></div>
-                    ))}
-                  </div>
-                  <span className="ml-3 text-gray-400">1K+ Creator</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold">★</span>
-                  </div>
-                  <span className="ml-2 text-gray-400">4.9/5 (328 Reviews)</span>
-                </div>
-              </div>
+      {/* ------------ HERO ------------- */}
+      <header className="hero">
+        <h1>Stop Bikin Konten Jualan <span className="hl">Ngebosenin</span>.</h1>
+        <p>{SITE_NAME} bantu kamu bikin <span className="hl">visual hook, teks pembuka, skrip & ide frame</span> yang nancep di detik pertama.</p>
+        <Link href="/builder" className="btn primary">🚀 Mulai Buat Skrip</Link>
+      </header>
+
+      {/* ------------ FEATURES ------------- */}
+      <section className="section">
+        <h2>Kenapa {SITE_NAME}?</h2>
+        <div className="grid g3">
+          {FEATURES.map((f,i)=>(
+            <div key={i} className="card feature">
+              <span className="icon">{f.icon}</span>
+              <h3>{f.title}</h3>
+              <p>{f.desc}</p>
             </div>
-            
-            <div className="md:w-1/2 relative">
-              <div className="relative bg-gray-800/50 border border-gray-700 rounded-2xl p-6 backdrop-blur-sm">
-                <div className="absolute -inset-1 bg-green-500/10 rounded-2xl blur-sm z-0"></div>
-                <div className="relative z-10">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <div className="text-sm font-medium ml-2">Hook Generator</div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <div className="text-xs text-gray-400 mb-1">Visual Hook</div>
-                      <div className="bg-gray-900 p-3 rounded-lg border border-gray-700">
-                        Close-up wajah kaget melihat jerawat baru di cermin
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <div className="text-xs text-gray-400 mb-1">Teks Hook</div>
-                      <div className="bg-gray-900 p-3 rounded-lg border border-gray-700">
-                        "Baru bangun udah disambut 'kejutan' di muka? Relate banget!"
-                      </div>
-                    </div>
-                    
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <div className="text-xs text-gray-400 mb-1">Gaya</div>
-                        <div className="bg-gray-900 p-3 rounded-lg border border-gray-700 text-center">
-                          Storytelling
-                        </div>
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-400 mb-1">Durasi</div>
-                        <div className="bg-gray-900 p-3 rounded-lg border border-gray-700 text-center">
-                          30 detik
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <button className="w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg font-semibold transition">
-                      Generate 3 Alternatif
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="absolute top-10 -right-5 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
-              <div className="absolute bottom-10 -left-5 w-48 h-48 bg-green-500/20 rounded-full blur-3xl"></div>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Features Section */}
-      <section id="features" className="py-16 bg-gray-900">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Dibuat Untuk <span className="text-green-500">Viral</span></h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">Fitur yang bikin kontenmu nempel di kepala audience</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className={`bg-gradient-to-br ${feature.color} p-0.5 rounded-2xl hover:scale-[1.02] transition-all`}>
-                <div className="bg-gray-900 rounded-2xl p-6 h-full">
-                  <div className="text-4xl mb-4">{feature.icon}</div>
-                  <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                  <p className="text-gray-400">{feature.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* ------------ PERSONA ------------- */}
+      <section className="section dark">
+        <h2>Kamu Siapa di Dunia Konten?</h2>
+        <div className="grid g3">
+          <Link href="/builder?persona=ugc" className="card persona">
+            <h3><span className="icon">🎭</span>UGC Creator</h3>
+            <p>Portofolio nendang, dilirik brand.</p>
+            <span className="cta">Mulai →</span>
+          </Link>
+          <Link href="/builder?persona=brand" className="card persona">
+            <h3><span className="icon">🏢</span>Pemilik Brand</h3>
+            <p>Naikkan konversi & penjualan.</p>
+            <span className="cta">Mulai →</span>
+          </Link>
+          <Link href="/builder?persona=freelancer" className="card persona">
+            <h3><span className="icon">💼</span>Freelancer/Agensi</h3>
+            <p>Hemat riset, hasil cepat.</p>
+            <span className="cta">Mulai →</span>
+          </Link>
         </div>
       </section>
 
-      {/* Persona Section */}
-      <section id="personas" className="py-16 bg-black">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Kamu <span className="text-green-500">Siapa?</span></h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">HookFreak cocok untuk semua player di dunia konten</p>
+      {/* ------------ EXAMPLES ------------- */}
+      <section className="section">
+        <h2>Contoh Hasil {SITE_NAME}</h2>
+        {EXAMPLES.map((ex,i)=>(
+          <div key={i} className="card example">
+            <header>
+              <h4>"{ex._internalProductDesc}"</h4>
+              <span className="tag">{ex._internalStyle}</span>
+            </header>
+            <div className="part"><b>Visual Hook</b><p>{ex.visualHook}</p></div>
+            <div className="part"><b>Teks Hook</b><p>{ex.textHook}</p></div>
+            <div className="part"><b>Skrip</b><div className="script">{formatScript(ex.script)}</div></div>
+            <div className="part"><b>Saran Frame</b><p>{ex.frames}</p></div>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {personas.map((persona, index) => (
-              <Link key={index} href={persona.path} className="group">
-                <div className="bg-gray-900 rounded-xl p-6 border border-gray-800 group-hover:border-green-500/50 transition-all h-full">
-                  <div className="text-3xl mb-4">{persona.icon}</div>
-                  <h3 className="text-xl font-bold mb-2">{persona.title}</h3>
-                  <p className="text-gray-400 mb-4">{persona.desc}</p>
-                  <span className="text-green-500 font-semibold group-hover:underline inline-flex items-center">
-                    Mulai Sekarang 
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        ))}
+        <Link href="/builder" className="btn primary center">Coba Sendiri →</Link>
       </section>
 
-      {/* Examples Section */}
-      <section id="examples" className="py-16 bg-gradient-to-b from-black to-gray-900">
-        <div className="container mx-auto px-4 max-w-4xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Hasil Nyata <span className="text-green-500">HookFreak</span></h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">Contoh skrip yang sudah terbukti meningkatkan engagement</p>
-          </div>
-          
-          <div className="space-y-8">
-            {examples.map((example, index) => (
-              <ExampleOutput key={index} data={example} />
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <Link href="/builder" className="bg-green-600 hover:bg-green-700 text-black font-bold py-3 px-8 rounded-lg text-center transition inline-flex items-center text-lg">
-              Coba Sendiri di Builder 
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-black border-t border-gray-800 py-12">
-        <div className="container mx-auto px-4 max-w-6xl">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="mb-6 md:mb-0">
-              <div className="text-2xl font-extrabold text-green-500">{SITE_NAME}</div>
-              <p className="text-gray-400 mt-2">Video Sales Hook Generator #1 di Indonesia</p>
-            </div>
-            
-            <div className="flex space-x-6">
-              <Link href="#" className="text-gray-400 hover:text-white transition">Terms</Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition">Privacy</Link>
-              <Link href="#" className="text-gray-400 hover:text-white transition">Contact</Link>
-            </div>
-          </div>
-          
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
-            &copy; {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
-          </div>
-        </div>
+      {/* ------------ FOOTER ------------- */}
+      <footer className="footer">
+        © {year} {SITE_NAME}. Bikin konten jualan nancep itu gampang!
       </footer>
 
-      {/* Global Styles */}
+      {/* ------------ STYLE ------------- */}
       <style jsx global>{`
-        body {
-          font-family: 'Inter', sans-serif;
-          background-color: #000;
-          color: #fff;
-          overflow-x: hidden;
+        :root{
+          --clr-primary:${PRIMARY_COLOR};
+          --clr-bg:#000;
+          --clr-card:#131313;
+          --clr-text:#f0f0f0;
+          --clr-muted:#b0b0b0;
+          --radius:12px;
         }
+        *,*::before,*::after{box-sizing:border-box;}
+        body{margin:0;font-family:Inter,system-ui;background:var(--clr-bg);color:var(--clr-text)}
+        a{text-decoration:none;color:inherit}
+
+        /* buttons */
+        .btn{display:inline-block;padding:.9rem 1.8rem;border-radius:6px;font-weight:700;transition:.2s}
+        .btn.primary{background:var(--clr-primary);color:#000;box-shadow:0 4px 15px rgba(57,255,20,.3)}
+        .btn.primary:hover{transform:translateY(-2px)}
+        .btn.ghost{background:rgba(255,255,255,.06)}
+        .btn.center{margin:3rem auto 0;display:block;width:max-content}
+
+        /* nav */
+        .nav{display:flex;justify-content:space-between;align-items:center;padding:1.2rem 1.6rem;background:#080808;position:sticky;top:0;z-index:50;border-bottom:1px solid #1a1a1a}
+        .logo{font-size:1.5rem;font-weight:900;color:var(--clr-primary)}
+        .logo span{color:var(--clr-text)}
         
-        .container {
-          width: 100%;
-          margin-right: auto;
-          margin-left: auto;
-          padding-right: 1rem;
-          padding-left: 1rem;
-        }
-        
-        @media (min-width: 640px) {
-          .container {
-            max-width: 640px;
-          }
-        }
-        
-        @media (min-width: 768px) {
-          .container {
-            max-width: 768px;
-          }
-        }
-        
-        @media (min-width: 1024px) {
-          .container {
-            max-width: 1024px;
-          }
-        }
-        
-        @media (min-width: 1280px) {
-          .container {
-            max-width: 1280px;
-          }
+        /* hero */
+        .hero{text-align:center;padding:4rem 1.5rem;position:relative}
+        .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,var(--clr-primary)12%,transparent 60%);opacity:.05}
+        .hero h1{font-size:2.2rem;font-weight:900;margin-bottom:1.2rem}
+        .hero p{max-width:640px;margin:0 auto 2rem;line-height:1.7;color:var(--clr-muted)}
+        .hl{color:var(--clr-primary)}
+
+        /* sections */
+        .section{padding:4rem 1.5rem}
+        .section.dark{background:#000}
+        .section h2{text-align:center;font-size:2rem;margin-bottom:2.5rem}
+
+        /* grid */
+        .grid{display:grid;gap:1.5rem}
+        .g3{grid-template-columns:1fr}
+        @media(min-width:768px){.g3{grid-template-columns:repeat(3,1fr)}}
+
+        /* cards */
+        .card{background:var(--clr-card);border:1px solid #222;border-radius:var(--radius);padding:2rem 1.5rem;transition:.25s}
+        .card:hover{transform:translateY(-4px);border-color:var(--clr-primary)}
+        .feature .icon{font-size:2.4rem;margin-bottom:1.2rem}
+        .feature h3{font-size:1.25rem;margin-bottom:.7rem}
+        .feature p{color:var(--clr-muted);line-height:1.6}
+
+        .persona{color:var(--clr-text);display:flex;flex-direction:column;height:100%}
+        .persona h3{font-size:1.25rem;margin-bottom:1rem}
+        .persona .icon{margin-right:.4rem}
+        .persona p{color:var(--clr-muted);flex-grow:1;line-height:1.6;margin-bottom:1rem}
+        .persona .cta{color:var(--clr-primary);font-weight:700}
+
+        /* example */
+        .example header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid #222;padding-bottom:.8rem}
+        .example h4{font-size:1.1rem;margin:0}
+        .tag{background:rgba(57,255,20,.12);color:var(--clr-primary);padding:.25rem .6rem;border-radius:16px;font-size:.8rem}
+        .part{margin-top:1.2rem}
+        .part b{display:block;color:var(--clr-primary);margin-bottom:.4rem}
+        .script{border-left:3px solid var(--clr-primary);padding-left:.8rem;background:#151515}
+        .script-row{margin-bottom:1rem;line-height:1.6}
+        .script-row strong{color:var(--clr-primary);display:block;margin-bottom:.2rem}
+
+        /* footer */
+        .footer{text-align:center;padding:3rem 1.5rem;border-top:1px solid #1a1a1a;color:var(--clr-muted)}
+
+        /* responsive tweaks */
+        @media(max-width:480px){
+          .hero h1{font-size:1.6rem}
+          .section{padding:3rem 1rem}
         }
       `}</style>
     </>
