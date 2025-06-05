@@ -1,196 +1,110 @@
 // src/lib/groq.ts
-
 export interface SalesAlternative {
   visualHook: string;
   textHook: string;
-  script: string; // Format: Hook -- Problem -- Agitation -- Solution -- CTA
-  frames: string; // Deskripsi per bagian skrip
+  script: string;   // Hook -- Problem -- Agitation -- Solution -- CTA
+  frames: string;
   // Internal identifiers
   _internalStyle: string;
   _internalAudience: string;
   _internalProductDesc: string;
+  _internalTrend: string;          // NEW: trend / slang injection
 }
 
-// Fungsi utama untuk menghasilkan 3 alternatif sales hook
+// =========  FUNGSI BARU: membantu sisipkan slang / emoji harian  =========
+const pickDailyTrend = () => {
+  const today = new Date().getDate();
+  const pool = [
+    "🔥", "🤯", "💸", "🚀", "skrrt", "literally", "gokil", "flexin", "no cap",
+    "sumpah", "auto", "ngeri", "parah sih", "fix", "bikin kaget"
+  ];
+  return pool[today % pool.length];
+};
+
+// =================   GENERATOR UTAMA  =====================
 export async function generateCompleteSalesHooks(
-  productDesc: string,
-  audience: string,
-  style: string,
-  duration?: number
+  productDesc = "skincare pencerah wajah",
+  audience = "wanita 20-35 thn aktif sosmed, butuh perawatan praktis",
+  style = "storytelling edukatif",
+  duration = Number(process.env.NEXT_PUBLIC_DEFAULT_DURATION) || 30
 ): Promise<SalesAlternative[]> {
-  // Default values jika input tidak lengkap
-  const finalProductDesc = productDesc || "skincare pencerah wajah";
-  const finalAudience = audience || "wanita usia 20-35 tahun yang aktif di sosial media dan tertarik dengan perawatan kulit praktis";
-  const finalStyle = style || "storytelling edukatif";
-  const finalDuration = duration || Number(process.env.NEXT_PUBLIC_DEFAULT_DURATION) || 30;
+
+  // 👉 slang/emoji harian agar tiap hari hook-nya terasa fresh
+  const trend = pickDailyTrend();
 
   const prompt = `
-Kamu adalah seorang scriptwriter video TikTok profesional dengan spesialisasi membuat konten jualan yang viral dan sangat efektif. Gayamu santai, tidak kaku, dan mengikuti tren terbaru. Klienmu adalah kreator konten dan marketer yang butuh skrip siap pakai, bukan ide abstrak atau deskripsi umum. Outputmu harus langsung usable dan jauh dari kesan textbook.
+Kamu copywriter video pendek (TikTok/Reels/Shorts) spesialis jualan brutal—pemicunya FOMO,
+kagetin, dan selalu “scroll-stopper”. Bahasa kamu: campuran Indonesia kasual + slang,
+tanpa basa-basi dan TIDAK ada kata formal textbook sama sekali.
 
-Deskripsi Produk: ${finalProductDesc}
-Target Audiens: ${finalAudience}
-Gaya Konten: ${finalStyle}
+Deskripsi Produk: ${productDesc}
+Target Audiens: ${audience}
+Gaya Konten: ${style}
+TrendKeywordHariIni: ${trend}
 
-Tugasmu adalah menghasilkan 3 (TIGA) alternatif LENGKAP untuk konten video pendek (TikTok, Reels, Shorts) berdasarkan informasi di atas. Setiap alternatif HARUS terdiri dari EMPAT bagian berikut, dengan format persis seperti ini:
+Buat 3 ALTERNATIF konten. Format WAJIB:
 
-VisualHook: [Deskripsi adegan pembuka 1–2 detik yang kuat secara visual, konkret, bisa direkam dengan HP, tanpa CGI. Fokus pada framing, gerakan, ekspresi, atau aksi mendadak. Hindari contoh yang terlalu umum atau klise.]
+VisualHook: …
+TextHook: …
+Script: …
+FrameSuggestion: …
 
-TextHook: [Satu kalimat pembuka yang emosional, provokatif, atau sangat membuat penasaran. Hindari bahasa formal. Tulis seolah-olah kamu ngobrol santai dengan audiens dan mengikuti tren bahasa yang sedang populer.]
+**ATURAN KHUSUS TextHook**
+• Maksimal 80 karakter, 1 kalimat.  
+• Pola: [Stat/Twist Mengejutkan] + [Sapaan Langsung ‘lo/lu/kamu’] + [Janji/Twist singkat].  
+• Sisipkan (opsional) 1 emoji atau kata tren “${trend}”.  
+• Dilarang memakai frasa klise: hai guys, teman-teman, sobat, smart-people, dst.  
+• Harus terasa seperti percakapan spontan, bukan copy-paste ChatGPT.
 
-Script: [Narasi video lengkap (maksimal ${finalDuration} detik) dengan struktur Hook - Problem - Agitation - Solution - CTA. Tulis sebagai PARAGRAF yang mengalir alami dan enak didengar/dibaca, BUKAN outline poin-poin. Pisahkan setiap bagian (Hook, Problem, Agitation, Solution, CTA) secara eksplisit dengan ' -- ' (spasi, dua strip, spasi). Gunakan gaya percakapan santai khas sosial media dan hindari kalimat textbook.
-Contoh struktur internal (jangan tampilkan ini di output, hanya sebagai panduanmu):
-Hook: (Lanjutkan atau elaborasi dari TextHook, tarik perhatian lebih dalam)
---
-Problem: (Sebutkan masalah utama yang dihadapi audiens terkait produk)
---
-Agitation: (Perburuk masalahnya, buat audiens merasakan urgensi atau ketidaknyamanan lebih dalam)
---
-Solution: (kenalkan produk sebagai solusi elegan dan efektif untuk masalah tersebut)
---
-CTA: (Ajak audiens melakukan tindakan spesifik, misal klik link, beli sekarang, follow)
-]
+**ATURAN Script**
+Tuliskan narasi lengkap (≤${duration}s) dalam satu paragraf,
+pisahkan bagian dengan ' -- ' mengikuti urutan Hook, Problem, Agitation, Solution, CTA.
+Bahasa tetap kasual dan energik.
 
-FrameSuggestion: [Saran visual praktis untuk setiap bagian skrip (Hook, Problem, Agitation, Solution, CTA). Deskripsikan angle kamera, gerakan, ekspresi wajah, objek relevan, atau B-roll yang mendukung narasi. Harus actionable untuk kreator solo.
-Contoh:
-Hook: Extreme close-up mata (angle dari bawah), lalu cepat zoom out menunjukkan seluruh wajah dengan ekspresi terkejut.
-Problem: POV shot melihat tangan sendiri memegang beberapa produk skincare lama yang tidak efektif, ekspresi wajah terlihat dari pantulan cermin (jika ada) atau bahu yang lesu.
-Agitation: Transisi cepat: scrolling konten sosial media yang menampilkan orang lain dengan kulit bagus, diselingi shot close-up area kulit sendiri yang bermasalah. Ekspresi sedikit iri atau cemas.
-Solution: Unboxing produk dengan antusias. Shot close-up tekstur produk saat diaplikasikan ke punggung tangan. Transisi ke wajah yang tersenyum puas setelah beberapa waktu penggunaan (bisa simulasi).
-CTA: Pegang produk di samping wajah, senyum percaya diri, lalu arahkan jari ke tombol CTA atau area link di bio. Tampilkan teks promo singkat jika ada.]
+**ATURAN FrameSuggestion**
+Berikan saran shot praktis, bisa direkam creator solo pakai HP. Hindari CGI.
 
-Pastikan setiap alternatif dipisahkan dengan "====" (empat sama dengan).
-Output HARUS 100% usable dan langsung bisa dieksekusi. Jangan ada disclaimer, jangan menjelaskan prosesmu, jangan ada basa-basi atau kalimat pengantar/penutup dari kamu. Pastikan setiap alternatif terasa fresh dan tidak terdengar seperti template. Langsung ke intinya.
-  `;
+Pisahkan tiap alternatif dengan “====”. Output langsung; jangan ada catatan ekstra.
+`;
 
   const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${process.env.GROQ_API_KEY}`, // Pastikan GROQ_API_KEY ada di .env.local
+      Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
     },
     body: JSON.stringify({
-      model: "llama-3.3-70b-versatile", // Atau model GPT-4 lain yang tersedia jika ada
+      model: "llama-3.3-70b-versatile",
       messages: [{ role: "user", content: prompt }],
-      stream: false,
-      temperature: 0.7, // Sedikit lebih tinggi untuk variasi antar 3 alternatif
-      max_tokens: 3000, // Sesuaikan jika output sering terpotong
+      temperature: 0.85,                // naikkan kreativitas global
+      max_tokens: 3000,
+      top_p: 0.9,
+      presence_penalty: 0.4,
+      frequency_penalty: 0.3
     }),
   });
 
   if (!resp.ok) {
-    const errorBody = await resp.text();
-    console.error("Groq API Error:", resp.status, errorBody);
-    throw new Error(`Groq API error ${resp.status}: ${errorBody}`);
+    const err = await resp.text();
+    console.error("Groq API Error:", resp.status, err);
+    throw new Error(\`Groq API error \${resp.status}: \${err}\`);
   }
 
   const json = await resp.json();
   const text: string = json.choices?.[0]?.message?.content || "";
 
-  const alternativesRaw = text.split(/====+/).map(b => b.trim()).filter(Boolean);
-
-  return alternativesRaw.map(block => {
-    const visualHook = (block.match(/VisualHook:\s*([\s\S]*?)(?=\nTextHook:)/i)?.[1] || "").trim();
-    const textHook = (block.match(/TextHook:\s*([\s\S]*?)(?=\nScript:)/i)?.[1] || "").trim();
-    const script = (block.match(/Script:\s*([\s\S]*?)(?=\nFrameSuggestion:)/i)?.[1] || "").trim();
-    const frames = (block.match(/FrameSuggestion:\s*([\s\S]*)/i)?.[1] || "").trim();
-
-    return {
-      visualHook,
-      textHook,
-      script,
-      frames,
-      _internalStyle: finalStyle,
-      _internalAudience: finalAudience,
-      _internalProductDesc: finalProductDesc,
-    } as SalesAlternative;
-  });
-}
-
-// Fungsi-fungsi lama (generateHooks, generateHookScenes, generateContentScript, generateBatchPack)
-// dapat Anda hapus atau komentari jika tidak lagi digunakan.
-// Contoh:
-/*
-export async function generateHooks(niche: string, tone: string, product?: string) {
-    // ... implementasi lama ...
-}
-
-export interface HookScene {
-  visual: string;
-  text: string;
-}
-
-export async function generateHookScenes(niche: string, tone: string) {
-    // ... implementasi lama ...
-}
-
-export interface ContentScript {
-  hook: string;
-  problem: string;
-  agitation: string;
-  solution: string;
-  cta: string;
-}
-
-export async function generateContentScript(
-  niche: string,
-  style: string,
-  product?: string
-) {
-    // ... implementasi lama ...
-}
-
-export interface BatchItem {
-  title: string;
-  visual: string;
-  text: string;
-  hook: string;
-  problem: string;
-  solution: string;
-  cta: string;
-  thumbnail: string;
-  vo: string;
-}
-
-export async function generateBatchPack(
-  brand: string,
-  product: string,
-  audience: string,
-  count = 10
-) {
-    // ... implementasi lama ...
-}
-
-
-export interface SalesHook { // Ini adalah interface lama, digantikan SalesAlternative
-  visualHook: string;
-  textHook: string;
-  script: string;
-  frames: string;
-}
-
-export async function generateSalesHooks(desc: string, audience: string, style: string) {
-    // ... implementasi lama ...
-}
-*/
-
-// Placeholder to satisfy build for legacy API routes
-export async function generateBatchPack(
-  brand: string,
-  product: string,
-  audience: string,
-  count = 10
-) {
-  throw new Error("generateBatchPack is not implemented");
-}
-
-export async function generateHooks(
-  niche: string,
-  tone: string,
-  product?: string
-) {
-  throw new Error("generateHooks is not implemented");
-}
-
-export async function generateHookScenes(niche: string, tone: string) {
-  throw new Error("generateHookScenes is not implemented");
+  return text
+    .split(/====+/)
+    .map(b => b.trim())
+    .filter(Boolean)
+    .map(block => ({
+      visualHook:  (block.match(/VisualHook:\\s*([\\s\\S]*?)(?=\\nTextHook:)/i)?.[1] || "").trim(),
+      textHook:    (block.match(/TextHook:\\s*([\\s\\S]*?)(?=\\nScript:)/i)?.[1] || "").trim(),
+      script:      (block.match(/Script:\\s*([\\s\\S]*?)(?=\\nFrameSuggestion:)/i)?.[1] || "").trim(),
+      frames:      (block.match(/FrameSuggestion:\\s*([\\s\\S]*)/i)?.[1] || "").trim(),
+      _internalStyle: style,
+      _internalAudience: audience,
+      _internalProductDesc: productDesc,
+      _internalTrend: trend
+    } as SalesAlternative));
 }
