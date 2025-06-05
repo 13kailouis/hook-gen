@@ -182,7 +182,7 @@ export default function HomePage() {
         
         /* hero */
         .hero{text-align:center;padding:4rem 1.5rem;position:relative}
-        .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,var(--clr-primary)12%,transparent 60%);opacity:.05}
+        .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,var(--clr-primary)12%,transparent 60%);opacity:.05;pointer-events:none}
         .hero h1{font-size:2.2rem;font-weight:900;margin-bottom:1.2rem}
         .hero p{max-width:640px;margin:0 auto 2rem;line-height:1.7;color:var(--clr-muted)}
         .hl{color:var(--clr-primary)}
