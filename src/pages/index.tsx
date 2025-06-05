@@ -42,13 +42,28 @@ const EXAMPLES: SalesAlternative[] = [
 ];
 
 /* ----------  HELPERS ---------- */
-const formatScript = (s:string) =>
+const LABEL = ["Hook", "Problem", "Agitation", "Solution", "CTA"];
+
+const formatScript = (s: string) =>
   s.split(" -- ").map((part, i) => {
-    const L=["Hook","Problem","Agitation","Solution","CTA"];
+    const text = part.replace(new RegExp(`^${LABEL[i]}\\s*:`, "i"), "").trim();
     return (
       <div key={i} className="script-row">
-        <strong>{L[i]}:</strong>
-        <span>{part.trim()}</span>
+        <strong>{LABEL[i]}:</strong>
+        <span>{text}</span>
+      </div>
+    );
+  });
+
+const formatFrames = (s: string) =>
+  LABEL.map((lab, i) => {
+    const reg = new RegExp(`${lab}\\s*:(.*?)($|\\n)`, "i");
+    const match = s.match(reg);
+    if (!match) return null;
+    return (
+      <div key={i} className="script-row">
+        <strong>{lab}:</strong>
+        <span>{match[1].trim()}</span>
       </div>
     );
   });
@@ -128,7 +143,7 @@ export default function HomePage() {
             <div className="part"><b>Visual Hook</b><p>{ex.visualHook}</p></div>
             <div className="part"><b>Teks Hook</b><p>{ex.textHook}</p></div>
             <div className="part"><b>Skrip</b><div className="script">{formatScript(ex.script)}</div></div>
-            <div className="part"><b>Saran Frame</b><p>{ex.frames}</p></div>
+            <div className="part"><b>Saran Frame</b><div className="script">{formatFrames(ex.frames)}</div></div>
           </div>
         ))}
         <Link href="/builder" className="btn primary center">Coba Sendiri →</Link>
