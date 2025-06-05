@@ -6,14 +6,14 @@ import { AuthProvider } from "@/components/AuthProvider";
 
 export default function App({ Component, pageProps }: AppProps) {
   const tokens = {
-    highlight: process.env.NEXT_PUBLIC_HIGHLIGHT_COLOR || '#39ff14',
-    gradient: process.env.NEXT_PUBLIC_GRADIENT || 'linear-gradient(90deg,#39ff14,#00ffe6)',
+    highlight: process.env.NEXT_PUBLIC_HIGHLIGHT_COLOR || '#FFD700',
+    gradient: process.env.NEXT_PUBLIC_GRADIENT || 'linear-gradient(90deg,#FFD700,#FFA500)',
     bg: process.env.NEXT_PUBLIC_BG || '#000',
     card: process.env.NEXT_PUBLIC_CARD || '#131313',
     text: process.env.NEXT_PUBLIC_TEXT || '#f0f0f0',
     muted: process.env.NEXT_PUBLIC_MUTED || '#b0b0b0',
     radius: Number(process.env.NEXT_PUBLIC_RADIUS) || 12,
-    shadow: process.env.NEXT_PUBLIC_SHADOW || '0 4px 15px rgba(57,255,20,.35)',
+    shadow: process.env.NEXT_PUBLIC_SHADOW || '0 4px 15px rgba(255,215,0,0.35)',
   };
 
   return (
