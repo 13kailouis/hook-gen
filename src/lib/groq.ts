@@ -33,9 +33,9 @@ Gaya Konten: ${finalStyle}
 
 Tugasmu adalah menghasilkan 3 (TIGA) alternatif LENGKAP untuk konten video pendek (TikTok, Reels, Shorts) berdasarkan informasi di atas. Setiap alternatif HARUS terdiri dari EMPAT bagian berikut, dengan format persis seperti ini:
 
-VisualHook: [Deskripsi adegan pembuka 1–2 detik yang kuat secara visual, konkret, bisa direkam dengan HP, tanpa CGI. Fokus pada framing, gerakan, ekspresi, atau aksi mendadak. Hindari contoh yang terlalu umum atau klise.]
+  VisualHook: [Deskripsi adegan pembuka 1–2 detik yang kuat secara visual, konkret, bisa direkam dengan HP, tanpa CGI. Fokus pada framing, gerakan, ekspresi, atau aksi mendadak. Hindari contoh yang terlalu umum atau klise.]
 
-TextHook: [Satu kalimat pembuka yang emosional, provokatif, atau sangat membuat penasaran. Hindari bahasa formal. Tulis seolah-olah kamu ngobrol santai dengan audiens dan mengikuti tren bahasa yang sedang populer.]
+  TextHook: [Kalimat 7–12 kata yang spontan dan berkarakter. Awali dengan kata kerja aktif yang bikin kaget atau terasa nyindir. Gunakan campuran slang Gen-Z plus bahasa lisan, sisipkan 1–2 kata Inggris populer. Jangan pakai kata "temukan", "dapatkan", "solusi", "produk", atau "silakan". Tambahkan satu elemen tak terduga seperti angka aneh, emoji tunggal, atau onomatope ("brut", "cekrek") untuk pattern-interrupt. Larang pembuka klise "Guys, pernah ga...", "Tahukah kamu...", "Halo semuanya...". Boleh pakai tanda baca tidak baku seperti "?!", "...", atau kapital parsial asalkan mudah dibaca. Jika gaya mengandung "storytelling" selipkan sedikit curhat pendek, jika "edukatif" beri nada "kasih tau lo nih", jika "komedi" tambahkan punchline sarkastik di akhir. Gunakan kreativitas setara temperatur 0.85 khusus pada bagian ini.]
 
 Script: [Narasi video lengkap (maksimal ${finalDuration} detik) dengan struktur Hook - Problem - Agitation - Solution - CTA. Tulis sebagai PARAGRAF yang mengalir alami dan enak didengar/dibaca, BUKAN outline poin-poin. Pisahkan setiap bagian (Hook, Problem, Agitation, Solution, CTA) secara eksplisit dengan ' -- ' (spasi, dua strip, spasi). Gunakan gaya percakapan santai khas sosial media dan hindari kalimat textbook.
 Contoh struktur internal (jangan tampilkan ini di output, hanya sebagai panduanmu):
@@ -90,7 +90,11 @@ Output HARUS 100% usable dan langsung bisa dieksekusi. Jangan ada disclaimer, ja
 
   return alternativesRaw.map(block => {
     const visualHook = (block.match(/VisualHook:\s*([\s\S]*?)(?=\nTextHook:)/i)?.[1] || "").trim();
-    const textHook = (block.match(/TextHook:\s*([\s\S]*?)(?=\nScript:)/i)?.[1] || "").trim();
+    let textHook = (block.match(/TextHook:\s*([\s\S]*?)(?=\nScript:)/i)?.[1] || "").trim();
+    textHook = textHook
+      .replace(/\s{2,}/g, " ")
+      .replace(/\.(\s*)$/, "")
+      .slice(0, 80);
     const script = (block.match(/Script:\s*([\s\S]*?)(?=\nFrameSuggestion:)/i)?.[1] || "").trim();
     const frames = (block.match(/FrameSuggestion:\s*([\s\S]*)/i)?.[1] || "").trim();
 
