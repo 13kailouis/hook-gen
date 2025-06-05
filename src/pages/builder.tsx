@@ -1,191 +1,220 @@
 // src/pages/builder.tsx
-import Head from "next/head";
-import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
-import { FiCopy, FiCheck } from "react-icons/fi";
+import Head            from "next/head";
+import Link            from "next/link";
+import { useRouter }   from "next/router";
+import { useState,useEffect } from "react";
+import { FiCopy,FiCheck } from "react-icons/fi";
 
-/* ----------  TYPE  ---------- */
-type SalesAlternative = {
-  visualHook: string;
-  textHook: string;
-  script: string;
-  frames: string;
-  _internalStyle: string;
-  _internalAudience: string;
-  _internalProductDesc: string;
+/* -------------------------------------------------- */
+/* ❶  DESIGN TOKEN—semua bisa di-override via .env    */
+/* -------------------------------------------------- */
+const TOKENS = {
+  BRAND          : process.env.NEXT_PUBLIC_SITE_NAME   || "HookFreak",
+  COLOR_PRIMARY  : process.env.NEXT_PUBLIC_PRIMARY     || "#39ff14",
+  COLOR_BG       : process.env.NEXT_PUBLIC_BG          || "#000",
+  COLOR_CARD     : process.env.NEXT_PUBLIC_CARD        || "#131313",
+  COLOR_TEXT     : process.env.NEXT_PUBLIC_TEXT        || "#f0f0f0",
+  COLOR_MUTED    : process.env.NEXT_PUBLIC_MUTED       || "#a0a0a0",
+  RADIUS         : Number(process.env.NEXT_PUBLIC_RADIUS) || 12,
+  SHADOW_ELEVATE : process.env.NEXT_PUBLIC_SHADOW      || "0 4px 15px rgba(57,255,20,.35)",
+  MAX_WIDTH      : Number(process.env.NEXT_PUBLIC_MAXW)   || 820,   // konten max-width
 };
 
-/* ----------  HELPERS ---------- */
-const LABEL = ["Hook", "Problem", "Agitation", "Solution", "CTA"];
-const fmtScript = (s: string) =>
-  s.split(" -- ").map((part, i) => (
+/* -------------------------------------------------- */
+/* ❷  TIPE DATA                                       */
+/* -------------------------------------------------- */
+type SalesAlternative = {
+  visualHook : string;
+  textHook   : string;
+  script     : string;
+  frames     : string;
+};
+
+/* -------------------------------------------------- */
+/* ❸  HELPER                                          */
+/* -------------------------------------------------- */
+const LABEL = ["Hook","Problem","Agitation","Solution","CTA"];
+const fmt   = (s:string)=>
+  s.split(" -- ").map((p,i)=>(
     <div key={i} className="sr">
       <strong>{LABEL[i]}:</strong>
-      <p>{part.trim()}</p>
+      <p>{p.trim()}</p>
     </div>
   ));
 
-/* ----------  PAGE  ---------- */
-export default function Builder() {
-  const router            = useRouter();
-  const [product, setP]   = useState("");
-  const [audience, setA]  = useState("");
-  const [style, setS]     = useState("storytelling");
-  const [duration, setD]  = useState(30);
-  const [loading, setL]   = useState(false);
-  const [err, setErr]     = useState<string|null>(null);
-  const [alts, setAlts]   = useState<SalesAlternative[]|null>(null);
-  const [copied, setCop]  = useState<number|null>(null);
+/* -------------------------------------------------- */
+/* ❹  COMPONENT                                       */
+/* -------------------------------------------------- */
+export default function Builder(){
+  const {query,isReady}=useRouter();
+  /* form state */
+  const [product ,setProd ]=useState("");
+  const [aud     ,setAud  ]=useState("");
+  const [style   ,setStyle]=useState("storytelling");
+  const [dur     ,setDur  ]=useState(30);
+  /* ui state */
+  const [loading ,setLoad ]=useState(false);
+  const [error   ,setErr  ]=useState<string|null>(null);
+  const [alts    ,setAlts ]=useState<SalesAlternative[]|null>(null);
+  const [copied  ,setCopy ]=useState<number|null>(null);
 
-  /* Prefill dari persona query */
-  useEffect(() => {
-    if (!router.isReady) return;
-    const { persona } = router.query;
-    if (persona === "ugc")        setS("storytelling");
-    else if (persona === "brand") setS("soft-sell");
-    else if (persona === "freelancer") setS("hard-sell");
-  }, [router.isReady, router.query]);
+  /* Prefill */
+  useEffect(()=>{
+    if(!isReady) return;
+    const p=query.persona as string|undefined;
+    if(p==="ugc")        setStyle("storytelling");
+    else if(p==="brand") setStyle("soft-sell");
+    else if(p==="freelancer") setStyle("hard-sell");
+  },[isReady,query]);
 
   /* Generate */
-  async function generate(e: React.FormEvent) {
+  async function generate(e:React.FormEvent){
     e.preventDefault();
-    setL(true); setErr(null); setAlts(null);
+    setLoad(true); setErr(null); setAlts(null);
     try{
-      const r = await fetch("/api/generate-script",{
+      const r=await fetch("/api/generate-script",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({description:product,audience,style,duration})
+        body:JSON.stringify({description:product,audience:aud,style,duration:dur})
       });
       if(!r.ok) throw new Error((await r.json()).error||`Error ${r.status}`);
-      const d = await r.json();
+      const d=await r.json();
       setAlts(d.alternatives||[]);
-    }catch(e:any){setErr(e.message);}
-    finally{setL(false);}
+    }catch(err:any){setErr(err.message);}
+    finally{setLoad(false);}
   }
 
   /* Copy */
-  const doCopy = (txt:string,i:number)=>{
-    navigator.clipboard.writeText(txt);
-    setCop(i); setTimeout(()=>setCop(null),1200);
+  const toClipboard=(t:string,i:number)=>{
+    navigator.clipboard.writeText(t);
+    setCopy(i); setTimeout(()=>setCopy(null),1400);
   };
 
+  /* -------------------------------------------------- */
   return(
     <>
       <Head>
-        <title>Builder – HookFreak</title>
-        <meta name="description" content="Generate hook, script & frame ideas in one click."/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>Builder – {TOKENS.BRAND}</title>
+        <meta name="description" content="Generate hook, script & frame ideas in seconds."/>
+        <meta name="viewport"   content="width=device-width, initial-scale=1"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com"/>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
       </Head>
 
-      {/* ---------- NAV (reuse style dari landing) ---------- */}
+      {/* ---------- NAV ---------- */}
       <nav className="nav">
-        <div className="logo">Hook<span>Freak</span></div>
-        <Link href="/" className="btn ghost">← Home</Link>
+        <div className="logo">{TOKENS.BRAND}</div>
+        <Link href="/" className="btn ghost" aria-label="Back to home">← Home</Link>
       </nav>
 
-      <main className="wrap">
+      <main className="wrap" style={{maxWidth:TOKENS.MAX_WIDTH}}>
         {/* ---------- HERO ---------- */}
         <header className="hero">
-          <h1>Bikin Skrip Jualan <span className="hl">Kilat</span></h1>
-          <p>Isi form singkat → dapat 3 alternatif siap pakai.</p>
+          <h1>Bikin Skrip Jualan <span className="hl">Sekilat</span></h1>
+          <p>Isi form → dapat <strong>3</strong> skrip siap pakai.</p>
         </header>
 
         {/* ---------- FORM ---------- */}
-        <form onSubmit={generate} className="form card">
-          <label>Deskripsi Produk / Jasa
-            <input value={product} onChange={e=>setP(e.target.value)} placeholder="Serum pencerah Niacinamide 10%"/>
-          </label>
+        <form onSubmit={generate} className="form card" aria-label="Hook generator form">
+          <label htmlFor="prod">Deskripsi Produk/Jasa</label>
+          <input id="prod" value={product} onChange={e=>setProd(e.target.value)}
+                 placeholder="Serum pencerah Niacinamide 10%" />
 
-          <label>Target Audiens
-            <input value={audience} onChange={e=>setA(e.target.value)} placeholder="Wanita 20-35 th, kulit kusam"/>
-          </label>
+          <label htmlFor="aud">Target Audiens</label>
+          <input id="aud" value={aud}    onChange={e=>setAud(e.target.value)}
+                 placeholder="Wanita 20-35 th, kulit kusam" />
 
-          <label>Gaya Konten
-            <select value={style} onChange={e=>setS(e.target.value)}>
-              <option value="storytelling">Storytelling</option>
-              <option value="soft-sell">Soft Sell</option>
-              <option value="hard-sell">Hard Sell</option>
-              <option value="humor">Humor</option>
-              <option value="shock">Shock</option>
-              <option value="fomo">FOMO</option>
-              <option value="edukatif">Edukatif</option>
-              <option value="problem-solution">Problem / Solution</option>
-              <option value="testimonial">Testimonial</option>
-              <option value="unboxing">Unboxing</option>
-            </select>
-          </label>
+          <label htmlFor="sty">Gaya Konten</label>
+          <select id="sty" value={style} onChange={e=>setStyle(e.target.value)}>
+            {["storytelling","soft-sell","hard-sell","humor","shock","fomo","edukatif","problem-solution","testimonial","unboxing"]
+              .map(v=><option key={v} value={v}>{v.replace("-"," ").toUpperCase()}</option>)}
+          </select>
 
-          <label>Durasi Maksimum
-            <select value={duration} onChange={e=>setD(+e.target.value)}>
-              <option value={15}>15 detik</option>
-              <option value={30}>30 detik</option>
-              <option value={60}>60 detik</option>
-            </select>
-          </label>
+          <label htmlFor="dur">Durasi Maksimum</label>
+          <select id="dur" value={dur} onChange={e=>setDur(+e.target.value)}>
+            {[15,30,60].map(v=><option key={v}>{v} detik</option>)}
+          </select>
 
-          <button className="btn primary" disabled={loading}>
-            {loading? "⏳ Membuat..." : "✨ Hasilkan 3 Skrip"}
+          <button className="btn primary" disabled={loading} aria-busy={loading}>
+            {loading?"⏳ Generating…":"🚀 Buat Skrip"}
           </button>
 
-          {err && <p className="err">{err}</p>}
+          {error && <p role="alert" className="err">{error}</p>}
         </form>
 
-        {/* ---------- RESULTS ---------- */}
-        {alts && alts.length>0 && (
-          <section className="results">
-            <h2>3 Alternatif Skrip</h2>
+        {/* ---------- RESULT ---------- */}
+        {alts && (
+          <section className="results" aria-live="polite">
+            <h2>3 Skrip Siap Pakai</h2>
             {alts.map((a,i)=>(
-              <div key={i} className="card alt">
+              <article key={i} className="card alt">
                 <header>
                   <h3>Alternatif {i+1}</h3>
-                  <button onClick={()=>doCopy(a.script,i)} className="copy" aria-label="Copy">
-                    {copied===i? <FiCheck size={18}/> : <FiCopy size={18}/> }
+                  <button onClick={()=>toClipboard(a.script,i)} className="copy"
+                          aria-label={copied===i?"Copied":"Copy script"}>
+                    {copied===i ? <FiCheck size={18}/> : <FiCopy size={18}/> }
                   </button>
                 </header>
 
                 <div className="part"><b>🎨 Visual Hook</b><p>{a.visualHook}</p></div>
                 <div className="part"><b>💬 Teks Hook</b><p>{a.textHook}</p></div>
-                <div className="part"><b>📝 Skrip</b><div className="script">{fmtScript(a.script)}</div></div>
+                <div className="part"><b>📝 Skrip</b><div className="script">{fmt(a.script)}</div></div>
                 <div className="part"><b>🎬 Frame</b><p style={{whiteSpace:"pre-line"}}>{a.frames}</p></div>
-              </div>
+              </article>
             ))}
           </section>
         )}
       </main>
 
-      {/* ---------- STYLE ---------- */}
-      <style jsx>{`
-        .wrap{max-width:820px;margin:0 auto;padding:4rem 1.5rem}
+      {/* ---------- STYLE (token based) ---------- */}
+      <style jsx global>{`
+        :root{
+          --clr-primary:${TOKENS.COLOR_PRIMARY};
+          --clr-bg:${TOKENS.COLOR_BG};
+          --clr-card:${TOKENS.COLOR_CARD};
+          --clr-text:${TOKENS.COLOR_TEXT};
+          --clr-muted:${TOKENS.COLOR_MUTED};
+          --radius:${TOKENS.RADIUS}px;
+          --shadow:${TOKENS.SHADOW_ELEVATE};
+        }
+        *{box-sizing:border-box}
+        body{margin:0;font-family:Inter,system-ui;background:var(--clr-bg);color:var(--clr-text)}
+        a{text-decoration:none;color:inherit}
+        .hl{color:var(--clr-primary)}
+        .btn{display:inline-block;padding:.85rem 1.6rem;border-radius:6px;font-weight:700;transition:.2s}
+        .btn.primary{background:var(--clr-primary);color:#000;box-shadow:var(--shadow)}
+        .btn.ghost{background:rgba(255,255,255,.07)}
+        .btn.primary:disabled{opacity:.6;cursor:not-allowed}
+
+        .nav{display:flex;justify-content:space-between;align-items:center;
+             padding:1.15rem 1.4rem;background:#080808;position:sticky;top:0;
+             border-bottom:1px solid #1a1a1a;z-index:60}
+        .logo{font-weight:900;font-size:1.4rem;color:var(--clr-primary)}
+
+        .wrap{margin:0 auto;padding:4rem 1rem}
         .hero{text-align:center;margin-bottom:3rem}
-        .hero h1{font-size:2rem;font-weight:900;margin-bottom:.8rem}
+        .hero h1{font-size:2rem;font-weight:900;margin:.4rem 0}
         .hero p{color:var(--clr-muted)}
 
-        /* form */
-        .form label{display:block;margin-bottom:1.2rem;font-weight:600}
-        .form input,.form select{
-          width:100%;padding:.8rem;border-radius:6px;border:1px solid #333;
-          background:#0b0b0b;color:var(--clr-text);margin-top:.4rem
-        }
-        .form .btn{margin-top:1rem;width:100%}
-        .err{color:#ff6b6b;margin-top:1rem;text-align:center}
-
-        /* cards */
-        .card{
-          background:var(--clr-card);border:1px solid #222;border-radius:var(--radius);
-          padding:2rem 1.5rem;transition:.25s
-        }
+        .card{background:var(--clr-card);border:1px solid #242424;border-radius:var(--radius);
+              padding:2rem 1.6rem;transition:.25s}
         .card:hover{border-color:var(--clr-primary)}
 
-        /* results */
-        .results h2{text-align:center;margin:4rem 0 2rem;font-size:1.6rem}
-        .alt header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
-        .alt header h3{margin:0;color:var(--clr-primary)}
+        .form{display:flex;flex-direction:column;gap:1.2rem}
+        .form input,.form select{
+          width:100%;padding:.82rem;border-radius:6px;border:1px solid #333;
+          background:#0b0b0b;color:var(--clr-text)
+        }
+        .err{color:#ff6b6b;margin-top:1rem;text-align:center}
+
+        .results h2{text-align:center;margin:4rem 0 2rem;font-size:1.5rem}
+        .alt header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.9rem}
         .copy{background:none;border:none;color:var(--clr-text);cursor:pointer}
 
-        .part{margin-top:1.4rem}
-        .part b{display:block;color:var(--clr-primary);margin-bottom:.4rem}
-        .script{border-left:3px solid var(--clr-primary);padding-left:.8rem;background:#151515}
+        .part{margin-top:1.35rem}
+        .part b{display:block;color:var(--clr-primary);margin-bottom:.35rem}
+        .script{border-left:3px solid var(--clr-primary);padding-left:.9rem;background:#151515}
         .sr{margin-bottom:.8rem}
         .sr strong{color:var(--clr-primary);display:block;margin-bottom:.2rem}
 
