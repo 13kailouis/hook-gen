@@ -20,6 +20,7 @@ const SITE_NAME       = process.env.NEXT_PUBLIC_SITE_NAME || "HookFreak";
 const SITE_TAGLINE    = "Video Sales Hook Builder";
 const SITE_DESC       = "Generate visual hooks, opening lines, full scripts & frame ideas for TikTok/Reels in seconds.";
 const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_PRIMARY   || "#39ff14";
+const GRADIENT        = process.env.NEXT_PUBLIC_GRADIENT  || "linear-gradient(90deg,#39ff14,#00ffe6)";
 const [MAIN, SECOND]  = SITE_NAME.split(" ");
 
 /* ----------  STATIC DATA ---------- */
@@ -160,6 +161,7 @@ export default function HomePage() {
       <style jsx global>{`
         :root{
           --clr-primary:${PRIMARY_COLOR};
+          --clr-gradient:${GRADIENT};
           --clr-bg:#000;
           --clr-card:#131313;
           --clr-text:#f0f0f0;
@@ -172,7 +174,7 @@ export default function HomePage() {
 
         /* buttons */
         .btn{display:inline-block;padding:.9rem 1.8rem;border-radius:6px;font-weight:700;transition:.2s}
-        .btn.primary{background:var(--clr-primary);color:#000;box-shadow:0 4px 15px rgba(57,255,20,.3)}
+        .btn.primary{background:var(--clr-gradient);color:#000;box-shadow:0 4px 15px rgba(57,255,20,.3)}
         .btn.primary:hover{transform:translateY(-2px)}
         .btn.ghost{background:rgba(255,255,255,.06)}
         .btn.center{margin:3rem auto 0;display:block;width:max-content}
@@ -187,7 +189,11 @@ export default function HomePage() {
         .hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle,var(--clr-primary)12%,transparent 60%);opacity:.05;pointer-events:none}
         .hero h1{font-size:2.2rem;font-weight:900;margin-bottom:1.2rem}
         .hero p{max-width:640px;margin:0 auto 2rem;line-height:1.7;color:var(--clr-muted)}
-        .hl{color:var(--clr-primary)}
+        .hl{
+          background:var(--clr-gradient);
+          -webkit-background-clip:text;
+          color:transparent;
+        }
 
         /* sections */
         .section{padding:4rem 1.5rem}

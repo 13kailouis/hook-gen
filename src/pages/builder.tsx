@@ -16,6 +16,7 @@ const TOKENS = {
   COLOR_CARD     : process.env.NEXT_PUBLIC_CARD        || "#131313",
   COLOR_TEXT     : process.env.NEXT_PUBLIC_TEXT        || "#f0f0f0",
   COLOR_MUTED    : process.env.NEXT_PUBLIC_MUTED       || "#a0a0a0",
+  COLOR_GRADIENT : process.env.NEXT_PUBLIC_GRADIENT    || "linear-gradient(90deg,#39ff14,#00ffe6)",
   RADIUS         : Number(process.env.NEXT_PUBLIC_RADIUS) || 12,
   SHADOW_ELEVATE : process.env.NEXT_PUBLIC_SHADOW      || "0 4px 15px rgba(57,255,20,.35)",
   MAX_WIDTH      : Number(process.env.NEXT_PUBLIC_MAXW)   || 820,   // konten max-width
@@ -215,6 +216,7 @@ export default function Builder(){
       <style jsx global>{`
         :root{
           --clr-primary:${TOKENS.COLOR_PRIMARY};
+          --clr-gradient:${TOKENS.COLOR_GRADIENT};
           --clr-bg:${TOKENS.COLOR_BG};
           --clr-card:${TOKENS.COLOR_CARD};
           --clr-text:${TOKENS.COLOR_TEXT};
@@ -225,9 +227,13 @@ export default function Builder(){
         *{box-sizing:border-box}
         body{margin:0;font-family:Inter,system-ui;background:var(--clr-bg);color:var(--clr-text)}
         a{text-decoration:none;color:inherit}
-        .hl{color:var(--clr-primary)}
+        .hl{
+          background:var(--clr-gradient);
+          -webkit-background-clip:text;
+          color:transparent;
+        }
         .btn{display:inline-block;padding:.85rem 1.6rem;border-radius:6px;font-weight:700;transition:.2s}
-        .btn.primary{background:var(--clr-primary);color:#000;box-shadow:var(--shadow)}
+        .btn.primary{background:var(--clr-gradient);color:#000;box-shadow:var(--shadow)}
         .btn.ghost{background:rgba(255,255,255,.07)}
         .btn.primary:disabled{opacity:.6;cursor:not-allowed}
 
