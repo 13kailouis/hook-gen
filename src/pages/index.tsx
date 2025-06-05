@@ -2,6 +2,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useMemo } from "react";
+import { useAuth } from "@/components/AuthProvider";
 
 /* ----------  TYPE ---------- */
 type SalesAlternative = {
@@ -71,6 +72,7 @@ const formatFrames = (s: string) =>
 /* ----------  PAGE ---------- */
 export default function HomePage() {
   const year = useMemo(()=>new Date().getFullYear(),[]);
+  const { user } = useAuth();
   return (
     <>
       <Head>
@@ -85,14 +87,14 @@ export default function HomePage() {
       {/* ------------ NAV ------------- */}
       <nav className="nav">
         <div className="logo">{MAIN}{SECOND && <span>{SECOND}</span>}</div>
-        <Link href="/builder" className="btn ghost">Builder</Link>
+        <Link href={user ? "/builder" : "/login?next=/builder"} className="btn ghost">Builder</Link>
       </nav>
 
       {/* ------------ HERO ------------- */}
       <header className="hero">
         <h1>Stop Bikin Konten Jualan <span className="hl">Ngebosenin</span>.</h1>
         <p>{SITE_NAME} bantu kamu bikin <span className="hl">visual hook, teks pembuka, skrip & ide frame</span> yang nancep di detik pertama.</p>
-        <Link href="/builder" className="btn primary">🚀 Mulai Buat Skrip</Link>
+        <Link href={user ? "/builder" : "/login?next=/builder"} className="btn primary">🚀 Mulai Buat Skrip</Link>
       </header>
 
       {/* ------------ FEATURES ------------- */}
@@ -146,7 +148,7 @@ export default function HomePage() {
             <div className="part"><b>Saran Frame</b><div className="script">{formatFrames(ex.frames)}</div></div>
           </div>
         ))}
-        <Link href="/builder" className="btn primary center">Coba Sendiri →</Link>
+        <Link href={user ? "/builder" : "/login?next=/builder"} className="btn primary center">Coba Sendiri →</Link>
       </section>
 
       {/* ------------ FOOTER ------------- */}

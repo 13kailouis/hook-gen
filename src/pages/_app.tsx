@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { Analytics } from "@vercel/analytics/react"; // Kalau kamu pakai juga
 import { SpeedInsights } from "@vercel/speed-insights/next"; // Tambahan ini!
+import { AuthProvider } from "@/components/AuthProvider";
 
 export default function App({ Component, pageProps }: AppProps) {
   const highlight = process.env.NEXT_PUBLIC_HIGHLIGHT_COLOR || '#39ff14';
@@ -10,7 +11,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <style jsx global>{`
         :root { --highlight-color: ${highlight}; }
       `}</style>
-      <Component {...pageProps} />
+      <AuthProvider>
+        <Component {...pageProps} />
+      </AuthProvider>
       <Analytics />
       <SpeedInsights /> {/* Tambahkan komponen ini */}
     </>

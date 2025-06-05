@@ -2,10 +2,22 @@
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/components/AuthProvider";
+import { useRouter } from "next/router";
 import HookList from "@/components/HookList";
 import { FiCopy, FiCheck } from "react-icons/fi";
 
 export default function Home() {
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!authLoading && !user) {
+      router.replace('/login?next=/generator');
+    }
+  }, [authLoading, user, router]);
+
+  if (authLoading || !user) return null;
   const [niche, setNiche] = useState("");
   const [tone, setTone] = useState("fear");
   const [product, setProduct] = useState("");
