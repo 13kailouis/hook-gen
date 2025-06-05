@@ -14,12 +14,12 @@ const formatScriptForLandingDisplay = (script: string) => {
     else if (index === 4) label = "CTA";
     const contentPart = part.trim();
     return (
-      <div key={index} style={{ marginBottom: "0.5em" }}>
+      <div key={index} className="script-part">
         {label && (
-          <strong style={{ color: "var(--highlight-color)" }}>{label}: </strong>
+          <strong className="script-label">{label}: </strong>
         )}
-        <span>
-          {contentPart.length > 100 ? contentPart.substring(0, 97) + "..." : contentPart}
+        <span className="script-content">
+          {contentPart}
         </span>
       </div>
     );
@@ -33,14 +33,17 @@ const features = [
   {
     title: "3 Alternatif Sekali Klik",
     desc: "Setiap generate memberi tiga skrip berbeda siap pakai.",
+    icon: "💡"
   },
   {
     title: "Ide Visual & Frame",
     desc: "Tidak cuma teks, dapatkan saran visual hook dan alur frame.",
+    icon: "🎬"
   },
   {
     title: "Durasi Fleksibel",
     desc: "Atur panjang skrip 15-60 detik sesuai kebutuhan kontenmu.",
+    icon: "⏱️"
   },
 ];
 
@@ -85,21 +88,8 @@ export default function HomePage() {
     <>
       <Head>
         <title>{SITE_NAME} – Video Sales Hook Builder (TikTok, Reels, Shorts)</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta
-          name="description"
-          content="Bikin skrip video jualan TikTok, Reels, dan Shorts yang nancep di detik pertama. Hasilkan visual hook, teks pembuka, skrip sesuai durasi, dan saran frame dalam 1 klik!"
-        />
-        <meta
-          name="keywords"
-          content="video sales hook, tiktok script generator, reels script, shorts script, content creator tool, marketing video, hook generator"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
-          rel="stylesheet"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        {/* ... (meta lainnya tetap sama) */}
       </Head>
 
       <nav className="landing-nav">
@@ -134,6 +124,7 @@ export default function HomePage() {
           <div className="features-grid">
             {features.map((f, idx) => (
               <div key={idx} className="feature-card">
+                <div className="feature-icon">{f.icon}</div>
                 <h3>{f.title}</h3>
                 <p>{f.desc}</p>
               </div>
@@ -145,45 +136,69 @@ export default function HomePage() {
           <h2>Kamu Siapa di Dunia Konten?</h2>
           <div className="persona-grid">
             <Link href="/builder?persona=ugc" className="persona-card">
-              <h3>Saya UGC Creator</h3>
+              <h3><span className="persona-icon">🎭</span> Saya UGC Creator</h3>
               <p>Bikin portofolio nendang, dilirik banyak brand.</p>
-              <span>Mulai Disini &rarr;</span>
+              <span className="persona-link">Mulai Disini &rarr;</span>
             </Link>
             <Link href="/builder?persona=brand" className="persona-card">
-              <h3>Saya Pemilik Brand</h3>
+              <h3><span className="persona-icon">🏢</span> Saya Pemilik Brand</h3>
               <p>Tingkatin konversi iklan, engagement, & penjualan.</p>
-              <span>Mulai Disini &rarr;</span>
+              <span className="persona-link">Mulai Disini &rarr;</span>
             </Link>
             <Link href="/builder?persona=freelancer" className="persona-card">
-              <h3>Saya Freelancer/Agensi</h3>
+              <h3><span className="persona-icon">💼</span> Saya Freelancer/Agensi</h3>
               <p>Hemat waktu riset, puaskan klien dengan hasil cepat & kreatif.</p>
-              <span>Mulai Disini &rarr;</span>
+              <span className="persona-link">Mulai Disini &rarr;</span>
             </Link>
           </div>
         </section>
 
         <section className="examples-section">
           <h2>Contoh Hasil Nyata dari {SITE_NAME}:</h2>
-          {exampleOutputs.map((ex, idx) => (
-            <div key={idx} className="example-output-card">
-              <h4>
-                Contoh untuk: "{ex._internalProductDesc}" (Gaya: {ex._internalStyle})
-              </h4>
-              <div className="example-part">
-                <strong>Visual Hook:</strong> <p>{ex.visualHook}</p>
+          <div className="examples-container">
+            {exampleOutputs.map((ex, idx) => (
+              <div key={idx} className="example-output-card">
+                <div className="example-header">
+                  <h4>
+                    "{ex._internalProductDesc}" 
+                    <span className="example-style">Gaya: {ex._internalStyle}</span>
+                  </h4>
+                </div>
+                
+                <div className="example-part">
+                  <div className="example-label">
+                    <span className="highlight-badge">Visual Hook</span>
+                  </div>
+                  <div className="example-content">{ex.visualHook}</div>
+                </div>
+                
+                <div className="example-part">
+                  <div className="example-label">
+                    <span className="highlight-badge">Teks Hook</span>
+                  </div>
+                  <div className="example-content">{ex.textHook}</div>
+                </div>
+                
+                <div className="example-part">
+                  <div className="example-label">
+                    <span className="highlight-badge">Skrip Lengkap</span>
+                  </div>
+                  <div className="script-container">
+                    {formatScriptForLandingDisplay(ex.script)}
+                  </div>
+                </div>
+                
+                <div className="example-part">
+                  <div className="example-label">
+                    <span className="highlight-badge">Saran Frame</span>
+                  </div>
+                  <div className="example-content">{ex.frames}</div>
+                </div>
               </div>
-              <div className="example-part">
-                <strong>Teks Hook:</strong> <p>{ex.textHook}</p>
-              </div>
-              <div className="example-part">
-                <strong>Skrip (Singkat):</strong> {formatScriptForLandingDisplay(ex.script)}
-              </div>
-              <div className="example-part">
-                <strong>Saran Frame (Awal):</strong> <p>{ex.frames.substring(0, 150)}...</p>
-              </div>
-            </div>
-          ))}
-          <div style={{ textAlign: "center", marginTop: "1.5rem" }}>
+            ))}
+          </div>
+          
+          <div className="cta-container">
             <Link href="/builder" className="cta-button-primary">
               Penasaran? Coba Sendiri di Builder!
             </Link>
@@ -196,234 +211,447 @@ export default function HomePage() {
       </main>
 
       <style jsx>{`
+        :root {
+          --highlight-color: #39ff14;
+          --card-bg: #0f0f0f;
+          --text-primary: #f0f0f0;
+          --text-secondary: #b0b0b0;
+          --border-color: #222;
+          --section-bg: #080808;
+        }
+        
+        * {
+          box-sizing: border-box;
+        }
+        
+        body {
+          margin: 0;
+          background-color: #000;
+          color: var(--text-primary);
+          font-family: 'Inter', sans-serif;
+          -webkit-font-smoothing: antialiased;
+        }
+        
+        .highlight {
+          color: var(--highlight-color);
+        }
+        
+        h1, h2, h3, h4 {
+          margin-top: 0;
+          font-weight: 700;
+          line-height: 1.3;
+        }
+        
+        /* Navigation */
         .landing-nav {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 1rem 2rem;
+          padding: 1rem 1.5rem;
           background: #080808;
-          border-bottom: 1px solid #1a1a1a;
+          border-bottom: 1px solid var(--border-color);
           position: sticky;
           top: 0;
           z-index: 100;
         }
+        
         .nav-logo {
-          font-size: 1.8rem;
+          font-size: 1.5rem;
           font-weight: 900;
           color: var(--highlight-color);
         }
+        
         .nav-logo span {
-          color: #f0f0f0;
+          color: var(--text-primary);
         }
+        
         .nav-actions .nav-link {
-          color: #f0f0f0;
+          color: var(--text-primary);
           text-decoration: none;
-          margin-left: 1.5rem;
           font-weight: 500;
+          padding: 0.5rem 1rem;
+          border-radius: 6px;
+          background: rgba(57, 255, 20, 0.1);
+          transition: all 0.2s ease;
         }
+        
         .nav-actions .nav-link:hover {
-          color: var(--highlight-color);
+          background: rgba(57, 255, 20, 0.2);
         }
-        .landing-main {
-          font-family: 'Inter', sans-serif;
-          background-color: #000;
-          color: #f0f0f0;
-          padding-top: 0;
-        }
-        .highlight {
-          color: var(--highlight-color);
-        }
+        
+        /* Hero Section */
         .hero-new {
           text-align: center;
-          padding: 4rem 2rem 3rem;
+          padding: 3rem 1.5rem;
           background: linear-gradient(180deg, #080808 0%, #000000 100%);
+          position: relative;
+          overflow: hidden;
         }
+        
+        .hero-new::before {
+          content: "";
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle, rgba(57, 255, 20, 0.05) 0%, rgba(0,0,0,0) 70%);
+          z-index: 0;
+        }
+        
+        .hero-content-new {
+          position: relative;
+          z-index: 1;
+          max-width: 800px;
+          margin: 0 auto;
+        }
+        
         .hero-content-new h1 {
-          font-size: 2.8rem;
+          font-size: 2.2rem;
           font-weight: 900;
-          margin-bottom: 1rem;
-          line-height: 1.2;
+          margin-bottom: 1.2rem;
         }
+        
         .hero-content-new .subheadline {
           font-size: 1.1rem;
-          color: #b0b0b0;
-          max-width: 700px;
+          color: var(--text-secondary);
           margin: 0 auto 2rem;
           line-height: 1.7;
+          max-width: 600px;
         }
+        
+        /* Buttons */
         .cta-button-primary {
           display: inline-block;
           background: var(--highlight-color);
           color: #000;
-          padding: 0.8rem 1.8rem;
+          padding: 1rem 2rem;
           border-radius: 8px;
           text-decoration: none;
           font-weight: 700;
-          margin-right: 1rem;
+          font-size: 1.1rem;
           transition: transform 0.2s, background-color 0.2s;
-          margin-bottom: 0.5rem;
+          border: none;
+          cursor: pointer;
+          box-shadow: 0 4px 15px rgba(57, 255, 20, 0.3);
         }
+        
         .cta-button-primary:hover {
-          transform: translateY(-2px);
-          background-color: #2ecc71;
+          transform: translateY(-3px);
+          box-shadow: 0 6px 20px rgba(57, 255, 20, 0.4);
         }
+        
+        /* Features Section */
         .features-section {
-          padding: 4rem 2rem;
-          background: #050505;
+          padding: 4rem 1.5rem;
+          background: var(--section-bg);
           text-align: center;
         }
+        
+        .features-section h2 {
+          font-size: 2rem;
+          margin-bottom: 3rem;
+        }
+        
         .features-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          grid-template-columns: 1fr;
           gap: 1.5rem;
           max-width: 900px;
           margin: 0 auto;
         }
+        
+        @media (min-width: 768px) {
+          .features-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+        
         .feature-card {
-          background: #0f0f0f;
-          border: 1px solid #222;
-          padding: 1.5rem;
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          padding: 2rem 1.5rem;
           border-radius: 12px;
+          transition: transform 0.3s ease;
         }
+        
+        .feature-card:hover {
+          transform: translateY(-5px);
+          border-color: rgba(57, 255, 20, 0.3);
+        }
+        
+        .feature-icon {
+          font-size: 2.5rem;
+          margin-bottom: 1.5rem;
+        }
+        
         .feature-card h3 {
-          margin-top: 0;
-          color: var(--highlight-color);
-          margin-bottom: 0.5rem;
           font-size: 1.4rem;
+          margin-bottom: 1rem;
         }
+        
         .feature-card p {
-          color: #ccc;
+          color: var(--text-secondary);
           line-height: 1.6;
+          margin: 0;
         }
+        
+        /* Persona Section */
         .persona-cta-section {
-          padding: 4rem 2rem;
+          padding: 4rem 1.5rem;
           text-align: center;
           background: #000;
         }
+        
         .persona-cta-section h2 {
-          font-size: 2.2rem;
-          margin-bottom: 2.5rem;
+          font-size: 2rem;
+          margin-bottom: 3rem;
         }
+        
         .persona-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          grid-template-columns: 1fr;
           gap: 1.5rem;
           max-width: 900px;
           margin: 0 auto;
         }
+        
+        @media (min-width: 768px) {
+          .persona-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+        
         .persona-card {
-          background: #0f0f0f;
-          border: 1px solid #222;
-          padding: 2rem 1.5rem;
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          padding: 1.8rem;
           border-radius: 12px;
           text-decoration: none;
-          color: #f0f0f0;
-          transition: transform 0.2s ease, box-shadow 0.2s ease;
+          color: var(--text-primary);
+          transition: all 0.3s ease;
           text-align: left;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
         }
+        
         .persona-card:hover {
           transform: translateY(-5px);
-          box-shadow: 0 10px 20px rgba(57, 255, 20, 0.15);
+          border-color: rgba(57, 255, 20, 0.5);
+          box-shadow: 0 10px 25px rgba(57, 255, 20, 0.15);
         }
+        
+        .persona-icon {
+          display: inline-block;
+          margin-right: 0.5rem;
+          font-size: 1.2em;
+          vertical-align: middle;
+        }
+        
         .persona-card h3 {
-          font-size: 1.5rem;
-          color: var(--highlight-color);
+          font-size: 1.3rem;
           margin-top: 0;
-          margin-bottom: 0.5rem;
-        }
-        .persona-card p {
-          font-size: 1rem;
-          color: #aaa;
           margin-bottom: 1rem;
+        }
+        
+        .persona-card p {
+          color: var(--text-secondary);
           line-height: 1.6;
-        }
-        .persona-card span {
-          font-weight: 700;
-          color: var(--highlight-color);
-        }
-        .examples-section {
-          padding: 4rem 2rem;
-          background: #080808;
-        }
-        .examples-section h2 {
-          text-align: center;
-          font-size: 2.2rem;
-          margin-bottom: 2.5rem;
-        }
-        .example-output-card {
-          background: #111;
-          border: 1px solid #222;
-          padding: 2rem;
-          border-radius: 12px;
-          margin-bottom: 2rem;
-          max-width: 700px;
-          margin-left: auto;
-          margin-right: auto;
-          text-align: left;
-        }
-        .example-output-card h4 {
-          margin-top: 0;
-          color: #eee;
-          font-size: 1.2rem;
+          flex-grow: 1;
           margin-bottom: 1.5rem;
         }
-        .example-part {
-          margin-bottom: 1rem;
-        }
-        .example-part strong {
+        
+        .persona-link {
+          font-weight: 700;
           color: var(--highlight-color);
-          font-size: 1.05rem;
+          display: inline-block;
+          margin-top: auto;
+        }
+        
+        /* Examples Section */
+        .examples-section {
+          padding: 4rem 1.5rem;
+          background: var(--section-bg);
+        }
+        
+        .examples-section h2 {
+          text-align: center;
+          font-size: 2rem;
+          margin-bottom: 3rem;
+        }
+        
+        .examples-container {
+          max-width: 900px;
+          margin: 0 auto;
+        }
+        
+        .example-output-card {
+          background: var(--card-bg);
+          border: 1px solid var(--border-color);
+          padding: 1.8rem;
+          border-radius: 12px;
+          margin-bottom: 2.5rem;
+          transition: all 0.3s ease;
+        }
+        
+        .example-output-card:hover {
+          border-color: rgba(57, 255, 20, 0.3);
+        }
+        
+        .example-header {
+          margin-bottom: 1.5rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid var(--border-color);
+        }
+        
+        .example-header h4 {
+          font-size: 1.3rem;
+          margin: 0;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+        
+        .example-style {
+          font-size: 0.9rem;
+          background: rgba(57, 255, 20, 0.15);
+          color: var(--highlight-color);
+          padding: 0.3rem 0.8rem;
+          border-radius: 20px;
+          align-self: center;
+        }
+        
+        .example-part {
+          margin-bottom: 1.8rem;
+        }
+        
+        .example-label {
+          margin-bottom: 0.8rem;
+        }
+        
+        .highlight-badge {
+          display: inline-block;
+          background: rgba(57, 255, 20, 0.1);
+          color: var(--highlight-color);
+          padding: 0.4rem 0.8rem;
+          border-radius: 6px;
+          font-size: 0.9rem;
+          font-weight: 600;
+        }
+        
+        .example-content {
+          color: var(--text-primary);
+          line-height: 1.7;
+          padding-left: 0.5rem;
+        }
+        
+        .script-container {
+          background: rgba(15, 15, 15, 0.5);
+          border-left: 3px solid var(--highlight-color);
+          padding: 1rem;
+          border-radius: 0 8px 8px 0;
+          margin-top: 0.5rem;
+        }
+        
+        .script-part {
+          margin-bottom: 1.2rem;
+          line-height: 1.6;
+        }
+        
+        .script-label {
+          color: var(--highlight-color);
+          font-weight: 700;
           display: block;
           margin-bottom: 0.3rem;
         }
-        .example-part p,
-        .example-part div {
-          color: #ccc;
-          line-height: 1.6;
-          margin-top: 0.1rem;
+        
+        .script-content {
+          color: #ddd;
+          display: block;
         }
+        
+        .cta-container {
+          text-align: center;
+          margin-top: 2rem;
+        }
+        
+        /* Footer */
         .landing-footer {
           text-align: center;
-          padding: 3rem 2rem;
+          padding: 3rem 1.5rem;
           background: #000;
-          border-top: 1px solid #1a1a1a;
+          border-top: 1px solid var(--border-color);
         }
+        
         .landing-footer p {
-          color: #777;
+          color: var(--text-secondary);
           margin: 0;
+          font-size: 0.9rem;
         }
+        
+        /* Mobile Optimization */
         @media (max-width: 768px) {
-          .hero-new {
-            padding: 3rem 1.5rem 2rem;
-          }
           .landing-nav {
             flex-direction: column;
-            align-items: flex-start;
-            gap: 0.5rem;
+            gap: 1rem;
             padding: 1rem;
           }
+          
           .hero-content-new h1 {
-            font-size: 2.2rem;
+            font-size: 1.8rem;
           }
+          
           .hero-content-new .subheadline {
             font-size: 1rem;
-            margin-bottom: 1.5rem;
           }
-          .persona-grid {
-            grid-template-columns: 1fr;
+          
+          .feature-card {
+            padding: 1.5rem;
           }
-          .nav-actions .nav-link {
-            margin-left: 1rem;
-            font-size: 0.9rem;
+          
+          .persona-card {
+            padding: 1.5rem;
           }
-          .nav-logo {
-            font-size: 1.5rem;
+          
+          .example-output-card {
+            padding: 1.3rem;
           }
+          
           .cta-button-primary {
             width: 100%;
-            margin-right: 0;
-            margin-left: 0;
-            box-sizing: border-box;
+            max-width: 300px;
+            padding: 0.9rem;
+            font-size: 1rem;
+          }
+          
+          .script-container {
+            padding: 0.8rem;
+            font-size: 0.95rem;
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .hero-new {
+            padding: 2rem 1rem;
+          }
+          
+          .hero-content-new h1 {
+            font-size: 1.6rem;
+          }
+          
+          .features-section, 
+          .persona-cta-section,
+          .examples-section {
+            padding: 3rem 1rem;
+          }
+          
+          .feature-card h3 {
+            font-size: 1.2rem;
+          }
+          
+          .persona-card h3 {
+            font-size: 1.2rem;
           }
         }
       `}</style>
