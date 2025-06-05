@@ -4,6 +4,9 @@ import Link            from "next/link";
 import { useRouter }   from "next/router";
 import { useState,useEffect } from "react";
 import { FiCopy,FiCheck } from "react-icons/fi";
+import { getServerSession } from "next-auth/next";
+import { GetServerSideProps } from "next";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 /* -------------------------------------------------- */
 /* ❶  DESIGN TOKEN—semua bisa di-override via .env    */
@@ -246,3 +249,16 @@ export default function Builder(){
     </>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  if (!session) {
+    return {
+      redirect: {
+        destination: `/api/auth/signin?callbackUrl=/builder`,
+        permanent: false,
+      },
+    };
+  }
+  return { props: { session } };
+};
