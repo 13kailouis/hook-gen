@@ -89,7 +89,8 @@ export default function Login() {
   }
 
   return (
-    <div style={container}>
+    <>
+      <div style={container}>
       <div style={card}>
         <header>
           <h1 style={heading}>
@@ -154,6 +155,7 @@ export default function Login() {
           }
         }
       `}</style>
-    </div>
+      </div>
+    </>
   )
 }

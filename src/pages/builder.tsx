@@ -11,14 +11,14 @@ import { FiCopy,FiCheck } from "react-icons/fi";
 /* -------------------------------------------------- */
 const TOKENS = {
   BRAND          : process.env.NEXT_PUBLIC_SITE_NAME   || "HookFreak",
-  COLOR_PRIMARY  : process.env.NEXT_PUBLIC_PRIMARY     || "#39ff14",
+  COLOR_PRIMARY  : process.env.NEXT_PUBLIC_HIGHLIGHT_COLOR || "#FFD700",
   COLOR_BG       : process.env.NEXT_PUBLIC_BG          || "#000",
   COLOR_CARD     : process.env.NEXT_PUBLIC_CARD        || "#131313",
   COLOR_TEXT     : process.env.NEXT_PUBLIC_TEXT        || "#f0f0f0",
   COLOR_MUTED    : process.env.NEXT_PUBLIC_MUTED       || "#a0a0a0",
-  COLOR_GRADIENT : process.env.NEXT_PUBLIC_GRADIENT    || "linear-gradient(90deg,#39ff14,#00ffe6)",
+  COLOR_GRADIENT : process.env.NEXT_PUBLIC_GRADIENT    || "linear-gradient(90deg,#FFD700,#FFA500)",
   RADIUS         : Number(process.env.NEXT_PUBLIC_RADIUS) || 12,
-  SHADOW_ELEVATE : process.env.NEXT_PUBLIC_SHADOW      || "0 4px 15px rgba(57,255,20,.35)",
+  SHADOW_ELEVATE : process.env.NEXT_PUBLIC_SHADOW      || "0 4px 15px rgba(255,215,0,0.35)",
   MAX_WIDTH      : Number(process.env.NEXT_PUBLIC_MAXW)   || 820,   // konten max-width
 };
 
@@ -137,9 +137,6 @@ export default function Builder(){
         <title>Builder – {TOKENS.BRAND}</title>
         <meta name="description" content="Generate hook, script & frame ideas in seconds."/>
         <meta name="viewport"   content="width=device-width, initial-scale=1"/>
-        <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
       </Head>
 
       {/* ---------- NAV ---------- */}
@@ -238,7 +235,7 @@ export default function Builder(){
         .hero p{color:var(--muted-color)}
 
         .card{background:var(--card-color);border:1px solid #242424;border-radius:var(--radius);
-              padding:2rem 1.6rem;transition:.25s}
+              padding:2rem 1.6rem;transition:.25s;box-shadow:var(--shadow)}
         .card:hover{border-color:var(--highlight-color)}
 
         .form{display:flex;flex-direction:column;gap:1.2rem}

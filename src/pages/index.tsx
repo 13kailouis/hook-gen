@@ -19,8 +19,8 @@ type SalesAlternative = {
 const SITE_NAME       = process.env.NEXT_PUBLIC_SITE_NAME || "HookFreak";
 const SITE_TAGLINE    = "Video Sales Hook Builder";
 const SITE_DESC       = "Generate visual hooks, opening lines, full scripts & frame ideas for TikTok/Reels in seconds.";
-const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_PRIMARY   || "#39ff14";
-const GRADIENT        = process.env.NEXT_PUBLIC_GRADIENT  || "linear-gradient(90deg,#39ff14,#00ffe6)";
+const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_HIGHLIGHT_COLOR || "#FFD700";
+const GRADIENT        = process.env.NEXT_PUBLIC_GRADIENT  || "linear-gradient(90deg,#FFD700,#FFA500)";
 const [MAIN, SECOND]  = SITE_NAME.split(" ");
 
 /* ----------  STATIC DATA ---------- */
@@ -80,9 +80,6 @@ export default function HomePage() {
         <title>{SITE_NAME} – {SITE_TAGLINE}</title>
         <meta name="description" content={SITE_DESC}/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
       </Head>
 
       {/* ------------ NAV ------------- */}
@@ -165,7 +162,7 @@ export default function HomePage() {
 
         /* buttons */
         .btn{display:inline-block;padding:.9rem 1.8rem;border-radius:6px;font-weight:700;transition:.2s}
-        .btn.primary{background:var(--highlight-gradient);color:#000;box-shadow:0 4px 15px rgba(57,255,20,.3)}
+        .btn.primary{background:var(--highlight-gradient);color:#000;box-shadow:0 4px 15px rgba(255,215,0,.3)}
         .btn.primary:hover{transform:translateY(-2px)}
         .btn.ghost{background:rgba(255,255,255,.06)}
         .btn.center{margin:3rem auto 0;display:block;width:max-content}
@@ -197,7 +194,7 @@ export default function HomePage() {
         @media(min-width:768px){.g3{grid-template-columns:repeat(3,1fr)}}
 
         /* cards */
-        .card{background:var(--card-color);border:1px solid #222;border-radius:var(--radius);padding:2rem 1.5rem;transition:.25s}
+        .card{background:var(--card-color);border:1px solid #222;border-radius:var(--radius);padding:2rem 1.5rem;transition:.25s;box-shadow:var(--shadow)}
         .card:hover{transform:translateY(-4px);border-color:var(--highlight-color)}
         .feature .icon{font-size:2.4rem;margin-bottom:1.2rem}
         .feature h3{font-size:1.25rem;margin-bottom:.7rem}
@@ -212,7 +209,7 @@ export default function HomePage() {
         /* example */
         .example header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;border-bottom:1px solid #222;padding-bottom:.8rem}
         .example h4{font-size:1.1rem;margin:0}
-        .tag{background:rgba(57,255,20,.12);color:var(--highlight-color);padding:.25rem .6rem;border-radius:16px;font-size:.8rem}
+        .tag{background:rgba(255,215,0,.12);color:var(--highlight-color);padding:.25rem .6rem;border-radius:16px;font-size:.8rem}
         .part{margin-top:1.2rem}
         .part b{display:block;color:var(--highlight-color);margin-bottom:.4rem}
         .script{border-left:3px solid var(--highlight-color);padding-left:.8rem;background:#151515}
