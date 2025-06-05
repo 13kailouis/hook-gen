@@ -33,14 +33,31 @@ type SalesAlternative = {
 /* -------------------------------------------------- */
 /* ❸  HELPER                                          */
 /* -------------------------------------------------- */
-const LABEL = ["Hook","Problem","Agitation","Solution","CTA"];
-const fmt   = (s:string)=>
-  s.split(" -- ").map((p,i)=>(
-    <div key={i} className="sr">
-      <strong>{LABEL[i]}:</strong>
-      <p>{p.trim()}</p>
-    </div>
-  ));
+const LABEL = ["Hook", "Problem", "Agitation", "Solution", "CTA"];
+
+const fmt = (s: string) =>
+  s.split(" -- ").map((p, i) => {
+    const text = p.replace(new RegExp(`^${LABEL[i]}\\s*:`, "i"), "").trim();
+    return (
+      <div key={i} className="sr">
+        <strong>{LABEL[i]}:</strong>
+        <p>{text}</p>
+      </div>
+    );
+  });
+
+const fmtFrame = (s: string) =>
+  LABEL.map((lab, i) => {
+    const reg = new RegExp(`${lab}\\s*:(.*?)($|\\n)`, "i");
+    const match = s.match(reg);
+    if (!match) return null;
+    return (
+      <div key={i} className="sr">
+        <strong>{lab}:</strong>
+        <p>{match[1].trim()}</p>
+      </div>
+    );
+  });
 
 /* -------------------------------------------------- */
 /* ❹  COMPONENT                                       */
@@ -133,7 +150,9 @@ export default function Builder(){
 
           <label htmlFor="dur">Durasi Maksimum</label>
           <select id="dur" value={dur} onChange={e=>setDur(+e.target.value)}>
-            {[15,30,60].map(v=><option key={v}>{v} detik</option>)}
+            {[15,30,60].map(v => (
+              <option key={v} value={v}>{v} detik</option>
+            ))}
           </select>
 
           <button className="btn primary" disabled={loading} aria-busy={loading}>
@@ -160,7 +179,7 @@ export default function Builder(){
                 <div className="part"><b>🎨 Visual Hook</b><p>{a.visualHook}</p></div>
                 <div className="part"><b>💬 Teks Hook</b><p>{a.textHook}</p></div>
                 <div className="part"><b>📝 Skrip</b><div className="script">{fmt(a.script)}</div></div>
-                <div className="part"><b>🎬 Frame</b><p style={{whiteSpace:"pre-line"}}>{a.frames}</p></div>
+                <div className="part"><b>🎬 Frame</b><div className="script">{fmtFrame(a.frames)}</div></div>
               </article>
             ))}
           </section>
