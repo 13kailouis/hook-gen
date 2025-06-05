@@ -3,6 +3,7 @@ import Head            from "next/head";
 import Link            from "next/link";
 import { useRouter }   from "next/router";
 import { useState,useEffect } from "react";
+import { useAuth } from "@/components/AuthProvider";
 import { FiCopy,FiCheck } from "react-icons/fi";
 
 /* -------------------------------------------------- */
@@ -64,6 +65,16 @@ const fmtFrame = (s: string) =>
 /* -------------------------------------------------- */
 export default function Builder(){
   const {query,isReady}=useRouter();
+  const { user, loading:authLoading, logout } = useAuth();
+
+  useEffect(()=>{
+    if(!authLoading && !user){
+      window.location.href = `/login?next=/builder`;
+    }
+  },[authLoading,user]);
+
+  if(authLoading || !user) return null;
+
   /* form state */
   const [product ,setProd ]=useState("");
   const [aud     ,setAud  ]=useState("");
@@ -122,7 +133,10 @@ export default function Builder(){
       {/* ---------- NAV ---------- */}
       <nav className="nav">
         <div className="logo">{TOKENS.BRAND}</div>
-        <Link href="/" className="btn ghost" aria-label="Back to home">← Home</Link>
+        <div>
+          <Link href="/" className="btn ghost" aria-label="Back to home" style={{marginRight:'0.5rem'}}>← Home</Link>
+          <button onClick={logout} className="btn ghost">Logout</button>
+        </div>
       </nav>
 
       <main className="wrap" style={{maxWidth:TOKENS.MAX_WIDTH}}>
