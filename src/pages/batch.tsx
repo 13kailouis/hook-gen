@@ -31,6 +31,7 @@ export default function Batch() {
     <>
       <Head>
         <title>HookFreak • Batch Pack</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="main-wrapper">
         <section className="hero">
