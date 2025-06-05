@@ -11,6 +11,7 @@ import { FiCopy,FiCheck } from "react-icons/fi";
 /* -------------------------------------------------- */
 const TOKENS = {
   BRAND          : process.env.NEXT_PUBLIC_SITE_NAME   || "HookFreak",
+  COLOR_PRIMARY  : process.env.NEXT_PUBLIC_HIGHLIGHT_COLOR || "#FFD700",
   COLOR_PRIMARY  : process.env.NEXT_PUBLIC_PRIMARY     || "#FFD700",
   COLOR_BG       : process.env.NEXT_PUBLIC_BG          || "#000",
   COLOR_CARD     : process.env.NEXT_PUBLIC_CARD        || "#131313",
