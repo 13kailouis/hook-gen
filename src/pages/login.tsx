@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useAuth } from '@/components/AuthProvider'
 import { useRouter } from 'next/router'
 import { useEffect, CSSProperties } from 'react'
@@ -89,7 +90,16 @@ export default function Login() {
   }
 
   return (
-    <div style={container}>
+    <>
+      <Head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;700;900&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
+      <div style={container}>
       <div style={card}>
         <header>
           <h1 style={heading}>
@@ -154,6 +164,7 @@ export default function Login() {
           }
         }
       `}</style>
-    </div>
+      </div>
+    </>
   )
 }
