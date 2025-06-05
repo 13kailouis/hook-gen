@@ -35,7 +35,7 @@ Tugasmu adalah menghasilkan 3 (TIGA) alternatif LENGKAP untuk konten video pende
 
 VisualHook: [Deskripsi adegan pembuka 1–2 detik yang kuat secara visual, konkret, bisa direkam dengan HP, tanpa CGI. Fokus pada framing, gerakan, ekspresi, atau aksi mendadak. Hindari contoh yang terlalu umum atau klise.]
 
-TextHook: [Satu kalimat pembuka yang emosional, provokatif, atau sangat membuat penasaran. Hindari bahasa formal. Tulis seolah-olah kamu ngobrol santai dengan audiens dan mengikuti tren bahasa yang sedang populer.]
+TextHook: [Racik kalimat 7–12 kata yang lahir spontan dan berkarakter. Awali dengan kata kerja aktif yang bikin kaget atau terasa sindiran. Campur slang Gen-Z dan bahasa lisan Indonesia plus 1–2 kata Inggris populer. Jauhi kata formal seperti "temukan", "dapatkan", "solusi", "produk", "silakan". Selipkan satu elemen tak terduga: angka aneh, emoji tunggal, atau onomatope "brut"/"cekrek". Larang frasa klise "Guys, pernah ga…", "Tahukah kamu…", "Halo semuanya…". Bebas pakai tanda baca nggak baku (?!, triple-dots, huruf kapital sebagian) asalkan mudah dibaca. Jika gaya mengandung "storytelling" tambahkan nada curhat singkat; jika "edukatif" sisipkan vibe "kasih tau lo nih"; jika "komedi" beri punchline sarkastik di akhir.]
 
 Script: [Narasi video lengkap (maksimal ${finalDuration} detik) dengan struktur Hook - Problem - Agitation - Solution - CTA. Tulis sebagai PARAGRAF yang mengalir alami dan enak didengar/dibaca, BUKAN outline poin-poin. Pisahkan setiap bagian (Hook, Problem, Agitation, Solution, CTA) secara eksplisit dengan ' -- ' (spasi, dua strip, spasi). Gunakan gaya percakapan santai khas sosial media dan hindari kalimat textbook.
 Contoh struktur internal (jangan tampilkan ini di output, hanya sebagai panduanmu):
@@ -72,7 +72,7 @@ Output HARUS 100% usable dan langsung bisa dieksekusi. Jangan ada disclaimer, ja
       model: "llama-3.3-70b-versatile", // Atau model GPT-4 lain yang tersedia jika ada
       messages: [{ role: "user", content: prompt }],
       stream: false,
-      temperature: 0.7, // Sedikit lebih tinggi untuk variasi antar 3 alternatif
+      temperature: 0.85, // Lebih tinggi khusus agar TextHook terasa spontan
       max_tokens: 3000, // Sesuaikan jika output sering terpotong
     }),
   });
@@ -86,11 +86,19 @@ Output HARUS 100% usable dan langsung bisa dieksekusi. Jangan ada disclaimer, ja
   const json = await resp.json();
   const text: string = json.choices?.[0]?.message?.content || "";
 
+  function sanitizeTextHook(str: string): string {
+    let clean = str.replace(/\s{2,}/g, ' ').trim();
+    clean = clean.replace(/\.$/, '');
+    if (clean.length > 80) clean = clean.slice(0, 80);
+    return clean;
+  }
+
   const alternativesRaw = text.split(/====+/).map(b => b.trim()).filter(Boolean);
 
   return alternativesRaw.map(block => {
     const visualHook = (block.match(/VisualHook:\s*([\s\S]*?)(?=\nTextHook:)/i)?.[1] || "").trim();
-    const textHook = (block.match(/TextHook:\s*([\s\S]*?)(?=\nScript:)/i)?.[1] || "").trim();
+    const textHookRaw = (block.match(/TextHook:\s*([\s\S]*?)(?=\nScript:)/i)?.[1] || "").trim();
+    const textHook = sanitizeTextHook(textHookRaw);
     const script = (block.match(/Script:\s*([\s\S]*?)(?=\nFrameSuggestion:)/i)?.[1] || "").trim();
     const frames = (block.match(/FrameSuggestion:\s*([\s\S]*)/i)?.[1] || "").trim();
 
