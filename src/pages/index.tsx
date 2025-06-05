@@ -19,8 +19,8 @@ type SalesAlternative = {
 const SITE_NAME       = process.env.NEXT_PUBLIC_SITE_NAME || "HookFreak";
 const SITE_TAGLINE    = "Video Sales Hook Builder";
 const SITE_DESC       = "Generate visual hooks, opening lines, full scripts & frame ideas for TikTok/Reels in seconds.";
-const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_PRIMARY   || "#39ff14";
-const GRADIENT        = process.env.NEXT_PUBLIC_GRADIENT  || "linear-gradient(90deg,#39ff14,#00ffe6)";
+const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_HIGHLIGHT_COLOR || "#FFD700";
+const GRADIENT        = process.env.NEXT_PUBLIC_GRADIENT  || "linear-gradient(90deg,#FFD700,#FFA500)";
 const [MAIN, SECOND]  = SITE_NAME.split(" ");
 
 /* ----------  STATIC DATA ---------- */
@@ -80,9 +80,6 @@ export default function HomePage() {
         <title>{SITE_NAME} – {SITE_TAGLINE}</title>
         <meta name="description" content={SITE_DESC}/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
       </Head>
 
       {/* ------------ NAV ------------- */}

@@ -11,7 +11,7 @@ import { FiCopy,FiCheck } from "react-icons/fi";
 /* -------------------------------------------------- */
 const TOKENS = {
   BRAND          : process.env.NEXT_PUBLIC_SITE_NAME   || "HookFreak",
-  COLOR_PRIMARY  : process.env.NEXT_PUBLIC_PRIMARY     || "#FFD700",
+  COLOR_PRIMARY  : process.env.NEXT_PUBLIC_HIGHLIGHT_COLOR || "#FFD700",
   COLOR_BG       : process.env.NEXT_PUBLIC_BG          || "#000",
   COLOR_CARD     : process.env.NEXT_PUBLIC_CARD        || "#131313",
   COLOR_TEXT     : process.env.NEXT_PUBLIC_TEXT        || "#f0f0f0",
@@ -137,9 +137,6 @@ export default function Builder(){
         <title>Builder – {TOKENS.BRAND}</title>
         <meta name="description" content="Generate hook, script & frame ideas in seconds."/>
         <meta name="viewport"   content="width=device-width, initial-scale=1"/>
-        <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
       </Head>
 
       {/* ---------- NAV ---------- */}
