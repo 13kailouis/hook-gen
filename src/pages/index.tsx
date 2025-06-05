@@ -85,6 +85,7 @@ export default function HomePage() {
     <>
       <Head>
         <title>{SITE_NAME} – Video Sales Hook Builder (TikTok, Reels, Shorts)</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
           content="Bikin skrip video jualan TikTok, Reels, dan Shorts yang nancep di detik pertama. Hasilkan visual hook, teks pembuka, skrip sesuai durasi, dan saran frame dalam 1 klik!"
@@ -392,11 +393,21 @@ export default function HomePage() {
           margin: 0;
         }
         @media (max-width: 768px) {
+          .hero-new {
+            padding: 3rem 1.5rem 2rem;
+          }
+          .landing-nav {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+            padding: 1rem;
+          }
           .hero-content-new h1 {
             font-size: 2.2rem;
           }
           .hero-content-new .subheadline {
             font-size: 1rem;
+            margin-bottom: 1.5rem;
           }
           .persona-grid {
             grid-template-columns: 1fr;

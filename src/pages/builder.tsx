@@ -109,6 +109,7 @@ export default function Builder() {
     <>
       <Head>
         <title>Video Sales Hook Builder – HookFreak</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta
           name="description"
           content="Bangun skrip video jualan TikTok, Reels, dan Shorts yang menjual dalam sekali klik."
