@@ -24,6 +24,8 @@ export default function Login() {
     background: 'linear-gradient(135deg, #000000 0%, #111827 50%, #0f172a 100%)',
   }
 
+  const highlight = 'var(--highlight-color)'
+
   const card: CSSProperties = {
     width: '100%',
     maxWidth: 420,
@@ -91,7 +93,7 @@ export default function Login() {
       <div style={card}>
         <header>
           <h1 style={heading}>
-            Masuk ke <span style={{ color: '#22c55e' }}>HookFreak</span>
+            Masuk ke <span style={{ color: highlight }}>HookFreak</span>
           </h1>
           <p style={subtext}>Satu klik untuk mulai membangun hook viral</p>
         </header>
@@ -105,7 +107,7 @@ export default function Login() {
         >
           {loading ? (
             <svg
-              style={{ height: 20, width: 20, animation: 'spin 1s linear infinite', color: '#22c55e' }}
+              style={{ height: 20, width: 20, animation: 'spin 1s linear infinite', color: highlight }}
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
