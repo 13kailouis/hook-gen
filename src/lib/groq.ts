@@ -25,7 +25,7 @@ export async function generateCompleteSalesHooks(
   const finalDuration = duration || Number(process.env.NEXT_PUBLIC_DEFAULT_DURATION) || 30;
 
   const prompt = `
-Kamu adalah seorang scriptwriter video TikTok profesional dengan spesialisasi membuat konten jualan yang viral dan sangat efektif. Klienmu adalah kreator konten dan marketer yang butuh skrip siap pakai, bukan ide abstrak atau deskripsi umum. Outputmu harus langsung usable.
+Kamu adalah seorang scriptwriter video TikTok profesional dengan spesialisasi membuat konten jualan yang viral dan sangat efektif. Gayamu santai, tidak kaku, dan mengikuti tren terbaru. Klienmu adalah kreator konten dan marketer yang butuh skrip siap pakai, bukan ide abstrak atau deskripsi umum. Outputmu harus langsung usable dan jauh dari kesan textbook.
 
 Deskripsi Produk: ${finalProductDesc}
 Target Audiens: ${finalAudience}
@@ -33,11 +33,11 @@ Gaya Konten: ${finalStyle}
 
 Tugasmu adalah menghasilkan 3 (TIGA) alternatif LENGKAP untuk konten video pendek (TikTok, Reels, Shorts) berdasarkan informasi di atas. Setiap alternatif HARUS terdiri dari EMPAT bagian berikut, dengan format persis seperti ini:
 
-VisualHook: [Deskripsi adegan pembuka 1-2 detik yang kuat secara visual, konkret, bisa direkam dengan HP, tanpa CGI. Fokus pada framing, gerakan, ekspresi, atau aksi mendadak. Contoh: Close-up ekstrem mata kaget lalu zoom out cepat; Tangan membanting produk X ke meja dengan caption "STOP!"; Transisi wipe cepat dari wajah lesu ke wajah segar setelah pakai produk Y.]
+VisualHook: [Deskripsi adegan pembuka 1–2 detik yang kuat secara visual, konkret, bisa direkam dengan HP, tanpa CGI. Fokus pada framing, gerakan, ekspresi, atau aksi mendadak. Hindari contoh yang terlalu umum atau klise.]
 
-TextHook: [Satu kalimat pembuka yang emosional, provokatif, atau sangat membuat penasaran. Cocok untuk subtitle atau voiceover. Gaya bahasa harus menyesuaikan gaya konten yang diminta dan punya efek interrupt kuat. Contoh: "STOP scroll kalau lo masih jerawatan di usia 25!"; "Gue kira ini gimmick, ternyata..."; "Rahasia glow up modal 50 ribu?"]
+TextHook: [Satu kalimat pembuka yang emosional, provokatif, atau sangat membuat penasaran. Hindari bahasa formal. Tulis seolah-olah kamu ngobrol santai dengan audiens dan mengikuti tren bahasa yang sedang populer.]
 
-Script: [Narasi video lengkap (maksimal ${finalDuration} detik) dengan struktur Hook - Problem - Agitation - Solution - CTA. Tulis sebagai PARAGRAF yang mengalir alami dan enak didengar/dibaca, BUKAN outline poin-poin. Pisahkan setiap bagian (Hook, Problem, Agitation, Solution, CTA) secara eksplisit dengan ' -- ' (spasi, dua strip, spasi). Gaya bahasa percakapan sehari-hari, sesuaikan dengan gaya konten dan target audiens.
+Script: [Narasi video lengkap (maksimal ${finalDuration} detik) dengan struktur Hook - Problem - Agitation - Solution - CTA. Tulis sebagai PARAGRAF yang mengalir alami dan enak didengar/dibaca, BUKAN outline poin-poin. Pisahkan setiap bagian (Hook, Problem, Agitation, Solution, CTA) secara eksplisit dengan ' -- ' (spasi, dua strip, spasi). Gunakan gaya percakapan santai khas sosial media dan hindari kalimat textbook.
 Contoh struktur internal (jangan tampilkan ini di output, hanya sebagai panduanmu):
 Hook: (Lanjutkan atau elaborasi dari TextHook, tarik perhatian lebih dalam)
 --
@@ -59,7 +59,7 @@ Solution: Unboxing produk dengan antusias. Shot close-up tekstur produk saat dia
 CTA: Pegang produk di samping wajah, senyum percaya diri, lalu arahkan jari ke tombol CTA atau area link di bio. Tampilkan teks promo singkat jika ada.]
 
 Pastikan setiap alternatif dipisahkan dengan "====" (empat sama dengan).
-Output HARUS 100% usable dan langsung bisa dieksekusi. Jangan ada disclaimer, jangan menjelaskan prosesmu, jangan ada basa-basi atau kalimat pengantar/penutup dari kamu. Langsung ke intinya.
+Output HARUS 100% usable dan langsung bisa dieksekusi. Jangan ada disclaimer, jangan menjelaskan prosesmu, jangan ada basa-basi atau kalimat pengantar/penutup dari kamu. Pastikan setiap alternatif terasa fresh dan tidak terdengar seperti template. Langsung ke intinya.
   `;
 
   const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {

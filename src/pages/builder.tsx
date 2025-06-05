@@ -52,10 +52,10 @@ const fmtFrame = (s: string) =>
     const match = s.match(reg);
     if (!match) return null;
     return (
-      <div key={i} className="sr">
+      <li key={i} className="sr">
         <strong>{lab}:</strong>
         <p>{match[1].trim()}</p>
-      </div>
+      </li>
     );
   });
 
@@ -179,7 +179,7 @@ export default function Builder(){
                 <div className="part"><b>🎨 Visual Hook</b><p>{a.visualHook}</p></div>
                 <div className="part"><b>💬 Teks Hook</b><p>{a.textHook}</p></div>
                 <div className="part"><b>📝 Skrip</b><div className="script">{fmt(a.script)}</div></div>
-                <div className="part"><b>🎬 Frame</b><div className="script">{fmtFrame(a.frames)}</div></div>
+                <div className="part"><b>🎬 Frame</b><ul className="script-list">{fmtFrame(a.frames)}</ul></div>
               </article>
             ))}
           </section>
@@ -234,6 +234,7 @@ export default function Builder(){
         .part{margin-top:1.35rem}
         .part b{display:block;color:var(--clr-primary);margin-bottom:.35rem}
         .script{border-left:3px solid var(--clr-primary);padding-left:.9rem;background:#151515}
+        .script-list{list-style:none;margin:0;border-left:3px solid var(--clr-primary);padding-left:.9rem;background:#151515}
         .sr{margin-bottom:.8rem}
         .sr strong{color:var(--clr-primary);display:block;margin-bottom:.2rem}
 
