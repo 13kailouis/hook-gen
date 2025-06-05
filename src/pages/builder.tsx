@@ -64,7 +64,8 @@ const fmtFrame = (s: string) =>
 /* ❹  COMPONENT                                       */
 /* -------------------------------------------------- */
 export default function Builder(){
-  const {query,isReady}=useRouter();
+  const router = useRouter();
+  const { query, isReady } = router;
   const { user, loading:authLoading, logout } = useAuth();
 
   useEffect(()=>{
@@ -118,6 +119,16 @@ export default function Builder(){
     setCopy(i); setTimeout(()=>setCopy(null),1400);
   };
 
+  const doLogout = async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error('Logout failed', err);
+    } finally {
+      router.replace('/login?next=/builder');
+    }
+  };
+
   /* -------------------------------------------------- */
   return(
     <>
@@ -135,7 +146,7 @@ export default function Builder(){
         <div className="logo">{TOKENS.BRAND}</div>
         <div>
           <Link href="/" className="btn ghost" aria-label="Back to home" style={{marginRight:'0.5rem'}}>← Home</Link>
-          <button onClick={logout} className="btn ghost">Logout</button>
+          <button onClick={doLogout} className="btn ghost">Logout</button>
         </div>
       </nav>
 
