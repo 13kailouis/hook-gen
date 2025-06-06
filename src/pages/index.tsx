@@ -19,8 +19,8 @@ type SalesAlternative = {
 const SITE_NAME       = process.env.NEXT_PUBLIC_SITE_NAME || "HookFreak";
 const SITE_TAGLINE    = "Video Sales Hook Builder";
 const SITE_DESC       = "Generate visual hooks, opening lines, full scripts & frame ideas for TikTok/Reels in seconds.";
-const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_PRIMARY   || "#39ff14";
-const GRADIENT        = process.env.NEXT_PUBLIC_GRADIENT  || "linear-gradient(90deg,#39ff14,#00ffe6)";
+const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_PRIMARY   || "#0d6efd";
+const GRADIENT        = process.env.NEXT_PUBLIC_GRADIENT  || "linear-gradient(90deg,#0d6efd,#6610f2)";
 const [MAIN, SECOND]  = SITE_NAME.split(" ");
 
 /* ----------  STATIC DATA ---------- */
