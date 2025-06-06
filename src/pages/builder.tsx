@@ -11,14 +11,14 @@ import { FiCopy,FiCheck } from "react-icons/fi";
 /* -------------------------------------------------- */
 const TOKENS = {
   BRAND          : process.env.NEXT_PUBLIC_SITE_NAME   || "HookFreak",
-  COLOR_PRIMARY  : process.env.NEXT_PUBLIC_PRIMARY     || "#FFD700",
-  COLOR_BG       : process.env.NEXT_PUBLIC_BG          || "#000",
-  COLOR_CARD     : process.env.NEXT_PUBLIC_CARD        || "#131313",
-  COLOR_TEXT     : process.env.NEXT_PUBLIC_TEXT        || "#f0f0f0",
-  COLOR_MUTED    : process.env.NEXT_PUBLIC_MUTED       || "#a0a0a0",
-  COLOR_GRADIENT : process.env.NEXT_PUBLIC_GRADIENT    || "linear-gradient(90deg,#FFD700,#FFA500)",
+  COLOR_PRIMARY  : process.env.NEXT_PUBLIC_PRIMARY     || "#0d6efd",
+  COLOR_BG       : process.env.NEXT_PUBLIC_BG          || "#0b0f19",
+  COLOR_CARD     : process.env.NEXT_PUBLIC_CARD        || "#151a23",
+  COLOR_TEXT     : process.env.NEXT_PUBLIC_TEXT        || "#f8f9fa",
+  COLOR_MUTED    : process.env.NEXT_PUBLIC_MUTED       || "#9ca3af",
+  COLOR_GRADIENT : process.env.NEXT_PUBLIC_GRADIENT    || "linear-gradient(90deg,#0d6efd,#6610f2)",
   RADIUS         : Number(process.env.NEXT_PUBLIC_RADIUS) || 12,
-  SHADOW_ELEVATE : process.env.NEXT_PUBLIC_SHADOW      || "0 4px 15px rgba(255,215,0,0.35)",
+  SHADOW_ELEVATE : process.env.NEXT_PUBLIC_SHADOW      || "0 4px 15px rgba(0,0,0,0.4)",
   MAX_WIDTH      : Number(process.env.NEXT_PUBLIC_MAXW)   || 820,   // konten max-width
 };
 
