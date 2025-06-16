@@ -7,6 +7,7 @@ import { FcGoogle } from 'react-icons/fc'
 export default function Login() {
   const { user, loading, login } = useAuth()
   const router = useRouter()
+  const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "ProfitHook"
 
   useEffect(() => {
     if (!loading && user) {
@@ -103,7 +104,7 @@ export default function Login() {
       <div style={card}>
         <header>
           <h1 style={heading}>
-            Masuk ke <span style={{ color: highlight }}>HookFreak</span>
+            Masuk ke <span style={{ color: highlight }}>{SITE_NAME}</span>
           </h1>
           <p style={subtext}>Satu klik untuk mulai membangun hook viral</p>
         </header>

@@ -5,6 +5,8 @@ import { FiMenu, FiX } from "react-icons/fi";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "ProfitHook";
+  const [MAIN, SECOND] = SITE_NAME.split(" ");
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -16,7 +18,8 @@ export default function Navbar() {
     <>
       <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
         <Link href="/" className="nav-logo">
-          Hook<span>Freak</span>
+          {MAIN}
+          {SECOND && <span>{SECOND}</span>}
         </Link>
         <button
           className="nav-toggle"
@@ -27,7 +30,7 @@ export default function Navbar() {
         </button>
         <div className={`nav-links ${open ? "show" : ""}`}>
           <Link href="#features">Fitur</Link>
-          <a href="#pricing">Harga</a>
+          <Link href="/pricing">Harga</Link>
           <a href="#login" className="login-link">
             Login
           </a>

@@ -37,7 +37,7 @@ export default function HookForm() {
   return (
     <div className="container">
       <div className="branding">
-        HookFreak <span style={{ fontSize: 16, color: "#888" }}>by STIDS</span>
+        ProfitHook <span style={{ fontSize: 16, color: "#888" }}>by STIDS</span>
       </div>
 
       <form onSubmit={handleGenerate}>
@@ -99,7 +99,7 @@ export default function HookForm() {
       )}
 
       <footer style={{ marginTop: 40, fontSize: 12, color: "#666", textAlign: "center" }}>
-        © {new Date().getFullYear()} HookFreak by STIDS
+        © {new Date().getFullYear()} ProfitHook by STIDS
       </footer>
     </div>
   );

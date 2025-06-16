@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 export default function Batch() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "ProfitHook";
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -42,13 +43,14 @@ export default function Batch() {
   return (
     <>
       <Head>
-        <title>HookFreak • Batch Pack</title>
+        <title>{SITE_NAME} • Batch Pack</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="main-wrapper">
         <section className="hero">
           <h1 className="logo-text">
-            Hook<span>Freak</span>
+            {SITE_NAME.split(' ')[0]}
+            {SITE_NAME.split(' ')[1] && <span>{SITE_NAME.split(' ')[1]}</span>}
           </h1>
           <p className="subtitle">Batch Pack Generator</p>
         </section>
