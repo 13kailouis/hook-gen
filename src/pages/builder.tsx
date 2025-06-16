@@ -10,7 +10,7 @@ import { FiCopy,FiCheck } from "react-icons/fi";
 /* ❶  DESIGN TOKEN—semua bisa di-override via .env    */
 /* -------------------------------------------------- */
 const TOKENS = {
-  BRAND          : process.env.NEXT_PUBLIC_SITE_NAME   || "HookFreak",
+  BRAND          : process.env.NEXT_PUBLIC_SITE_NAME   || "ProfitHook",
   COLOR_PRIMARY  : process.env.NEXT_PUBLIC_PRIMARY     || "#FFD700",
   COLOR_BG       : process.env.NEXT_PUBLIC_BG          || "#000",
   COLOR_CARD     : process.env.NEXT_PUBLIC_CARD        || "#131313",

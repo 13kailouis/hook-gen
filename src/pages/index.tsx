@@ -16,18 +16,18 @@ type SalesAlternative = {
 };
 
 /* ----------  GLOBAL VAR ---------- */
-const SITE_NAME       = process.env.NEXT_PUBLIC_SITE_NAME || "HookFreak";
-const SITE_TAGLINE    = "Video Sales Hook Builder";
-const SITE_DESC       = "Generate visual hooks, opening lines, full scripts & frame ideas for TikTok/Reels in seconds.";
+const SITE_NAME       = process.env.NEXT_PUBLIC_SITE_NAME || "ProfitHook";
+const SITE_TAGLINE    = "AI Video Ad Generator";
+const SITE_DESC       = "Generate high-converting video ads for TikTok/Reels in seconds.";
 const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_PRIMARY   || "#39ff14";
 const GRADIENT        = process.env.NEXT_PUBLIC_GRADIENT  || "linear-gradient(90deg,#39ff14,#00ffe6)";
 const [MAIN, SECOND]  = SITE_NAME.split(" ");
 
 /* ----------  STATIC DATA ---------- */
 const FEATURES = [
-  { icon:"💡", title:"3 Alternatif Sekali Klik", desc:"Setiap generate memberi tiga skrip berbeda siap pakai." },
-  { icon:"🎬", title:"Ide Visual & Frame",        desc:"Tidak cuma teks, dapatkan saran visual hook & alur frame." },
-  { icon:"⏱️", title:"Durasi Fleksibel",          desc:"Atur panjang skrip 15-60 detik sesuai kebutuhan konten." },
+  { icon:"💰", title:"Fokus Konversi", desc:"Script dioptimalkan untuk penjualan dan ROI." },
+  { icon:"🎬", title:"Ide Visual & Frame", desc:"Tidak cuma teks, dapatkan saran visual hook & alur frame." },
+  { icon:"⚡", title:"Tiga Variasi", desc:"Satu klik menghasilkan tiga pilihan script untuk A/B testing." },
 ];
 
 const EXAMPLES: SalesAlternative[] = [
@@ -93,8 +93,8 @@ export default function HomePage() {
 
       {/* ------------ HERO ------------- */}
       <header className="hero">
-        <h1>Stop Bikin Konten Jualan <span className="hl">Ngebosenin</span>.</h1>
-        <p>{SITE_NAME} bantu kamu bikin <span className="hl">visual hook, teks pembuka, skrip & ide frame</span> yang nancep di detik pertama.</p>
+        <h1>Stop Bikin Iklan <span className="hl">Biasa Aja</span>.</h1>
+        <p>{SITE_NAME} bantu kamu bikin <span className="hl">video ad jualan</span> yang langsung menarik perhatian.</p>
         <Link href={user ? "/builder" : "/login?next=/builder"} className="btn primary">🚀 Mulai Buat Skrip</Link>
       </header>
 

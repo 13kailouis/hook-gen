@@ -1,15 +1,15 @@
-# HookFreak – Video Sales Hook Builder
+# ProfitHook – AI Video Ad Generator
 
-Bangun skrip video jualan TikTok, Reels, dan Shorts dalam sekali klik. Hasilkan visual hook, teks pembuka, skrip berdurasi fleksibel, dan saran frame secara langsung.
+Bangun naskah video iklan TikTok, Reels, dan Shorts yang berorientasi profit dalam sekali klik. ProfitHook menghasilkan visual hook, teks pembuka, skrip siap eksekusi, dan saran frame otomatis.
 
-Setiap permintaan memberi tiga versi alternatif supaya kamu bisa pilih yang paling pas.
+Setiap permintaan langsung memberi tiga alternatif agar kamu bisa memilih mana yang paling potensial meningkatkan konversi.
 
 **Fitur Utama:**
 * **Visual Hook Prompt:** Ide adegan pembuka yang kuat & bisa langsung direkam.
-* **Teks Hook Nendang:** Kalimat pembuka subtitle/VO yang bikin berhenti scroll.
-* **Skrip Video Sesuai Durasi:** Struktur Hook-Problem-Agitation-Solution-CTA dengan panjang yang bisa diatur.
-* **Saran Frame Praktis:** Ide visual per bagian skrip untuk memudahkan produksi.
-* **3 Alternatif Sekali Generate:** Pilih gaya yang paling cocok untuk brand-mu.
+* **Script Fokus Profit:** Struktur Hook–Problem–Agitation–Solution–CTA yang dioptimalkan untuk jualan.
+* **Prompt Visual dan Frame:** Saran adegan pembuka hingga penutup untuk memaksimalkan engagement.
+* **Durasi Fleksibel:** Tentukan panjang video 15–60 detik sesuai kebutuhan kampanye.
+* **Tiga Variasi Otomatis:** Lebih banyak opsi untuk A/B testing iklan.
 
 ## Cara jalan
 1.  Salin file `.env.example` menjadi `.env.local` (`cp .env.example .env.local`).
