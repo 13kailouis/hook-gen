@@ -42,7 +42,7 @@ export default function Batch() {
   return (
     <>
       <Head>
-        <title>HookFreak • Batch Pack</title>
+        <title>ProfitHook • Batch Pack</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
       <main className="main-wrapper">

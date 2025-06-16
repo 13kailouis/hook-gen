@@ -103,9 +103,9 @@ export default function Login() {
       <div style={card}>
         <header>
           <h1 style={heading}>
-            Masuk ke <span style={{ color: highlight }}>HookFreak</span>
+            Masuk ke <span style={{ color: highlight }}>ProfitHook</span>
           </h1>
-          <p style={subtext}>Satu klik untuk mulai membangun hook viral</p>
+          <p style={subtext}>Satu klik untuk mulai membuat video ad profit</p>
         </header>
 
         <button
