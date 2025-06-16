@@ -10,6 +10,7 @@ import { FiCopy, FiCheck } from "react-icons/fi";
 export default function Home() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || "ProfitHook";
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -96,14 +97,14 @@ export default function Home() {
   return (
     <>
          <Head>
-          <title>HookFreak • AI Viral Hook Generator TikTok</title>
+          <title>{SITE_NAME} • AI Viral Hook Generator</title>
           <meta name="description" content="Bikin hook video TikTok & Reels viral pakai AI. Gratis, cepat, dan didesain untuk CTR tinggi. Powered by STIDS." />
           <meta name="keywords" content="hook generator, TikTok hook, AI TikTok content, viral hook tools, konten viral, pembuka video TikTok, kalimat viral, hook reels, CTA TikTok" />
           <meta name="author" content="Stidscom Team" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         
           {/* OG untuk Facebook/Telegram/LinkedIn */}
-          <meta property="og:title" content="HookFreak - AI Viral Hook Generator" />
+          <meta property="og:title" content={`${SITE_NAME} - AI Viral Hook Generator`} />
           <meta property="og:description" content="Auto generate hook TikTok yang bikin orang nggak bisa skip. Cuma 1 klik. Gratis selamanya!" />
           <meta property="og:image" content="/og-cover.png" />
           <meta property="og:url" content="https://hook-gen.vercel.app" />
@@ -111,7 +112,7 @@ export default function Home() {
         
           {/* Twitter card */}
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:title" content="HookFreak - AI Viral Hook Generator" />
+          <meta name="twitter:title" content={`${SITE_NAME} - AI Viral Hook Generator`} />
           <meta name="twitter:description" content="Bikin hook TikTok & Reels viral dalam 1 klik. Gratis & powerful." />
           <meta name="twitter:image" content="/og-cover.png" />
         
@@ -207,7 +208,7 @@ export default function Home() {
                   rel="noopener noreferrer"
                   className="community-cta"
                 >
-                  📢 Gabung Komunitas Telegram HookFreak →
+                  📢 Gabung Komunitas Telegram {SITE_NAME} →
                 </a>
               </div>
             </div>
