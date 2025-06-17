@@ -16,18 +16,18 @@ type SalesAlternative = {
 };
 
 /* ----------  GLOBAL VAR ---------- */
-const SITE_NAME       = process.env.NEXT_PUBLIC_SITE_NAME || "HookFreak";
-const SITE_TAGLINE    = "Video Sales Hook Builder";
-const SITE_DESC       = "Generate visual hooks, opening lines, full scripts & frame ideas for TikTok/Reels in seconds.";
+const SITE_NAME       = process.env.NEXT_PUBLIC_SITE_NAME || "AdOptimizer AI";
+const SITE_TAGLINE    = "Ads & Content Optimizer";
+const SITE_DESC       = "Generate compelling ad copy and track campaign analytics from one dashboard.";
 const PRIMARY_COLOR   = process.env.NEXT_PUBLIC_PRIMARY   || "#39ff14";
 const GRADIENT        = process.env.NEXT_PUBLIC_GRADIENT  || "linear-gradient(90deg,#39ff14,#00ffe6)";
 const [MAIN, SECOND]  = SITE_NAME.split(" ");
 
 /* ----------  STATIC DATA ---------- */
 const FEATURES = [
-  { icon:"💡", title:"3 Alternatif Sekali Klik", desc:"Setiap generate memberi tiga skrip berbeda siap pakai." },
-  { icon:"🎬", title:"Ide Visual & Frame",        desc:"Tidak cuma teks, dapatkan saran visual hook & alur frame." },
-  { icon:"⏱️", title:"Durasi Fleksibel",          desc:"Atur panjang skrip 15-60 detik sesuai kebutuhan konten." },
+  { icon:"🤖", title:"AI Ad Builder",     desc:"Buat headline & copy iklan otomatis." },
+  { icon:"📊", title:"Dashboard ROI",    desc:"Pantau performa kampanye secara real-time." },
+  { icon:"⚡", title:"Workflow Otomatis", desc:"Follow-up lead dan CRM sederhana." },
 ];
 
 const EXAMPLES: SalesAlternative[] = [
@@ -88,14 +88,17 @@ export default function HomePage() {
       {/* ------------ NAV ------------- */}
       <nav className="nav">
         <div className="logo">{MAIN}{SECOND && <span>{SECOND}</span>}</div>
-        <Link href={user ? "/builder" : "/login?next=/builder"} className="btn ghost">Builder</Link>
+        <div>
+          <Link href={user ? "/dashboard" : "/login?next=/dashboard"} className="btn ghost" style={{marginRight:'0.5rem'}}>Dashboard</Link>
+          <Link href={user ? "/adbuilder" : "/login?next=/adbuilder"} className="btn ghost">Ad Builder</Link>
+        </div>
       </nav>
 
       {/* ------------ HERO ------------- */}
       <header className="hero">
-        <h1>Stop Bikin Konten Jualan <span className="hl">Ngebosenin</span>.</h1>
-        <p>{SITE_NAME} bantu kamu bikin <span className="hl">visual hook, teks pembuka, skrip & ide frame</span> yang nancep di detik pertama.</p>
-        <Link href={user ? "/builder" : "/login?next=/builder"} className="btn primary">🚀 Mulai Buat Skrip</Link>
+        <h1>Stop Tebak-Tebakan <span className="hl">Hasil Iklan</span>.</h1>
+        <p>{SITE_NAME} bantu kamu buat <span className="hl">copy iklan efektif</span> dan pantau performanya tanpa ribet.</p>
+        <Link href={user ? "/adbuilder" : "/login?next=/adbuilder"} className="btn primary">🚀 Coba Ad Builder</Link>
       </header>
 
       {/* ------------ FEATURES ------------- */}
